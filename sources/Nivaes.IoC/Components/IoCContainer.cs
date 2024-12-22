@@ -36,51 +36,45 @@ namespace Nivaes.IoC
 
         protected abstract void Bootstrap(IIoCContainerBootstrapper bootstrapper);
 
-        public object Resolve(Type type)
+        public object? Resolve(Type serviceType)
         {
-            if (Resolvers.TryGetValue(type, out var entry))
+            if (Resolvers.TryGetValue(serviceType, out var entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (Scoped)
+            if (Scoped && ScopedResolvers.TryGetValue(serviceType, out entry))
             {
-                if (ScopedResolvers.TryGetValue(type, out entry))
-                {
-                    return entry.Resolve(this);
-                }
+                return entry.Resolve(this);
             }
 
-            if (ScopedResolvers.TryGetValue(type, out entry))
+            if (ScopedResolvers.TryGetValue(serviceType, out entry))
             {
-                ExceptionHelper.ScopedWithoutScopeException(type.FullName);
+                ExceptionHelper.ScopedWithoutScopeException(serviceType.FullName ?? string.Empty);
             }
 
-            ExceptionHelper.ServiceIsNotRegistered(type.FullName);
+            ExceptionHelper.ServiceIsNotRegistered(serviceType.FullName ?? string.Empty);
             return null;
         }
 
-        public object Resolve(Type type, IOverrides overrides)
+        public object? Resolve(Type type, IOverrides overrides)
         {
             if (Resolvers.TryGetValue(type, out var entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (Scoped)
+            if (Scoped && ScopedResolvers.TryGetValue(type, out entry))
             {
-                if (ScopedResolvers.TryGetValue(type, out entry))
-                {
-                    return entry.Resolve(this, overrides);
-                }
+                return entry.Resolve(this, overrides);
             }
 
             if (ScopedResolvers.TryGetValue(type, out entry))
             {
-                ExceptionHelper.ScopedWithoutScopeException(type.FullName);
+                ExceptionHelper.ScopedWithoutScopeException(type.FullName ?? string.Empty);
             }
 
-            ExceptionHelper.ServiceIsNotRegistered(type.FullName);
+            ExceptionHelper.ServiceIsNotRegistered(type.FullName ?? string.Empty);
             return null;
         }
 
@@ -124,12 +118,12 @@ namespace Nivaes.IoC
 
         public void AddInstance<TValue>(TValue value)
         {
-            Resolvers.Add(typeof(TValue), new SingletonResolver(o => value));
+            Resolvers.Add(typeof(TValue), new SingletonResolver(o => value!));
         }
 
         public void ReplaceInstance<TValue>(TValue value)
         {
-            Resolvers[typeof(TValue)] = new SingletonResolver(o => value);
+            Resolvers[typeof(TValue)] = new SingletonResolver(o => value!);
         }
 
         public void Merge(IoCContainer container)

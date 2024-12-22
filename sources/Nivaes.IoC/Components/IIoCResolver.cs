@@ -4,7 +4,7 @@
     {
         IIoCResolver CreateScope();
 
-        object Resolve(Type serviceType);
-        object Resolve(Type type, IOverrides overrides);
+        object? Resolve(Type serviceType);
+        object? Resolve(Type type, IOverrides overrides);
     }
 }

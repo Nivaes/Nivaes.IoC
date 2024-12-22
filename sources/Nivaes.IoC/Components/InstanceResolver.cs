@@ -2,8 +2,8 @@
 {
     public interface IInstanceResolver : IDisposable
     {
-        object Resolve(IIoCResolver resolver);
-        object Resolve(IIoCResolver resolver, IOverrides overrides);
+        object? Resolve(IIoCResolver resolver);
+        object? Resolve(IIoCResolver resolver, IOverrides overrides);
 
         IInstanceResolver Duplicate();
     }
@@ -46,12 +46,12 @@
     public sealed class TransientResolver<TCreator, TType> : IInstanceResolver
         where TCreator : struct, ICreator<TType>
     {
-        public object Resolve(IIoCResolver resolver)
+        public object? Resolve(IIoCResolver resolver)
         {
             return default(TCreator).Create(resolver);
         }
 
-        public object Resolve(IIoCResolver resolver, IOverrides overrides)
+        public object? Resolve(IIoCResolver resolver, IOverrides overrides)
         {
             return default(TCreator).Create(resolver, overrides);
         }
