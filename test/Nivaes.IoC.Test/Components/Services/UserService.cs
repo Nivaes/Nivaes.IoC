@@ -9,11 +9,12 @@ namespace Nivaes.IoC.Test
     public class UserService : IUserService
     {
         public Guid Id { get; } = Guid.NewGuid();
-        private Helper1 _helper;
+
+        private Helper1 helper;
 
         public UserService(Helper1 helper)
         {
-            _helper = helper;
+            this.helper = helper;
         }
 
         public void PrintMessage()
