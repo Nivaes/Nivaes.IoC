@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
     public interface IInstanceResolver : IDisposable
     {
@@ -10,7 +8,7 @@ namespace Nivaes.IoC
         IInstanceResolver Duplicate();
     }
 
-    public interface ICreator<T>
+    public interface ICreator<out T>
     {
         T Create(IIoCResolver resolver);
         T Create(IIoCResolver resolver, IOverrides overrides);
@@ -18,26 +16,26 @@ namespace Nivaes.IoC
     
     public sealed class TransientResolver : IInstanceResolver
     {
-        private readonly Func<IIoCResolver, object> _activator;
+        private readonly Func<IIoCResolver, object> activator;
 
         public TransientResolver(Func<IIoCResolver, object> activator)
         {
-            _activator = activator;
+            this.activator = activator;
         }
 
         public object Resolve(IIoCResolver resolver)
         {
-            return _activator(resolver);
+            return activator(resolver);
         }
 
         public object Resolve(IIoCResolver resolver, IOverrides overrides)
         {
-            return _activator(resolver);
+            return activator(resolver);
         }
 
         public IInstanceResolver Duplicate()
         {
-            return new TransientResolver(_activator);
+            return new TransientResolver(activator);
         }
 
         public void Dispose()
@@ -72,29 +70,29 @@ namespace Nivaes.IoC
     public sealed class SingletonResolver<TCreator, TType> : IInstanceResolver
         where TCreator : struct, ICreator<TType>
     {
-        private object @object = new object();
-        private object _cache;
-        private bool _disposed;
-        private Func<IIoCResolver, object> _resolve;
-        private Func<IIoCResolver, IOverrides, object> _resolveOverride;
+        private readonly object @object = new object();
+        private object? cache;
+        private bool disposed;
+        private Func<IIoCResolver, object> resolve;
+        private Func<IIoCResolver, IOverrides, object> resolveOverride;
 
         public SingletonResolver()
         {
-            _cache = null;
-            _disposed = false;
+            cache = null;
+            disposed = false;
 
-            _resolve = ResolveInternal;
-            _resolveOverride = ResolveInternalOverride;
+            resolve = ResolveInternal;
+            resolveOverride = ResolveInternalOverride;
         }
 
         public object Resolve(IIoCResolver resolver)
         {
-            return _resolve(resolver);
+            return resolve(resolver);
         }
 
         public object Resolve(IIoCResolver resolver, IOverrides overrides)
         {
-            return _resolveOverride(resolver, overrides);
+            return resolveOverride(resolver, overrides);
         }
 
         public IInstanceResolver Duplicate()
@@ -104,14 +102,11 @@ namespace Nivaes.IoC
 
         public void Dispose()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Instance resolver was disposed. It may happen because the scope was disposed.");
-            }
+            ObjectDisposedException.ThrowIf(disposed, this);
 
-            if (_cache != null && _cache is IDisposable disposable)
+            if (cache is IDisposable disposable)
             {
-                _disposed = true;
+                disposed = true;
                 disposable.Dispose();
             }
         }
@@ -120,16 +115,16 @@ namespace Nivaes.IoC
         {
             lock (@object)
             {
-                if (_cache != null)
+                if (cache != null)
                 {
-                    return _cache;
+                    return cache;
                 }
 
                 var creator = default(TCreator);
-                _cache = creator.Create(resolver);
-                _resolve = o => _cache;
-                _resolveOverride = (o, oo) => _cache;;
-                return _cache;
+                cache = creator.Create(resolver);
+                resolve = o => cache!;
+                resolveOverride = (o, oo) => cache!;
+                return cache!;
             }
         }
         
@@ -137,83 +132,80 @@ namespace Nivaes.IoC
         {
             lock (@object)
             {
-                if (_cache != null)
+                if (cache != null)
                 {
-                    return _cache;
+                    return cache;
                 }
 
                 var creator = default(TCreator);
-                _cache = creator.Create(resolver, overrides);
-                _resolve = o => _cache;
-                _resolveOverride = (o, oo) => _cache;;
-                return _cache;
+                cache = creator.Create(resolver, overrides);
+                resolve = o => cache!;
+                resolveOverride = (o, oo) => cache!;
+                return cache!;
             }
         }
     }
 
     public sealed class SingletonResolver : IInstanceResolver
     {
-        private readonly Func<IIoCResolver, object> _activator;
-        private object _cache;
-        private bool _disposed;
-        private Func<IIoCResolver, object> _resolve;
+        private readonly Func<IIoCResolver, object> activator;
+        private object? cache;
+        private bool disposed;
+        private Func<IIoCResolver, object> resolve;
 
         public SingletonResolver(Func<IIoCResolver, object> activator)
         {
-            _activator = activator;
-            _cache = null;
-            _disposed = false;
+            this.activator = activator;
+            cache = null;
+            disposed = false;
 
-            _resolve = ResolveInternal;
+            resolve = ResolveInternal;
         }
 
         public object Resolve(IIoCResolver resolver)
         {
-            return _resolve(resolver);
+            return resolve(resolver);
         }
 
         public object Resolve(IIoCResolver resolver, IOverrides overrides)
         {
-            return _resolve(resolver);
+            return resolve(resolver);
         }
 
         public IInstanceResolver Duplicate()
         {
-            return new SingletonResolver(_activator);
+            return new SingletonResolver(activator);
         }
 
         public void Dispose()
         {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Instance resolver was disposed. It may happen because the scope was disposed.");
-            }
+            ObjectDisposedException.ThrowIf(disposed, this);
 
-            if (_cache != null && _cache is IDisposable disposable)
+            if (cache is IDisposable disposable)
             {
-                _disposed = true;
+                disposed = true;
                 disposable.Dispose();
             }
         }
 
         private object ResolveInternal(IIoCResolver resolver)
         {
-            lock (_activator)
+            lock (activator)
             {
-                if (_cache != null)
+                if (cache != null)
                 {
-                    return _cache;
+                    return cache;
                 }
 
-                _cache = _activator(resolver);
-                _resolve = GetCached;
-                return _cache;
+                cache = activator(resolver);
+                resolve = GetCached;
+                return cache;
             }
         }
 
         private object GetCached(IIoCResolver resolver)
         {
-            return _cache;
+            return cache!;
         }
     }
 }

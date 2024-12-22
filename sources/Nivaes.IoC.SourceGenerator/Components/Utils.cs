@@ -25,19 +25,15 @@ namespace Nivaes.IoC
             }
         }
 
-        public static ITypeSymbol GetTypeSymbol(this SymbolInfo info)
+        public static ITypeSymbol? GetTypeSymbol(this SymbolInfo info)
         {
-            switch (info.Symbol)
+            return info.Symbol switch
             {
-                case ITypeSymbol type:
-                    return type;
-                case ILocalSymbol local:
-                    return local.Type;
-                case IParameterSymbol parameterSymbol:
-                    return parameterSymbol.Type;
-                default:
-                    return null;
-            }
+                ITypeSymbol type => type,
+                ILocalSymbol local => local.Type,
+                IParameterSymbol parameterSymbol => parameterSymbol.Type,
+                _ => null,
+            };
         }
 
         public static IEnumerable<IMethodSymbol> GetPublicMethods(this IEnumerable<ISymbol> members)
