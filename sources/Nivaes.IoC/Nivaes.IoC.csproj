@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <RootNamespace>Nivaes.IoC</RootNamespace>
+        <Description>Nivaes IoC.</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" />
+    </ItemGroup>
+
+</Project>
