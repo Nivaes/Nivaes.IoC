@@ -14,10 +14,10 @@ Librerias compartidas
 
 ## Integration
 
-![CI](https://github.com/Nivaes/Nivaes.IoT/workflows/CI/badge.svg)
+[![CI](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/ci.yaml/badge.svg)](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/ci.yaml)
 
-![Build Release](https://github.com/Nivaes/Nivaes.IoT/workflows/Build%20Release/badge.svg)
+[![Build Release](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/build_release.yaml/badge.svg)](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/build_release.yaml)
 
-![Publish Release](https://github.com/Nivaes/Nivaes.IoT/workflows/Publish%20Release/badge.svg)
+[![Publish Release](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/publish_release.yaml/badge.svg)](https://github.com/Nivaes/Nivaes.IoC/actions/workflows/publish_release.yaml)
 
 
