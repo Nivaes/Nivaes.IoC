@@ -9,6 +9,10 @@ namespace Nivaes.IoC
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+//#if DEBUG
+//                        System.Diagnostics.Debugger.Launch();
+//#endif
+
             var generate = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // select enums with attributes

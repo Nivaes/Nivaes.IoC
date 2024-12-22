@@ -22,7 +22,7 @@
   <PropertyGroup>
     <NeutralLanguage>en</NeutralLanguage>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>dev-001</VersionSuffix>
+    <VersionSuffix>dev-004</VersionSuffix>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -41,8 +41,6 @@
     
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' and '$(IsTestProject)' != 'true' and '$(IsBenchmarksProject)' != 'true'">true</GeneratePackageOnBuild>
-   
-  
 </PropertyGroup>
 
   <PropertyGroup>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Xunit;
-using Nivaes.IoC.Tests.Data;
-using Nivaes.IoC.Tests.Utils;
+using Nivaes.IoC.SourceGenerator.Test.Data;
+using Nivaes.IoC.SourceGenerator.Test.Utils;
 
-namespace Nivaes.IoC.Tests;
+namespace Nivaes.IoC.SourceGenerator.Test;
 
 public class ScopedContainerTest
 {

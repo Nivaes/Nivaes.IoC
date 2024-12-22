@@ -1,18 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
 
-    <ItemGroup>
-        <PackageReference Include="BenchmarkDotNet" />
-        <PackageReference Include="Grace" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-    </ItemGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\sources\Nivaes.IoC\Nivaes.IoC.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Grace" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\sources\Nivaes.IoC\Nivaes.IoC.csproj" />
+  </ItemGroup>
 
 </Project>

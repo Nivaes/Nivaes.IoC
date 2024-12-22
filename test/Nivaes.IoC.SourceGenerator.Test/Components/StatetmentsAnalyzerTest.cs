@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using Nivaes.IoC.SourceGenerator.Test.Data;
+using Nivaes.IoC.SourceGenerator.Test.Utils;
 using Xunit;
-using Nivaes.IoC.Tests.Data;
-using Nivaes.IoC.Tests.Utils;
 
-namespace Nivaes.IoC.Tests;
+namespace Nivaes.IoC.SourceGenerator.Test;
 
 public class StatetmentsAnalyzerTest
 {
