@@ -1,31 +1,57 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-		<OutputType>Library</OutputType>
-        <TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyName>Nivaes.IoC.SourceGenerator</AssemblyName>
-		<RootNamespace>Nivaes.IoC.SourceGenerator</RootNamespace>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Nivaes.IoC.SourceGenerator</AssemblyName>
+    <RootNamespace>Nivaes.IoC.SourceGenerator</RootNamespace>
 
-		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-		<IncludeBuildOutput>false</IncludeBuildOutput>
-		
-		<LangVersion>latest</LangVersion>
-        <Nullable>enable</Nullable>
-        
-        <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-        <Description>Nivaes IoC source generator.</Description>
-    </PropertyGroup>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
 
-	<ItemGroup>
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-	</ItemGroup>
-	
-    <ItemGroup>
-        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
-    </ItemGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Nivaes.IoC.SourceGenerator</PackageId>
+    <Title>Nivaes IoC SourceGenerator</Title>
+    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+    <Product>Nivaes IoC SourceGenerator</Product>
+    <Description>Nivaes IoC source generator.</Description>
+    <PackageTags>Nivaes;IoC;roslyn</PackageTags>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Roslynator.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
 </Project>

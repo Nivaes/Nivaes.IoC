@@ -25,6 +25,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC", "sources\Nivae
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.Benchmarks", "sources\Nivaes.IoC.Benchmarks\Nivaes.IoC.Benchmarks.csproj", "{8F450F60-B568-4A94-9B28-0058EC4BD5AA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{071D58AE-3A42-4DCD-8D87-555D50BAAEA2}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{A743E524-CABA-4D51-A173-235319F5B589}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build_release.yaml = .github\workflows\build_release.yaml
+		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+		.github\workflows\publish_release.yaml = .github\workflows\publish_release.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +68,8 @@ Global
 		{0090F938-F627-4778-9308-9A61302C8930} = {668694D7-0F58-40F2-B718-536811C550E0}
 		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB} = {4BDA909C-F325-40FE-B9A7-01689DE57DE1}
 		{8F450F60-B568-4A94-9B28-0058EC4BD5AA} = {668694D7-0F58-40F2-B718-536811C550E0}
+		{071D58AE-3A42-4DCD-8D87-555D50BAAEA2} = {9BEC0B56-B633-48D2-AB2A-63F13A692250}
+		{A743E524-CABA-4D51-A173-235319F5B589} = {071D58AE-3A42-4DCD-8D87-555D50BAAEA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {459176FD-3FCB-4025-80C7-E855E0E0F81B}

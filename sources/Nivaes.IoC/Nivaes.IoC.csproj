@@ -1,13 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
-        <RootNamespace>Nivaes.IoC</RootNamespace>
-        <Description>Nivaes IoC.</Description>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>Nivaes.IoC</RootNamespace>
+    
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" />
-    </ItemGroup>
+  <PropertyGroup>
+    <PackageId>Nivaes.IoC</PackageId>
+    <Title>Nivaes IoC</Title>
+
+    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+    <Product>Nivaes IoC</Product>
+    <Description>Nivaes IoC.</Description>
+    <PackageTags>Nivaes;IoC</PackageTags>
+
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" />
+  </ItemGroup>
 
 </Project>
