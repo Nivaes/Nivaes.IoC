@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Nivaes.IoC\Nivaes.IoC.csproj" />
+        <ProjectReference Include="..\..\sources\Nivaes.IoC\Nivaes.IoC.csproj" />
     </ItemGroup>
 
 </Project>

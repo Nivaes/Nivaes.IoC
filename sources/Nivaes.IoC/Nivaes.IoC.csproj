@@ -19,11 +19,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Nivaes.IoC.Benchmarks" />
+    <InternalsVisibleTo Include="Nivaes.IoC.Tests" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Include="Images\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" />
+    <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" >
+      <PrivateAssets>all</PrivateAssets>
+      <OutputItemType>Analyzer</OutputItemType>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeAssets>analyzers</IncludeAssets>
+      <ExcludeAssets>runtime; build; native; contentfiles; buildtransitive</ExcludeAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
