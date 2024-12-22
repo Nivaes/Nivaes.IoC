@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nivaes.IoC.Test
+namespace Nivaes.IoC.UnitTest
 {
-    public class Helper2
+    public class Helper1
     {
-        private Helper3 _helper;
-        public Helper2(Helper3 helper) 
+        private Helper2 _helper;
+
+        public Helper1(Helper2 helper) 
         {
             _helper = helper;
         }

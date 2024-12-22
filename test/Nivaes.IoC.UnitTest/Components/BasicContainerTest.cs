@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Xunit;
 
-namespace Nivaes.IoC.Test;
+namespace Nivaes.IoC.UnitTest;
 
 public partial class MyContainer : IoCContainer
 {

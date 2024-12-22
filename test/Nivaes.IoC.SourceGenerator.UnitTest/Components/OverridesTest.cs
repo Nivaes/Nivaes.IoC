@@ -1,8 +1,8 @@
-﻿using Nivaes.IoC.SourceGenerator.Test.Data;
-using Nivaes.IoC.SourceGenerator.Test.Utils;
+﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
 using Xunit;
 
-namespace Nivaes.IoC.SourceGenerator.Test;
+namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
 public class OverridesTest
 {

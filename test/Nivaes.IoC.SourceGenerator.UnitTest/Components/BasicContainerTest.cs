@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Xunit;
-using Nivaes.IoC.SourceGenerator.Test.Data;
-using Nivaes.IoC.SourceGenerator.Test.Utils;
+using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
 
-namespace Nivaes.IoC.SourceGenerator.Test;
+namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
 public class BasicContainerTest
 {

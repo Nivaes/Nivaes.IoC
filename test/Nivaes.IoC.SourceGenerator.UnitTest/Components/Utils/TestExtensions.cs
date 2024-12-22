@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Nivaes.IoC.SourceGenerator.Test.Utils;
+namespace Nivaes.IoC.SourceGenerator.UnitTest.Utils;
 
 public static class TestExtensions
 {

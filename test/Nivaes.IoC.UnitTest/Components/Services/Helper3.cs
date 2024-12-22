@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Nivaes.IoC.Test
+namespace Nivaes.IoC.UnitTest
 {
     public class Helper3
     {
