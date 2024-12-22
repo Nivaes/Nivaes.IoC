@@ -81,10 +81,6 @@ namespace Nivaes.IoC
                         }
                     }
 
-                    var groupedEntries = entries
-                       .GroupBy(o => o.Interface, SymbolEqualityComparer.Default)
-                       .ToArray();
-
                     if (classDeclaration == null)
                         return (null, null, null);
 
@@ -199,7 +195,7 @@ namespace {action.containerType?.ContainingNamespace}
             });
         }
 
-        private (string, string) MapResolver(ServiceEntry entry)
+        private static (string, string) MapResolver(ServiceEntry entry)
         {
             switch (entry.Lifetime)
             {
@@ -234,7 +230,7 @@ namespace {action.containerType?.ContainingNamespace}
                         entry.Syntax.GetLocation()));
             }
 
-            var constructor = constructorsWithArguments.FirstOrDefault() ?? constructors.First();
+            var constructor = constructorsWithArguments.FirstOrDefault() ?? constructors[0];
             var arguments = constructor.Parameters.Select(o => o.Type).ToArray();
             var argumentsText = arguments.Select(o => transients.Contains(o.ToGlobalName()) ? $"default({o.ToCreatorName()}).Create(resolver)" : $"resolver.Resolve<{o.ToGlobalName()}>()");
             return $"new {implementation.ToGlobalName()}({argumentsText.Join()})";
@@ -247,7 +243,7 @@ namespace {action.containerType?.ContainingNamespace}
                 .Where(o => o.MethodKind == MethodKind.Constructor)
                 .ToArray();
 
-            var constructor = members.First();
+            var constructor = members[0];
             var arguments = constructor.Parameters
                 .Select((o, i) => @$"
                 var constructor{o.Name.ToLower()}{i}Override = overrides.Constructor.Overrides.TryGetValue(""{o.Name.ToLower()}"", out var constructor{o.Name.ToLower()}{i}Value);
@@ -265,7 +261,7 @@ namespace {action.containerType?.ContainingNamespace}
                 .Where(o => o.MethodKind == MethodKind.Constructor)
                 .ToArray();
 
-            var constructor = members.First();
+            var constructor = members[0];
             var variables = constructor.Parameters
                 .Select(ResolveVariable);
 
@@ -337,7 +333,7 @@ namespace {action.containerType?.ContainingNamespace}
 
         }
 
-        private class ServiceEntry
+        private sealed class ServiceEntry
         {
             public enum LifetimeKind
             {

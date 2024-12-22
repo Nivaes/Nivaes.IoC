@@ -2,7 +2,7 @@
 
 namespace Nivaes.IoC
 {
-    public class Descriptors
+    public static class Descriptors
     {
         public static readonly DiagnosticDescriptor ClassIsNotPartial = new(
             "NI001",
