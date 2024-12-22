@@ -22,7 +22,7 @@
   <PropertyGroup>
     <NeutralLanguage>en</NeutralLanguage>
     <VersionPrefix>0.1.0</VersionPrefix>
-    <VersionSuffix>dev-011</VersionSuffix>
+    <VersionSuffix>dev-001</VersionSuffix>
   </PropertyGroup>
 
   <PropertyGroup>
