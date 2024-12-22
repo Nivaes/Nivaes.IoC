@@ -101,7 +101,7 @@ namespace Nivaes.IoC.Benchmarks
         }
 
         [Benchmark]
-        public void ZeroStartup()
+        public void NivaesIoCStartup()
         {
             var resolver = Creators.CreateIoC();
             var userService = (IUserService)resolver.Resolve(typeof(IUserService));
