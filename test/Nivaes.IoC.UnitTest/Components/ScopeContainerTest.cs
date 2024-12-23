@@ -8,40 +8,20 @@ using Xunit.Abstractions;
 
 namespace Nivaes.IoC.UnitTest;
 
-//public class SingletonService : IDisposable
-//{
-//    public bool Disposed { get; set; }
-
-//    public void Dispose()
-//    {
-//        Disposed = true;
-//    }
-//}
-
-//public class Service : IDisposable
-//{
-//    public bool Disposed { get; set; }
-
-//    public void Dispose()
-//    {
-//        Disposed = true;
-//    }
-//}
-
-public partial class Test2Container : IoCContainer
+public partial class ScopeContainerTest
 {
-    protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+    public partial class Test2Container : IoCContainer
     {
-        bootstrapper.AddSingleton<Helper1>();
-        bootstrapper.AddSingleton<Helper2>();
-        bootstrapper.AddSingleton<Helper3>();
-        bootstrapper.AddScoped<IUserService1, UserService1>();
-        bootstrapper.AddSingleton<UserService2>();
+        protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+        {
+            bootstrapper.AddSingleton<Helper1>();
+            bootstrapper.AddSingleton<Helper2>();
+            bootstrapper.AddSingleton<Helper3>();
+            bootstrapper.AddScoped<IUserService1, UserService1>();
+            bootstrapper.AddSingleton<UserService2>();
+        }
     }
-}
 
-public class ScopeContainerTest
-{
     private readonly ITestOutputHelper output;
 
     public ScopeContainerTest(ITestOutputHelper output)

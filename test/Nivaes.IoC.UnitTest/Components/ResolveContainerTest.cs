@@ -8,21 +8,21 @@ using Xunit.Abstractions;
 
 namespace Nivaes.IoC.UnitTest;
 
-public partial class Test1Container : IoCContainer
+public partial class ResolveContainerTest
 {
-    protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+    public partial class Test1Container : IoCContainer
     {
-        bootstrapper.AddSingleton<Helper1>();
-        bootstrapper.AddSingleton<Helper2>();
-        bootstrapper.AddSingleton<Helper3>();
-        bootstrapper.AddTransient<IUserService1, UserService1>();
-        bootstrapper.AddTransient<IUserService2, UserService2>();
-        bootstrapper.AddTransient<IUserService3, UserService3>();
+        protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+        {
+            bootstrapper.AddSingleton<Helper1>();
+            bootstrapper.AddSingleton<Helper2>();
+            bootstrapper.AddSingleton<Helper3>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService2, UserService2>();
+            bootstrapper.AddTransient<IUserService3, UserService3>();
+        }
     }
-}
 
-public class ResolveContainerTest
-{
     private readonly ITestOutputHelper output;
 
     public ResolveContainerTest(ITestOutputHelper output)
