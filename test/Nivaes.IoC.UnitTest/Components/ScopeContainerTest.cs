@@ -34,11 +34,6 @@ public partial class ScopeContainerTest
     {
         var container = new Test2Container();
         container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
-        //container.AddDelegate<IUserService1>((a) => 
-        //    {
-        //        return new UserService1(new Helper1(new Helper2(new Helper3())));
-        //    }
-        //);
 
         var userService1_1 = container.Resolve<IUserService1>();
         userService1_1.Should().NotBeNull();
