@@ -37,8 +37,11 @@ public class ScopedContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
+        Assert.NotNull(containerType);
+        Assert.NotNull(serviceType);
 
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType);
+        Assert.NotNull(container);
 
         Assert.Throws<ScopedWithoutScopeException>(() => container.Resolve(serviceType));
     }
@@ -72,8 +75,11 @@ public class ScopedContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
+        Assert.NotNull(containerType);
+        Assert.NotNull(serviceType);
 
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType);
+        Assert.NotNull(container);
 
         var scoped = container.CreateScope();
         var scopedFirstService = scoped.Resolve(serviceType);
@@ -129,17 +135,24 @@ public class ScopedContainerTest
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.Service");
         var singletonServiceType = assembly.GetType("TestProject.SingletonService");
+        Assert.NotNull(containerType);
+        Assert.NotNull(serviceType);
+        Assert.NotNull(singletonServiceType);
 
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType);
+        Assert.NotNull(container);
 
-        object service = null;
-        object singletonService = null;
+        object? service = null;
+        object? singletonService = null;
         using (var scoped = container.CreateScope())
         {
             service = scoped.Resolve(serviceType);
+            Assert.NotNull(service);
+
             Assert.False((bool)service.ReflectionGetValue("Disposed"));
 
             singletonService = scoped.Resolve(singletonServiceType);
+            Assert.NotNull(singletonService);
             Assert.False((bool)service.ReflectionGetValue("Disposed"));
         }
 

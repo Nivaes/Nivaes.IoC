@@ -35,15 +35,17 @@ public class OverridesTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer")!;
         var serviceType = assembly.GetType("TestProject.Service");
+        Assert.NotNull(serviceType);
 
         var container = (IoCContainer)Activator.CreateInstance(containerType)!;
         
         var initialValue = "not override";
         container.AddInstance(initialValue);
 
-        var service = container.Resolve(serviceType, Overrides.Create().Constructor(("value", "override")));
-        
-        var value = service.ReflectionGetValue("Value");
+        var service = container.Resolve(serviceType!, Overrides.Create().Constructor(("value", "override")));
+        Assert.NotNull(service);
+
+        var value = service?.ReflectionGetValue("Value");
         Assert.NotEqual(initialValue, value);
     }
     
@@ -89,16 +91,18 @@ public class OverridesTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer")!;
         var serviceType = assembly.GetType("TestProject.Service");
+        Assert.NotNull(serviceType);
 
         var container = (IoCContainer)Activator.CreateInstance(containerType)!;
         
         var initialValue = "not override";
         container.AddInstance(initialValue);
 
-        var service = container.Resolve(serviceType, Overrides.Create().Dependency<string>(() => "override"));
-        
-        var value = service.ReflectionGetValue("Value");
-        var repositoryValue = service.ReflectionGetValue("Repository").ReflectionGetValue("Value");
+        var service = container.Resolve(serviceType!, Overrides.Create().Dependency<string>(() => "override"));
+        Assert.NotNull(service);
+
+        var value = service?.ReflectionGetValue("Value");
+        var repositoryValue = service?.ReflectionGetValue("Repository").ReflectionGetValue("Value");
         
         Assert.NotEqual(initialValue, value);
         Assert.NotEqual(initialValue, repositoryValue);

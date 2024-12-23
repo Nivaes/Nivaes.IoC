@@ -1,25 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Nivaes.IoC.UnitTest
 {
-    public class UserService : IUserService
+    public interface IUserService3
+    {
+        Guid Id { get; }
+        void PrintMessage();
+    }
+
+    public class UserService3 : IUserService3
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        private Helper1 helper;
+        private Helper3 helper;
 
-        public UserService(Helper1 helper)
+        public UserService3(Helper3 helper)
         {
             this.helper = helper;
         }
 
         public void PrintMessage()
         {
-            Console.WriteLine($"UserService.PrintMessage {Id}");
+            Debug.WriteLine($"UserService.PrintMessage {Id}");
         }
     }
 }
