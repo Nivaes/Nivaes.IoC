@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Nivaes.IoC.UnitTest;
 
-public partial class MyContainer : IoCContainer
+public partial class Test1Container : IoCContainer
 {
     protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
     {
@@ -20,38 +21,33 @@ public partial class MyContainer : IoCContainer
     }
 }
 
-public class BasicContainerTest
+public class ResolveContainerTest
 {
     private readonly ITestOutputHelper output;
 
-    public BasicContainerTest(ITestOutputHelper output)
+    public ResolveContainerTest(ITestOutputHelper output)
     {
         this.output = output;
     }
 
     [Fact]
-    public void ResolveSimpleTransient()
+    public void ResolveSimpleTransient1()
     {
-        var container = new MyContainer();
+        var container = new Test1Container();
+
         var userService1_1 = container.Resolve<IUserService1>();
-
-        Assert.NotNull(userService1_1);
-
-        userService1_1.PrintMessage();
+        userService1_1.Should().NotBeNull();
+        userService1_1!.PrintMessage();
         output.WriteLine($"{userService1_1.Id}");
 
         var userService1_2 = container.Resolve<IUserService1>();
-
-        Assert.NotNull(userService1_2);
-
-        userService1_2.PrintMessage();
+        userService1_2.Should().NotBeNull();
+        userService1_2!.PrintMessage();
         output.WriteLine($"{userService1_2.Id}");
 
         var userService1_3 = container.Resolve<IUserService1>();
-
-        Assert.NotNull(userService1_3);
-
-        userService1_3.PrintMessage();
+        userService1_3.Should().NotBeNull();
+        userService1_3!.PrintMessage();
         output.WriteLine($"{userService1_3.Id}");
     }
 }

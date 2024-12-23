@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis;
 using Xunit;
 using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using FluentAssertions;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
@@ -90,10 +91,19 @@ public class BasicContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
+        
         var serviceType = assembly.GetType("TestProject.IService");
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
-        var firstService = container.Resolve(serviceType);
-        var secondService = container.Resolve(serviceType);
+        serviceType.Should().NotBeNull();
+
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+
+        var firstService = container!.Resolve(serviceType!);
+        firstService.Should().NotBeNull();
+
+        var secondService = container.Resolve(serviceType!);
+        secondService.Should().NotBeNull();
 
         Assert.True(firstService != null && secondService != null && !firstService.Equals(secondService));
     }
@@ -218,7 +228,7 @@ public class BasicContainerTest
         var container = (IIoCResolver)Activator.CreateInstance(containerType);
         var service = container.Resolve(serviceType);
 
-        Assert.NotNull(service);
+        service.Should().NotBeNull();
     }
 
     [Fact]
@@ -240,7 +250,7 @@ public class BasicContainerTest
 ");
 
         var newProject = await project.ApplyIoCGenerator();
-
+        newProject.Should().NotBeNull();
     }
 
     [Fact]
@@ -259,6 +269,6 @@ public class BasicContainerTest
 ");
 
         var newProject = await project.ApplyIoCGenerator();
-
+        newProject.Should().NotBeNull();
     }
 }

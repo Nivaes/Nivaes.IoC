@@ -14,7 +14,7 @@ namespace Nivaes.IoC.UnitTest
         void PrintMessage();
     }
 
-    public class UserService1 : IUserService1
+    public class UserService1 : IUserService1, IDisposable
     {
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -29,5 +29,14 @@ namespace Nivaes.IoC.UnitTest
         {
             Debug.WriteLine($"UserService.PrintMessage {Id}");
         }
+
+        #region IDisposable
+        public bool Disposed { get; set; }
+
+        public void Dispose()
+        {
+            Disposed = true;
+        }
+        #endregion
     }
 }

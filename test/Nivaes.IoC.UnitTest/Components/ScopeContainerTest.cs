@@ -1,0 +1,134 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.CodeAnalysis;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace Nivaes.IoC.UnitTest;
+
+//public class SingletonService : IDisposable
+//{
+//    public bool Disposed { get; set; }
+
+//    public void Dispose()
+//    {
+//        Disposed = true;
+//    }
+//}
+
+//public class Service : IDisposable
+//{
+//    public bool Disposed { get; set; }
+
+//    public void Dispose()
+//    {
+//        Disposed = true;
+//    }
+//}
+
+public partial class Test2Container : IoCContainer
+{
+    protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+    {
+        bootstrapper.AddSingleton<Helper1>();
+        bootstrapper.AddSingleton<Helper2>();
+        bootstrapper.AddSingleton<Helper3>();
+        bootstrapper.AddScoped<IUserService1, UserService1>();
+        bootstrapper.AddSingleton<UserService2>();
+    }
+}
+
+public class ScopeContainerTest
+{
+    private readonly ITestOutputHelper output;
+
+    public ScopeContainerTest(ITestOutputHelper output)
+    {
+        this.output = output;
+    }
+
+    [Fact]
+    public void ResolveScopedTransient01()
+    {
+        var container = new Test2Container();
+        container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
+        //container.AddDelegate<IUserService1>((a) => 
+        //    {
+        //        return new UserService1(new Helper1(new Helper2(new Helper3())));
+        //    }
+        //);
+
+        var userService1_1 = container.Resolve<IUserService1>();
+        userService1_1.Should().NotBeNull();
+        userService1_1!.PrintMessage();
+        output.WriteLine($"{userService1_1.Id}");
+
+        var userService1_2 = container.Resolve<IUserService1>();
+        userService1_2.Should().NotBeNull();
+        userService1_2!.PrintMessage();
+        output.WriteLine($"{userService1_2.Id}");
+
+        var userService1_3 = container.Resolve<IUserService1>();
+        userService1_3.Should().NotBeNull();
+        userService1_3!.PrintMessage();
+        output.WriteLine($"{userService1_3.Id}");
+    }
+
+    [Fact]
+    public void ResolveScopedTransient02()
+    {
+        var container = new Test2Container();
+        container.AddDelegate<IUserService1>((container) =>
+            {
+                var helper3 = container.Resolve<Helper3>();
+                helper3.Should().NotBeNull();
+                return new UserService1(new Helper1(new Helper2(helper3!)));
+            }
+        );
+
+        var userService1_1 = container.Resolve<IUserService1>();
+        userService1_1.Should().NotBeNull();
+        userService1_1!.PrintMessage();
+        output.WriteLine($"{userService1_1.Id}");
+
+        var userService1_2 = container.Resolve<IUserService1>();
+        userService1_2.Should().NotBeNull();
+        userService1_2!.PrintMessage();
+        output.WriteLine($"{userService1_2.Id}");
+
+        var userService1_3 = container.Resolve<IUserService1>();
+        userService1_3.Should().NotBeNull();
+        userService1_3!.PrintMessage();
+        output.WriteLine($"{userService1_3.Id}");
+    }
+
+    [Fact]
+    public void ResolveMultyScopedTransient()
+    {
+        var container = new Test2Container();
+        container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
+
+        var scope1 = container.CreateScope();
+        scope1.Should().NotBeNull();
+
+        var userService1_1 = scope1.Resolve<IUserService1>();
+        userService1_1.Should().NotBeNull();
+        userService1_1!.PrintMessage();
+        output.WriteLine($"{userService1_1.Id}");
+
+        var userService1_2 = scope1.Resolve<IUserService1>();
+        userService1_2.Should().NotBeNull();
+        userService1_2!.PrintMessage();
+        output.WriteLine($"{userService1_2.Id}");
+
+        var scope2 = container.CreateScope();
+        scope2.Should().NotBeNull();
+
+        var userService1_3 = scope2.Resolve<IUserService1>();
+        userService1_3.Should().NotBeNull();
+        userService1_3!.PrintMessage();
+        output.WriteLine($"{userService1_3.Id}");
+    }
+}
