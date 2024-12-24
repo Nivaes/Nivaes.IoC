@@ -21,9 +21,9 @@ public class StatetmentsAnalyzerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 if(true)
                 {
@@ -33,7 +33,7 @@ public class StatetmentsAnalyzerTest
         }
 ");
 
-        var diagnostics = await project.ApplyAnalyzer(new IoCContainerAnalyzer());
+        var diagnostics = await project.ApplyAnalyzer(new IoCServiceContainerAnalyzer());
 
         Assert.True(diagnostics.Any(o => o.Id == Descriptors.StatementsNotAllowed.Id));
 
@@ -54,9 +54,9 @@ public class StatetmentsAnalyzerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 while(true)
                 {
@@ -66,7 +66,7 @@ public class StatetmentsAnalyzerTest
         }
 ");
 
-        var diagnostics = await project.ApplyAnalyzer(new IoCContainerAnalyzer());
+        var diagnostics = await project.ApplyAnalyzer(new IoCServiceContainerAnalyzer());
 
         Assert.True(diagnostics.Any(o => o.Id == Descriptors.StatementsNotAllowed.Id));
     }
@@ -86,9 +86,9 @@ public class StatetmentsAnalyzerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 for(int i = 0; i < 10; i++)
                 {
@@ -98,7 +98,7 @@ public class StatetmentsAnalyzerTest
         }
 ");
 
-        var diagnostics = await project.ApplyAnalyzer(new IoCContainerAnalyzer());
+        var diagnostics = await project.ApplyAnalyzer(new IoCServiceContainerAnalyzer());
 
         Assert.True(diagnostics.Any(o => o.Id == Descriptors.StatementsNotAllowed.Id));
     }

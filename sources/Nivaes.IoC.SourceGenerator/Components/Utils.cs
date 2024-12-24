@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.Text;
+
     public static class Utils
     {
         public static IEnumerable<ISymbol> GetAllMembers(this ITypeSymbol symbol)

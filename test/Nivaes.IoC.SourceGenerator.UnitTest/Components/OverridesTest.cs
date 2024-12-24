@@ -21,9 +21,9 @@ public class OverridesTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddTransient<Service>();
             }
@@ -37,7 +37,7 @@ public class OverridesTest
         var serviceType = assembly.GetType("TestProject.Service");
         Assert.NotNull(serviceType);
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType)!;
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType)!;
         
         var initialValue = "not override";
         container.AddInstance(initialValue);
@@ -76,9 +76,9 @@ public class OverridesTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddTransient<Service>();
                 bootstrapper.AddTransient<Repository>();
@@ -93,7 +93,7 @@ public class OverridesTest
         var serviceType = assembly.GetType("TestProject.Service");
         Assert.NotNull(serviceType);
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType)!;
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType)!;
         
         var initialValue = "not override";
         container.AddInstance(initialValue);

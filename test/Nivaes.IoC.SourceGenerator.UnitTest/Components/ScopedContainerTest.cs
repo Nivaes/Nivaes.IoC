@@ -23,9 +23,9 @@ public class ScopedContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddScoped<IService, Service>();
             }
@@ -61,9 +61,9 @@ public class ScopedContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddScoped<IService, Service>();
             }
@@ -119,9 +119,9 @@ public class ScopedContainerTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddScoped<Service>();
                 bootstrapper.AddSingleton<SingletonService>();

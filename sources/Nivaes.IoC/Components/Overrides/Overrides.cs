@@ -1,8 +1,7 @@
-﻿using System;
-using Nivaes.IoC.Core.Overrides;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
+    using System;
+
     public interface IOverrides
     {
         ConstructorOverrides Constructor { get; set; }

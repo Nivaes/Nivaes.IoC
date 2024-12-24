@@ -1,18 +1,18 @@
-﻿using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
-    [Generator]
-    public class IoCContainerGenerator : IIncrementalGenerator
+    using System.Text;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+    [Generator(LanguageNames.CSharp)]
+    public class IoCServiceContainerGenerator : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            //#if DEBUG
-            //            System.Diagnostics.Debugger.Launch();
-            //#endif
+//#if DEBUG
+//                        System.Diagnostics.Debugger.Launch();
+//#endif
 
             var generate = context.SyntaxProvider
                 .CreateSyntaxProvider(
@@ -26,7 +26,7 @@ namespace Nivaes.IoC
                 {
                     case ClassDeclarationSyntax classDeclaration:
                         if (classDeclaration.BaseList?.Types
-                                .Any(o => o.Type.ToString().EndsWith("IoCContainer")) ?? false)
+                                .Any(o => o.Type.ToString().EndsWith("IoCServiceContainer")) ?? false)
                         {
                             return true;
                         }
@@ -212,7 +212,7 @@ namespace {action.containerType?.ContainingNamespace}
     {sufixClass}
 }}
 ";
-                context.AddSource(action.identifiersText[0] + "_IoCContainer", source);
+                context.AddSource(action.identifiersText[0] + "_IoCServiceContainer", source);
 
             });
         }

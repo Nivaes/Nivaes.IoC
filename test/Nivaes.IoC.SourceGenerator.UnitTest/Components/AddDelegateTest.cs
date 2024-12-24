@@ -14,9 +14,9 @@ public class AddDelegateTest
     {
         var project = await TestProject.Project.ApplyToProgram(@"
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
             }
         }
@@ -27,7 +27,7 @@ public class AddDelegateTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer")!;
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
         container.AddDelegate(r => new MemoryStream(), Reuse.Singleton);
         using var scope1 = container.CreateScope();
 
@@ -44,9 +44,9 @@ public class AddDelegateTest
     {
         var project = await TestProject.Project.ApplyToProgram(@"
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
             }
         }
@@ -57,7 +57,7 @@ public class AddDelegateTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
         container.AddDelegate(r => new MemoryStream(), Reuse.Scoped);
 
         using var scope1 = container.CreateScope();
@@ -76,9 +76,9 @@ public class AddDelegateTest
     {
         var project = await TestProject.Project.ApplyToProgram(@"
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
             }
         }
@@ -89,7 +89,7 @@ public class AddDelegateTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
         container.AddDelegate(r => new MemoryStream(), Reuse.Transient);
 
         using var scope1 = container.CreateScope();

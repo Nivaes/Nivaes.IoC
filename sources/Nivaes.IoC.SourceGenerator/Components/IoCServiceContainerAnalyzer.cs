@@ -1,13 +1,13 @@
-﻿using System.Collections.Immutable;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
+    using System.Collections.Immutable;
+    using Microsoft.CodeAnalysis;
+    using Microsoft.CodeAnalysis.CSharp;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using Microsoft.CodeAnalysis.Diagnostics;
+
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class IoCContainerAnalyzer : DiagnosticAnalyzer
+    public class IoCServiceContainerAnalyzer : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             =>
@@ -28,7 +28,7 @@ namespace Nivaes.IoC
         private static void Handle(SyntaxNodeAnalysisContext context)
         {
             if (context.Node is ClassDeclarationSyntax classDeclaration &&
-                (classDeclaration.BaseList?.Types.Any(o => o.Type.ToString() == "IoCContainer") ?? false))
+                (classDeclaration.BaseList?.Types.Any(o => o.Type.ToString() == "IoCServiceContainer") ?? false))
             {
                 var isPartial = classDeclaration.Modifiers.Any(o => o.IsKind(SyntaxKind.PartialKeyword));
                 if (!isPartial)

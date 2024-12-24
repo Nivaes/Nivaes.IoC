@@ -10,9 +10,9 @@ namespace Nivaes.IoC.UnitTest;
 
 public partial class ResolveContainerTest
 {
-    public partial class Test1Container : IoCContainer
+    public partial class Test1Container : IoCServiceContainer
     {
-        protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+        protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
         {
             bootstrapper.AddSingleton<Helper1>();
             bootstrapper.AddSingleton<Helper2>();

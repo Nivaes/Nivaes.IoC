@@ -1,6 +1,6 @@
 ﻿namespace Nivaes.IoC
 {
-    public interface IIoCContainerBootstrapper
+    public interface IIoCServiceContainerBootstrapper
     {
         void AddTransient<TImplementation>();
         void AddTransient<TInterface, TImplementation>();

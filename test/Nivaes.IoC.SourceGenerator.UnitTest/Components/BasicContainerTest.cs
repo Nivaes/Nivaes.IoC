@@ -41,9 +41,9 @@ public class BasicContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
@@ -78,9 +78,9 @@ public class BasicContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddTransient<IService, Service>();
             }
@@ -123,17 +123,17 @@ public class BasicContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddTransient<IService, Service>();
             }
         }
 
-        public partial class SingleContainer : IoCContainer
+        public partial class SingleContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
@@ -178,9 +178,9 @@ public class BasicContainerTest
 
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
@@ -210,9 +210,9 @@ public class BasicContainerTest
         {
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<Service>();
             }
@@ -240,9 +240,9 @@ public class BasicContainerTest
         {
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<Servi>();
             }

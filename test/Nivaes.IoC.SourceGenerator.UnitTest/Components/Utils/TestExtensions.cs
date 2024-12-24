@@ -38,7 +38,7 @@ public static class TestExtensions
 
     public static async Task<Project> ApplyIoCGenerator(this Project project)
     {
-        var newProject = await project.RunSourceGenerator(new IoCContainerGenerator());
+        var newProject = await project.RunSourceGenerator(new IoCServiceContainerGenerator());
 
         return newProject;
     }

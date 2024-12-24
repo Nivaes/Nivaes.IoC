@@ -31,7 +31,7 @@ namespace Nivaes.IoC
         public static readonly DiagnosticDescriptor StatementsNotAllowed = new(
             "NI004",
             "The Bootstrap method does not allow statements",
-            "The Bootstrap method does not allow statements. Use only method calls from the IIoCContainerBootstrapper.",
+            "The Bootstrap method does not allow statements. Use only method calls from the IIoCServiceContainerBootstrapper.",
             "Nivaes.IoC",
             DiagnosticSeverity.Error,
             true);

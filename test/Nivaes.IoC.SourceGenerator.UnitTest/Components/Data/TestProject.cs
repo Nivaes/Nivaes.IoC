@@ -50,7 +50,7 @@ namespace TestProject
             MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location),
             MetadataReference.CreateFromFile(typeof(ArrayPool<>).Assembly.Location),
-            MetadataReference.CreateFromFile(typeof(IoCContainer).Assembly.Location),
+            MetadataReference.CreateFromFile(typeof(IoCServiceContainer).Assembly.Location),
         };
     }
 }

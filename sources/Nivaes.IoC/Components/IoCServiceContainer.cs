@@ -2,7 +2,7 @@
 
 namespace Nivaes.IoC
 {
-    public abstract class IoCContainer : IIoCResolver, IDisposable
+    public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         protected readonly Dictionary<Type, IInstanceResolver> Resolvers = new Dictionary<Type, IInstanceResolver>();
 
@@ -12,11 +12,11 @@ namespace Nivaes.IoC
 
         private bool disposed = false;
 
-        protected IoCContainer()
+        protected IoCServiceContainer()
         {
         }
 
-        protected IoCContainer(Dictionary<Type, IInstanceResolver> resolvers,
+        protected IoCServiceContainer(Dictionary<Type, IInstanceResolver> resolvers,
             Dictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
         {
             Resolvers = resolvers;
@@ -34,7 +34,7 @@ namespace Nivaes.IoC
             throw new NotImplementedException(nameof(CreateScope));
         }
 
-        protected abstract void Bootstrap(IIoCContainerBootstrapper bootstrapper);
+        protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
 
         public object? Resolve(Type serviceType)
         {
@@ -126,7 +126,7 @@ namespace Nivaes.IoC
             Resolvers[typeof(TValue)] = new SingletonResolver(o => value!);
         }
 
-        public void Merge(IoCContainer container)
+        public void Merge(IoCServiceContainer container)
         {
             foreach (var resolver in container.Resolvers)
             {

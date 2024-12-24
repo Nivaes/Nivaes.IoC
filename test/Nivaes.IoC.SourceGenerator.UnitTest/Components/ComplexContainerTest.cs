@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using FluentAssertions;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
@@ -37,9 +38,9 @@ public class ComplexContainerTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddTransient<IRepository, Repository>();
                 bootstrapper.AddTransient<IService, Service>();
@@ -53,7 +54,7 @@ public class ComplexContainerTest
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
 
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType);
         var firstService = container.Resolve(serviceType);
         var secondService = container.Resolve(serviceType);
 
@@ -88,17 +89,17 @@ public class ComplexContainerTest
             }
         }
 
-        public partial class ServiceContainer : IoCContainer
+        public partial class ServiceContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
         }
 
-        public partial class RepositoryContainer : IoCContainer
+        public partial class RepositoryContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IRepository, Repository>();
             }
@@ -112,8 +113,8 @@ public class ComplexContainerTest
         var repositoryContainerType = assembly.GetType("TestProject.RepositoryContainer");
         var serviceType = assembly.GetType("TestProject.IService");
 
-        var serviceContainer = (IoCContainer)Activator.CreateInstance(serviceContainerType);
-        var repositoryContainer = (IoCContainer)Activator.CreateInstance(repositoryContainerType);
+        var serviceContainer = (IoCServiceContainer?)Activator.CreateInstance(serviceContainerType);
+        var repositoryContainer = (IoCServiceContainer?)Activator.CreateInstance(repositoryContainerType);
         repositoryContainer.Merge(serviceContainer);
 
         var service = repositoryContainer.Resolve(serviceType);
@@ -149,9 +150,9 @@ public class ComplexContainerTest
             }
         }
 
-        public partial class ServiceContainer : IoCContainer
+        public partial class ServiceContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IRepository, Repository>();
                 bootstrapper.AddSingleton<IService, Service>();
@@ -165,7 +166,7 @@ public class ComplexContainerTest
         var serviceContainerType = assembly.GetType("TestProject.ServiceContainer");
         var serviceType = assembly.GetType("TestProject.IService");
 
-        var serviceContainer = (IoCContainer)Activator.CreateInstance(serviceContainerType);
+        var serviceContainer = (IoCServiceContainer)Activator.CreateInstance(serviceContainerType);
         var serviceContainerCopy = serviceContainer.Clone();
 
         var service = serviceContainer.Resolve(serviceType);
@@ -195,9 +196,9 @@ public class ComplexContainerTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
@@ -208,12 +209,14 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
-        container.AddDelegate(o => Guid.NewGuid().ToString());
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        container!.AddDelegate(o => Guid.NewGuid().ToString());
 
-        var service1 = container.Resolve(typeof(string));
-        var service2 = container.Resolve(typeof(string));
+        var service1 = container!.Resolve(typeof(string));
+        var service2 = container!.Resolve(typeof(string));
 
         Assert.NotSame(service1, service2);
     }
@@ -237,9 +240,9 @@ public class ComplexContainerTest
             }
         }
 
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
                 bootstrapper.AddSingleton<IService, Service>();
             }
@@ -250,11 +253,14 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
         var serviceType = assembly.GetType("TestProject.IService");
+        serviceType.Should().NotBeNull();
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
-        container.AddInstance(Guid.NewGuid().ToString());
-        var service = container.Resolve(serviceType);
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        container!.AddInstance(Guid.NewGuid().ToString());
+        var service = container.Resolve(serviceType!);
 
         Assert.NotNull(service);
     }
@@ -263,9 +269,9 @@ public class ComplexContainerTest
     public async Task ReplaceInstance()
     {
         var project = await TestProject.Project.ApplyToProgram(@"
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
             }
         }
@@ -275,7 +281,7 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
             
         var guidValue = Guid.NewGuid();
         container.AddInstance(guidValue);
@@ -293,9 +299,9 @@ public class ComplexContainerTest
     public async Task ReplaceDelegate()
     {
         var project = await TestProject.Project.ApplyToProgram(@"
-        public partial class TestContainer : IoCContainer
+        public partial class TestContainer : IoCServiceContainer
         {
-            protected override void Bootstrap(IIoCContainerBootstrapper bootstrapper)
+            protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
             {
             }
         }
@@ -305,7 +311,7 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
 
-        var container = (IoCContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
             
         var guidValue = Guid.NewGuid();
         container.AddDelegate(o => guidValue, Reuse.Singleton);

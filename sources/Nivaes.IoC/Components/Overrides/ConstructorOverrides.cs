@@ -1,4 +1,4 @@
-﻿namespace Nivaes.IoC.Core.Overrides
+﻿namespace Nivaes.IoC
 {
     public class ConstructorOverrides
     {
