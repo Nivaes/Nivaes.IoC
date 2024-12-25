@@ -10,7 +10,7 @@ namespace Nivaes.IoC.UnitTest;
 
 public partial class ScopeContainerTest
 {
-    public partial class Test2Container : IoCServiceContainer
+    public partial class TestContainer : IoCServiceContainer
     {
         protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
         {
@@ -32,7 +32,7 @@ public partial class ScopeContainerTest
     [Fact]
     public void ResolveScopedTransient01()
     {
-        var container = new Test2Container();
+        var container = new TestContainer();
         container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
 
         var userService1_1 = container.Resolve<IUserService1>();
@@ -54,7 +54,7 @@ public partial class ScopeContainerTest
     [Fact]
     public void ResolveScopedTransient02()
     {
-        var container = new Test2Container();
+        var container = new TestContainer();
         container.AddDelegate<IUserService1>((container) =>
             {
                 var helper3 = container.Resolve<Helper3>();
@@ -82,7 +82,7 @@ public partial class ScopeContainerTest
     [Fact]
     public void ResolveMultyScopedTransient()
     {
-        var container = new Test2Container();
+        var container = new TestContainer();
         container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
 
         var scope1 = container.CreateScope();

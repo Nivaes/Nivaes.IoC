@@ -1,6 +1,7 @@
 ﻿namespace Nivaes.IoC
 {
     using System.Text;
+    using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,7 +12,7 @@
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
 //#if DEBUG
-//                        System.Diagnostics.Debugger.Launch();
+//            System.Diagnostics.Debugger.Launch();
 //#endif
 
             var generate = context.SyntaxProvider
@@ -137,7 +138,7 @@
 
                 var prefixClass = new StringBuilder();
                 var sufixClass = new StringBuilder();
-                for (int i = 1; i < action.identifiersText.Length; i++)
+                for (int i = action.identifiersText.Length-1; i > 0 ; i--)
                 {
                     prefixClass.AppendLine($"public partial class {action.identifiersText[i]}{{");
                     sufixClass.AppendLine($"}}");
@@ -212,7 +213,8 @@ namespace {action.containerType?.ContainingNamespace}
     {sufixClass}
 }}
 ";
-                context.AddSource(action.identifiersText[0] + "_IoCServiceContainer", source);
+                var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
+                context.AddSource(sourceName + "_IoCServiceContainer", source);
 
             });
         }

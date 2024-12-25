@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Xunit;
-using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
 

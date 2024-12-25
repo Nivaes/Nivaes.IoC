@@ -10,7 +10,7 @@ namespace Nivaes.IoC.UnitTest;
 
 public partial class ResolveContainerTest
 {
-    public partial class Test1Container : IoCServiceContainer
+    public partial class TestContainer : IoCServiceContainer
     {
         protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
         {
@@ -33,7 +33,7 @@ public partial class ResolveContainerTest
     [Fact]
     public void ResolveSimpleTransient1()
     {
-        var container = new Test1Container();
+        var container = new TestContainer();
 
         var userService1_1 = container.Resolve<IUserService1>();
         userService1_1.Should().NotBeNull();

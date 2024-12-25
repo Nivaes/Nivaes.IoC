@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FluentAssertions;
 using Microsoft.CodeAnalysis;
-using Xunit;
 using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
-using FluentAssertions;
+using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
 

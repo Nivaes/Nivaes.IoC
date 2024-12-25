@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -16,7 +13,7 @@ public static class TestExtensions
     public static async Task<ImmutableArray<Diagnostic>> ApplyAnalyzer(this Project project, DiagnosticAnalyzer analyzer)
     {
         var compilation = await project.GetCompilationAsync();
-        var newCompilation = compilation.WithAnalyzers(ImmutableArray.Create(analyzer));
+        var newCompilation = compilation!.WithAnalyzers(ImmutableArray.Create(analyzer));
         var diagnostics = await newCompilation.GetAllDiagnosticsAsync();
 
         return diagnostics;
@@ -46,11 +43,10 @@ public static class TestExtensions
     public static async Task<Project> RunSourceGenerator<TGenerator>(this Project project, TGenerator generator)
         where TGenerator : IIncrementalGenerator
     {
-
         var compilation = await project.GetCompilationAsync();
-        var driver = CSharpGeneratorDriver.Create(generator);
+        var driver = CSharpGeneratorDriver.Create(incrementalGenerators: generator);
         var results = driver
-            .RunGenerators(compilation)
+            .RunGenerators(compilation!)
             .GetRunResult()
             .Results
             .SelectMany(o => o
@@ -68,7 +64,7 @@ public static class TestExtensions
         return project;
     }
 
-    public static object ReflectionGetValue(this object @object, string name)
+    public static object? ReflectionGetValue(this object @object, string name)
     {
         var nonPublic = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         var member = @object.GetType().GetField(name, nonPublic);
@@ -83,7 +79,7 @@ public static class TestExtensions
         return member.GetValue(@object);
     }
 
-    public static object ReflectionCall(this object @object, string name, params object[] args)
+    public static object? ReflectionCall(this object @object, string name, params object[] args)
     {
         var nonPublic = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         var member = @object.GetType().GetMethod(name, nonPublic);
@@ -98,7 +94,7 @@ public static class TestExtensions
         return member.Invoke(@object, args);
     }
         
-    public static object StaticReflectionCall(this object @object, string name, params object[] args)
+    public static object? StaticReflectionCall(this object @object, string name, params object[] args)
     {
         var nonPublic = BindingFlags.Static | BindingFlags.Public;
         var member = @object.GetType().GetMethod(name, nonPublic);
@@ -116,7 +112,7 @@ public static class TestExtensions
     public static async Task<Assembly> CompileToRealAssembly(this Project project)
     {
         var compilation = await project.GetCompilationAsync();
-        var error = compilation.GetDiagnostics().FirstOrDefault(o => o.Severity == DiagnosticSeverity.Error);
+        var error = compilation!.GetDiagnostics().FirstOrDefault(o => o.Severity == DiagnosticSeverity.Error);
         if (error != null)
         {
             throw new Exception(error.GetMessage());
