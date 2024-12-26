@@ -2,8 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
+    <AssemblyName>Nivaes.IoC</AssemblyName>
     <RootNamespace>Nivaes.IoC</RootNamespace>
-    
+
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,8 +16,7 @@
     <Product>Nivaes IoC</Product>
     <Description>Nivaes IoC.</Description>
     <PackageTags>Nivaes;IoC</PackageTags>
-
-    <IsAotCompatible>true</IsAotCompatible>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,10 +26,14 @@
   
   <ItemGroup>
     <None Include="Images\icon.png" Pack="true" PackagePath="\" />
+    <None Include="Docs\Readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj" >
+    <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj">
+      <OutputItemType>Analyzer</OutputItemType>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      
       <PrivateAssets>runtime; build; native; contentfiles; buildtransitive</PrivateAssets>
       <IncludeAssets>analyzers</IncludeAssets>
       <ExcludeAssets>runtime; build; native; contentfiles; buildtransitive</ExcludeAssets>
