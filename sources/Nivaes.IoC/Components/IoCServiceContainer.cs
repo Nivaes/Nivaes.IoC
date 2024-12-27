@@ -1,12 +1,14 @@
-﻿using Nivaes.IoC.Core;
+﻿using System;
+using System.Collections.Frozen;
+using Nivaes.IoC.Core;
 
 namespace Nivaes.IoC
 {
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected readonly Dictionary<Type, IInstanceResolver> Resolvers = new Dictionary<Type, IInstanceResolver>();
+        protected readonly IDictionary<Type, IInstanceResolver> Resolvers = new Dictionary<Type, IInstanceResolver>();
 
-        protected readonly Dictionary<Type, IInstanceResolver> ScopedResolvers = new Dictionary<Type, IInstanceResolver>();
+        protected readonly IDictionary<Type, IInstanceResolver> ScopedResolvers = new Dictionary<Type, IInstanceResolver>();
 
         protected readonly bool Scoped;
 
@@ -16,8 +18,8 @@ namespace Nivaes.IoC
         {
         }
 
-        protected IoCServiceContainer(Dictionary<Type, IInstanceResolver> resolvers,
-            Dictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
+        protected IoCServiceContainer(IDictionary<Type, IInstanceResolver> resolvers,
+            IDictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
         {
             Resolvers = resolvers;
             ScopedResolvers = scopedResolvers;

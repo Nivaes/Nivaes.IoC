@@ -192,7 +192,7 @@ namespace {action.containerType?.ContainingNamespace}
         .JoinWithNewLine()}
         }}
 
-        private {action.containerType?.Name}(Dictionary<Type, IInstanceResolver> resolvers, Dictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
+        private {action.containerType?.Name}(IDictionary<Type, IInstanceResolver> resolvers, IDictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
             : base(resolvers, scopedResolvers, scope)
         {{
         }}
