@@ -1,0 +1,57 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.CodeAnalysis;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace Nivaes.IoC.UnitTest;
+
+public partial class ResolveDelegateContainerTest
+{
+    public partial class TestContainer : IoCServiceContainer
+    {
+        protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
+        {
+            bootstrapper.AddSingleton<Helper1>();
+            bootstrapper.AddSingleton<Helper2>();
+            bootstrapper.AddSingleton<Helper3>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService2, UserService2>();
+        }
+    }
+
+    private readonly ITestOutputHelper output;
+
+    public ResolveDelegateContainerTest(ITestOutputHelper output)
+    {
+        this.output = output;
+    }
+
+    [Fact]
+    public void ResolveSimpleTransient1()
+    {
+        var container = new TestContainer();
+        container.AddDelegate<IUserService3>(
+            (provider) =>
+            {
+                return new UserService3(provider.Resolve<Helper3>()!);
+            });
+
+        var userService3_1 = container.Resolve<IUserService3>();
+        userService3_1.Should().NotBeNull();
+        userService3_1!.PrintMessage();
+        output.WriteLine($"{userService3_1.Id}");
+
+        var userService3_2 = container.Resolve<IUserService3>();
+        userService3_2.Should().NotBeNull();
+        userService3_2!.PrintMessage();
+        output.WriteLine($"{userService3_2.Id}");
+
+        var userService3_3 = container.Resolve<IUserService3>();
+        userService3_3.Should().NotBeNull();
+        userService3_3!.PrintMessage();
+        output.WriteLine($"{userService3_3.Id}");
+    }
+}
