@@ -19,5 +19,21 @@
           "isDefault": true
       }
     },
+    {
+      "label": "publish_benchmark",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+          "publish",
+          "${workspaceFolder}/test/Nivaes.IoC.Benchmarks/Nivaes.IoC.Benchmarks.csproj",
+          "--configuration", "Release",
+          "-p:SkipCompTimeGen=true"
+      ],
+      "problemMatcher": "$msCompile",
+      "group": {
+          "kind": "build",
+          "isDefault": true
+      }
+    },
   ]
 }

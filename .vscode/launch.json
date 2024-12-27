@@ -18,5 +18,19 @@
       "internalConsoleOptions": "openOnSessionStart",
       "requireExactSource": false // allows to for moderate code editing while debugging
     },
+    {
+      "name": "Playground+Benchmarks (Publish)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "publish_benchmark",
+      "program": "${workspaceFolder}/test/Nivaes.IoC.Benchmarks/bin/Release/net9.0/Nivaes.IoC.Benchmarks.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/test/Nivaes.IoC.Benchmarks",
+      // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart",
+      "requireExactSource": false // allows to for moderate code editing while debugging
+    },
   ]
 }
