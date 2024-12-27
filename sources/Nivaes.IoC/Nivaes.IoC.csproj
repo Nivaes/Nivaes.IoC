@@ -6,6 +6,7 @@
     <RootNamespace>Nivaes.IoC</RootNamespace>
 
     <IsAotCompatible>true</IsAotCompatible>
+    <OptimizationPreference>Speed</OptimizationPreference>
   </PropertyGroup>
 
   <PropertyGroup>
