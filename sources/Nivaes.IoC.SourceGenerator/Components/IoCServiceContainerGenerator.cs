@@ -199,14 +199,14 @@ namespace {action.containerType?.ContainingNamespace}
 
         public override IIoCResolver CreateScope()
         {{
-            var newScope = ScopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
-            return new {action.containerType?.Name}(Resolvers, newScope, true);
+            var newScope = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            return new {action.containerType?.Name}(resolvers, newScope, true);
         }}
 
         public override IIoCResolver Clone()
         {{
-            var copy = Resolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
-            var scopedCopy = ScopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            var copy = resolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            var scopedCopy = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
             return new {action.containerType?.Name}(copy, scopedCopy, false);
         }}
     }}
@@ -224,11 +224,11 @@ namespace {action.containerType?.ContainingNamespace}
             switch (entry.Lifetime)
             {
                 case ServiceEntry.LifetimeKind.Singleton:
-                    return ("Resolvers", "SingletonResolver");
+                    return ("resolvers", "SingletonResolver");
                 case ServiceEntry.LifetimeKind.Transient:
-                    return ("Resolvers", "TransientResolver");
+                    return ("resolvers", "TransientResolver");
                 case ServiceEntry.LifetimeKind.Scoped:
-                    return ("ScopedResolvers", "SingletonResolver");
+                    return ("scopedResolvers", "SingletonResolver");
                 default:
                     return ("", "");
             }

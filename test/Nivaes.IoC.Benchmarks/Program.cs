@@ -135,6 +135,15 @@
         }
 
         [Benchmark]
+        public void IoCServiceContainerFrozenStartup()
+        {
+            var resolver = Creators.CreateIoCServiceContainer();
+            resolver.Frozen();
+            var userService = (IUserService?)resolver.Resolve(typeof(IUserService));
+            var singleService = (SingleService?)resolver.Resolve(typeof(SingleService));
+        }
+
+        [Benchmark]
         public void GraceStartup()
         {
             var resolver = Creators.CreateGrace();
@@ -150,6 +159,7 @@
         private readonly DependencyInjectionContainer _grace;
         private readonly ZeroContainer _zeroIoCContainer;
         private readonly BenchmarkIoCServiceContainer _iocServiceContainer;
+        private readonly BenchmarkIoCServiceContainer _iocServiceContainerFrozen;
         private readonly ServiceProvider _serviceProvider;
 
         public IoCRuntimeBenchmark()
@@ -158,6 +168,9 @@
             _serviceProvider = Creators.CreateMicrosoft();
             _zeroIoCContainer = Creators.CreateZeroIoC();
             _iocServiceContainer = Creators.CreateIoCServiceContainer();
+
+            _iocServiceContainerFrozen = Creators.CreateIoCServiceContainer();
+            _iocServiceContainerFrozen.Frozen();
         }
 
         [Benchmark]
@@ -176,6 +189,12 @@
         public IUserService? IoCServiceContainerTransient()
         {
             return (IUserService?)_iocServiceContainer.Resolve(typeof(IUserService));
+        }
+
+        [Benchmark]
+        public IUserService? IoCServiceContainerFrozenTransient()
+        {
+            return (IUserService?)_iocServiceContainerFrozen.Resolve(typeof(IUserService));
         }
 
         [Benchmark]
@@ -200,6 +219,11 @@
         public SingleService? IoCServiceContainerSingleton()
         {
             return (SingleService?)_iocServiceContainer.Resolve(typeof(SingleService));
+        }
+        [Benchmark]
+        public SingleService? IoCServiceContainerFrozenSingleton()
+        {
+            return (SingleService?)_iocServiceContainerFrozen.Resolve(typeof(SingleService));
         }
 
         [Benchmark]

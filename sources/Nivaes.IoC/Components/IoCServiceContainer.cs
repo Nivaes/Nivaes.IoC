@@ -6,9 +6,9 @@ namespace Nivaes.IoC
 {
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected readonly IDictionary<Type, IInstanceResolver> Resolvers = new Dictionary<Type, IInstanceResolver>();
+        protected IDictionary<Type, IInstanceResolver> resolvers = new Dictionary<Type, IInstanceResolver>();
 
-        protected readonly IDictionary<Type, IInstanceResolver> ScopedResolvers = new Dictionary<Type, IInstanceResolver>();
+        protected IDictionary<Type, IInstanceResolver> scopedResolvers = new Dictionary<Type, IInstanceResolver>();
 
         protected readonly bool Scoped;
 
@@ -21,8 +21,8 @@ namespace Nivaes.IoC
         protected IoCServiceContainer(IDictionary<Type, IInstanceResolver> resolvers,
             IDictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
         {
-            Resolvers = resolvers;
-            ScopedResolvers = scopedResolvers;
+            this.resolvers = resolvers;
+            this.scopedResolvers = scopedResolvers;
             Scoped = scope;
         }
 
@@ -36,21 +36,27 @@ namespace Nivaes.IoC
             throw new NotImplementedException(nameof(CreateScope));
         }
 
+        public void Frozen()
+        {
+            resolvers = resolvers.ToFrozenDictionary();
+            scopedResolvers = scopedResolvers.ToFrozenDictionary();
+        }
+
         protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
 
         public object? Resolve(Type serviceType)
         {
-            if (Resolvers.TryGetValue(serviceType, out var entry))
+            if (resolvers.TryGetValue(serviceType, out var entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (Scoped && ScopedResolvers.TryGetValue(serviceType, out entry))
+            if (Scoped && scopedResolvers.TryGetValue(serviceType, out entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (ScopedResolvers.TryGetValue(serviceType, out entry))
+            if (scopedResolvers.TryGetValue(serviceType, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(serviceType.FullName ?? string.Empty);
             }
@@ -61,17 +67,17 @@ namespace Nivaes.IoC
 
         public object? Resolve(Type type, IOverrides overrides)
         {
-            if (Resolvers.TryGetValue(type, out var entry))
+            if (resolvers.TryGetValue(type, out var entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (Scoped && ScopedResolvers.TryGetValue(type, out entry))
+            if (Scoped && scopedResolvers.TryGetValue(type, out entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (ScopedResolvers.TryGetValue(type, out entry))
+            if (scopedResolvers.TryGetValue(type, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(type.FullName ?? string.Empty);
             }
@@ -86,13 +92,13 @@ namespace Nivaes.IoC
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    ScopedResolvers.Add(interfaceType, new SingletonResolver(resolver));
+                    scopedResolvers.Add(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Singleton:
-                    Resolvers.Add(interfaceType, new SingletonResolver(resolver));
+                    resolvers.Add(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Transient:
-                    Resolvers.Add(interfaceType, new TransientResolver(resolver));
+                    resolvers.Add(interfaceType, new TransientResolver(resolver));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -105,13 +111,13 @@ namespace Nivaes.IoC
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    ScopedResolvers[interfaceType] = new SingletonResolver(resolver);
+                    scopedResolvers[interfaceType] = new SingletonResolver(resolver);
                     break;
                 case Reuse.Singleton:
-                    Resolvers[interfaceType] = new SingletonResolver(resolver);
+                    resolvers[interfaceType] = new SingletonResolver(resolver);
                     break;
                 case Reuse.Transient:
-                    Resolvers[interfaceType] = new TransientResolver(resolver);
+                    resolvers[interfaceType] = new TransientResolver(resolver);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -120,24 +126,24 @@ namespace Nivaes.IoC
 
         public void AddInstance<TValue>(TValue value)
         {
-            Resolvers.Add(typeof(TValue), new SingletonResolver(o => value!));
+            resolvers.Add(typeof(TValue), new SingletonResolver(o => value!));
         }
 
         public void ReplaceInstance<TValue>(TValue value)
         {
-            Resolvers[typeof(TValue)] = new SingletonResolver(o => value!);
+            resolvers[typeof(TValue)] = new SingletonResolver(o => value!);
         }
 
         public void Merge(IoCServiceContainer container)
         {
-            foreach (var resolver in container.Resolvers)
+            foreach (var resolver in container.resolvers)
             {
-                Resolvers.Add(resolver.Key, resolver.Value);
+                resolvers.Add(resolver.Key, resolver.Value);
             }
 
-            foreach (var resolver in container.ScopedResolvers)
+            foreach (var resolver in container.scopedResolvers)
             {
-                ScopedResolvers.Add(resolver.Key, resolver.Value);
+                scopedResolvers.Add(resolver.Key, resolver.Value);
             }
         }
 
@@ -156,13 +162,13 @@ namespace Nivaes.IoC
             {
                 if (!Scoped)
                 {
-                    foreach (var resolver in Resolvers.Values)
+                    foreach (var resolver in resolvers.Values)
                     {
                         resolver.Dispose();
                     }
                 }
 
-                foreach (var resolver in ScopedResolvers.Values)
+                foreach (var resolver in scopedResolvers.Values)
                 {
                     resolver.Dispose();
                 }
