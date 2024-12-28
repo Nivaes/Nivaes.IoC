@@ -132,7 +132,7 @@
     public class UserService9 : IUserService9
     {
 
-        public UserService9(Helper1 helper1)
+        public UserService9()
         {
         }
 
@@ -219,9 +219,9 @@
     #endregion
 
     #region SingleService
-    public class SingleService1(/*SingleHelper1 helper*/)
+    public class SingleService1(SingleHelper1 helper)
     {
-        //private readonly SingleHelper1 helper = helper;
+        private readonly SingleHelper1 helper = helper;
     }
 
     public class SingleService2(SingleHelper2 helper)
@@ -247,6 +247,7 @@
         {
             bootstrapper.AddTransient<Helper1>();
             bootstrapper.AddTransient<Helper2>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService2, UserService2>();
             bootstrapper.AddTransient<IUserService3, UserService3>();
             bootstrapper.AddTransient<IUserService4, UserService4>();
@@ -255,7 +256,6 @@
             bootstrapper.AddTransient<IUserService7, UserService7>();
             bootstrapper.AddTransient<IUserService8, UserService8>();
             bootstrapper.AddTransient<IUserService9, UserService9>();
-            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService10, UserService10>();
             bootstrapper.AddTransient<IUserService11, UserService11>();
             bootstrapper.AddSingleton<SingleHelper1>();
@@ -274,6 +274,7 @@
         {
             bootstrapper.AddTransient<Helper1>();
             bootstrapper.AddTransient<Helper2>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService2, UserService2>();
             bootstrapper.AddTransient<IUserService3, UserService3>();
             bootstrapper.AddTransient<IUserService4, UserService4>();
@@ -282,7 +283,6 @@
             bootstrapper.AddTransient<IUserService7, UserService7>();
             bootstrapper.AddTransient<IUserService8, UserService8>();
             bootstrapper.AddTransient<IUserService9, UserService9>();
-            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService10, UserService10>();
             bootstrapper.AddTransient<IUserService11, UserService11>();
             bootstrapper.AddSingleton<SingleHelper1>();
@@ -299,7 +299,7 @@
     {
         private static void Main(string[] args)
         {
-            BenchmarkRunner.Run<IoCStartupBenchmark>();
+            //BenchmarkRunner.Run<IoCStartupBenchmark>();
             BenchmarkRunner.Run<IoCRuntimeBenchmark>();
         }
     }
@@ -321,6 +321,7 @@
             var services = new ServiceCollection();
             services.AddTransient<Helper1>();
             services.AddTransient<Helper2>();
+            services.AddTransient<IUserService1, UserService1>();
             services.AddTransient<IUserService2, UserService2>();
             services.AddTransient<IUserService3, UserService3>();
             services.AddTransient<IUserService4, UserService4>();
@@ -329,7 +330,6 @@
             services.AddTransient<IUserService7, UserService7>();
             services.AddTransient<IUserService8, UserService8>();
             services.AddTransient<IUserService9, UserService9>();
-            services.AddTransient<IUserService1, UserService1>();
             services.AddTransient<IUserService10, UserService10>();
             services.AddTransient<IUserService11, UserService11>();
             services.AddSingleton<SingleHelper1>();
@@ -350,6 +350,7 @@
             {
                 o.Export<Helper1>().As<Helper1>();
                 o.Export<Helper2>().As<Helper2>();
+                o.Export<UserService1>().As<IUserService1>();
                 o.Export<UserService2>().As<IUserService2>();
                 o.Export<UserService3>().As<IUserService3>();
                 o.Export<UserService4>().As<IUserService4>();
@@ -358,7 +359,6 @@
                 o.Export<UserService7>().As<IUserService7>();
                 o.Export<UserService8>().As<IUserService8>();
                 o.Export<UserService9>().As<IUserService9>();
-                o.Export<UserService1>().As<IUserService1>();
                 o.Export<UserService10>().As<IUserService10>();
                 o.Export<UserService11>().As<IUserService11>();
                 o.Export<SingleHelper1>().As<SingleHelper1>().UsingLifestyle(new SingletonLifestyle());
@@ -455,39 +455,75 @@
         }
 
         [Benchmark]
-        public IUserService1? MicrosoftTransient()
+        public IUserService8? MicrosoftTransient8()
         {
-            return (IUserService1?)_serviceProvider.GetService(typeof(IUserService1));
+            return (IUserService8?)_serviceProvider.GetService(typeof(IUserService8));
         }
 
         [Benchmark]
-        public IUserService1? ZeroIoCTransient()
+        public IUserService9? MicrosoftTransient9()
         {
-            return (IUserService1?)_zeroIoCContainer.Resolve(typeof(IUserService1));
+            return (IUserService9?)_serviceProvider.GetService(typeof(IUserService9));
         }
 
         [Benchmark]
-        public IUserService1? IoCServiceContainerTransient()
+        public IUserService8? ZeroIoCTransient8()
         {
-            return (IUserService1?)_iocServiceContainer.Resolve(typeof(IUserService1));
+            return (IUserService8)_zeroIoCContainer.Resolve(typeof(IUserService8));
         }
 
         [Benchmark]
-        public IUserService1? IoCServiceContainerOptimizeTransient()
+        public IUserService9? ZeroIoCTransient9()
         {
-            return (IUserService1?)_iocServiceContainerOptimize.Resolve(typeof(IUserService1));
+            return (IUserService9?)_zeroIoCContainer.Resolve(typeof(IUserService9));
         }
 
         [Benchmark]
-        public IUserService1? IoCServiceContainerFrozenTransient()
+        public IUserService8? IoCServiceContainerTransient8()
         {
-            return (IUserService1?)_iocServiceContainerFrozen.Resolve(typeof(IUserService1));
+            return (IUserService8?)_iocServiceContainer.Resolve(typeof(IUserService8));
         }
 
         [Benchmark]
-        public IUserService1 GraceTransient()
+        public IUserService9? IoCServiceContainerTransient9()
         {
-            return (IUserService1)_grace.Locate(typeof(IUserService1));
+            return (IUserService9?)_iocServiceContainer.Resolve(typeof(IUserService9));
+        }
+
+        [Benchmark]
+        public IUserService8? IoCServiceContainerOptimizeTransient8()
+        {
+            return (IUserService8?)_iocServiceContainerOptimize.Resolve(typeof(IUserService8));
+        }
+
+        [Benchmark]
+        public IUserService9? IoCServiceContainerOptimizeTransient9()
+        {
+            return (IUserService9?)_iocServiceContainerOptimize.Resolve(typeof(IUserService9));
+        }
+
+        [Benchmark]
+        public IUserService8? IoCServiceContainerFrozenTransient8()
+        {
+            return (IUserService8?)_iocServiceContainerFrozen.Resolve(typeof(IUserService8));
+        }
+
+        [Benchmark]
+        public IUserService9? IoCServiceContainerFrozenTransient9()
+        {
+            return (IUserService9?)_iocServiceContainerFrozen.Resolve(typeof(IUserService9));
+        }
+
+        [Benchmark]
+        public IUserService8 GraceTransient8()
+        {
+            return (IUserService8)_grace.Locate(typeof(IUserService8));
+        }
+
+        [Benchmark]
+        public IUserService9 GraceTransient9()
+        {
+            return (IUserService9)_grace.Locate(typeof(IUserService9));
         }
 
         [Benchmark]
