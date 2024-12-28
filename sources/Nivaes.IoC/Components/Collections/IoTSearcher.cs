@@ -2,7 +2,7 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    internal class IoTSearcher<TValue> : ISearcher<TValue>
+    public class IoTSearcher<TValue> : ISearcher<TValue>
     {
         private readonly KeyValuePair<int, TValue>[] mArray;
 

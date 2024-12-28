@@ -1,9 +1,8 @@
 ﻿namespace Nivaes.IoC
 {
     using System.Collections.Frozen;
-    using Nivaes.IoC.Components.Collections;
-
-    internal static class SearcherExtension
+    
+    public static class SearcherExtension
     {
         public static ISearcher<TValue> ToIoTSeeker<TValue>(this IEnumerable<KeyValuePair<int, TValue>> source)
         {

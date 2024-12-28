@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Frozen;
-using Nivaes.IoC.Components;
-using Nivaes.IoC.Components.Collections;
-using Nivaes.IoC.Core;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
+    using Nivaes.IoC.Core;
+
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         protected IDictionary<int, IInstanceResolver> resolvers = new Dictionary<int, IInstanceResolver>();

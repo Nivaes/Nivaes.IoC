@@ -2,7 +2,7 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    internal class DictionarySearcher<TValue> : ISearcher<TValue>
+    public class DictionarySearcher<TValue> : ISearcher<TValue>
     {
         private readonly IDictionary<int, TValue> mSource;
 
