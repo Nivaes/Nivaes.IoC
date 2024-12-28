@@ -10,40 +10,128 @@
     using Nivaes.IoC;
     using ZeroIoC;
 
-    public interface IUserService
+    #region TestClass
+    #region IUserService
+    public interface IUserService1
     {
     }
 
-    public class UserService : IUserService
+    public class UserService1 : IUserService1
     {
-        public UserService(Helper helper)
+
+        public UserService1(Helper1 helper1)
         {
         }
 
         public Guid Id { get; } = Guid.NewGuid();
     }
 
-    public class Helper
+    public interface IUserService2
     {
     }
 
-    public class SingleHelper
+    public class UserService2 : IUserService2
+    {
+
+        public UserService2(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService3
     {
     }
 
-    public class SingleService(SingleHelper helper)
+    public class UserService3 : IUserService3
     {
-        private readonly SingleHelper helper = helper;
+
+        public UserService3(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
     }
+    #endregion
+
+    #region Helper
+    public class Helper1
+    {
+    }
+
+    public class Helper2
+    {
+        private readonly Helper1 helper1;
+
+        public Helper2(Helper1 helper1)
+        {
+            this.helper1 = helper1;
+        }
+    }
+    #endregion
+
+    #region SingleHelper
+    public class SingleHelper1
+    {
+        private readonly Helper1 helper1;
+        private readonly Helper2 helper2;
+
+        public SingleHelper1(Helper1 helper1, Helper2 helper2)
+        {
+            this.helper1 = helper1;
+            this.helper2 = helper2;
+        }
+    }
+
+    public class SingleHelper2
+    {
+        private readonly Helper1 helper1;
+
+        public SingleHelper2(Helper1 helper1)
+        {
+            this.helper1 = helper1;
+        }
+    }
+
+    public class SingleHelper3
+    {
+        private readonly Helper2 helper2;
+
+        public SingleHelper3(Helper2 helper2)
+        {
+            this.helper2 = helper2;
+        }
+    }
+    #endregion
+
+    #region SingleService
+    public class SingleService1(SingleHelper1 helper)
+    {
+        private readonly SingleHelper1 helper = helper;
+    }
+
+    public class SingleService2(SingleHelper2 helper)
+    {
+        private readonly SingleHelper2 helper = helper;
+    }
+    #endregion
+    #endregion
 
     public partial class ZeroContainer : ZeroIoCContainer
     {
         protected override void Bootstrap(IZeroIoCContainerBootstrapper bootstrapper)
         {
-            bootstrapper.AddTransient<Helper>();
-            bootstrapper.AddTransient<IUserService, UserService>();
-            bootstrapper.AddSingleton<SingleHelper>();
-            bootstrapper.AddSingleton<SingleService>();
+            bootstrapper.AddTransient<Helper1>();
+            bootstrapper.AddTransient<Helper2>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService2, UserService2>();
+            bootstrapper.AddTransient<IUserService3, UserService3>();
+            bootstrapper.AddSingleton<SingleHelper1>();
+            bootstrapper.AddSingleton<SingleHelper2>();
+            bootstrapper.AddSingleton<SingleHelper3>();
+            bootstrapper.AddSingleton<SingleService1>();
+            bootstrapper.AddSingleton<SingleService2>();
         }
     }
 
@@ -51,10 +139,16 @@
     {
         protected override void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper)
         {
-            bootstrapper.AddTransient<Helper>();
-            bootstrapper.AddTransient<IUserService, UserService>();
-            bootstrapper.AddSingleton<SingleHelper>();
-            bootstrapper.AddSingleton<SingleService>();
+            bootstrapper.AddTransient<Helper1>();
+            bootstrapper.AddTransient<Helper2>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService2, UserService2>();
+            bootstrapper.AddTransient<IUserService3, UserService3>();
+            bootstrapper.AddSingleton<SingleHelper1>();
+            bootstrapper.AddSingleton<SingleHelper2>();
+            bootstrapper.AddSingleton<SingleHelper3>();
+            bootstrapper.AddSingleton<SingleService1>();
+            bootstrapper.AddSingleton<SingleService2>();
         }
     }
 
@@ -82,10 +176,16 @@
         public static ServiceProvider CreateMicrosoft()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<SingleHelper>();
-            services.AddSingleton<SingleService>();
-            services.AddTransient<Helper>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<Helper1>();
+            services.AddTransient<Helper2>();
+            services.AddTransient<IUserService1, UserService1>();
+            services.AddTransient<IUserService2, UserService2>();
+            services.AddTransient<IUserService3, UserService3>();
+            services.AddSingleton<SingleHelper1>();
+            services.AddSingleton<SingleHelper2>();
+            services.AddSingleton<SingleHelper3>();
+            services.AddSingleton<SingleService1>();
+            services.AddSingleton<SingleService2>();
 
             return services.BuildServiceProvider();
         }
@@ -95,11 +195,17 @@
             var grace = new DependencyInjectionContainer();
             grace.Configure(o =>
             {
-                o.Export<SingleHelper>().As<SingleHelper>().UsingLifestyle(new SingletonLifestyle());
-                o.Export<SingleService>().As<SingleService>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<Helper1>().As<Helper1>();
+                o.Export<Helper2>().As<Helper2>();
+                o.Export<UserService1>().As<IUserService1>();
+                o.Export<UserService2>().As<IUserService2>();
+                o.Export<UserService3>().As<IUserService3>();
 
-                o.Export<Helper>().As<Helper>();
-                o.Export<UserService>().As<IUserService>();
+                o.Export<SingleHelper1>().As<SingleHelper1>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleHelper2>().As<SingleHelper2>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleHelper3>().As<SingleHelper3>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleService1>().As<SingleService1>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleService2>().As<SingleService2>().UsingLifestyle(new SingletonLifestyle());
             });
 
             return grace;
@@ -114,24 +220,24 @@
         public void MicrosoftStartup()
         {
             var resolver = Creators.CreateMicrosoft();
-            var userService = (IUserService?)resolver.GetService(typeof(IUserService));
-            var singleService = (SingleService?)resolver.GetService(typeof(SingleService));
+            var userService = (IUserService1?)resolver.GetService(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.GetService(typeof(SingleService1));
         }
 
         [Benchmark]
         public void ZeroIoCStartup()
         {
             var resolver = Creators.CreateZeroIoC();
-            var userService = (IUserService?)resolver.Resolve(typeof(IUserService));
-            var singleService = (SingleService?)resolver.Resolve(typeof(SingleService));
+            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }
 
         [Benchmark]
         public void IoCServiceContainerStartup()
         {
             var resolver = Creators.CreateIoCServiceContainer();
-            var userService = (IUserService?)resolver.Resolve(typeof(IUserService));
-            var singleService = (SingleService?)resolver.Resolve(typeof(SingleService));
+            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }
 
         [Benchmark]
@@ -139,16 +245,16 @@
         {
             var resolver = Creators.CreateIoCServiceContainer();
             resolver.Frozen();
-            var userService = (IUserService?)resolver.Resolve(typeof(IUserService));
-            var singleService = (SingleService?)resolver.Resolve(typeof(SingleService));
+            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }
 
         [Benchmark]
         public void GraceStartup()
         {
             var resolver = Creators.CreateGrace();
-            var userService = (IUserService?)resolver.Locate(typeof(IUserService));
-            var singleService = (SingleService?)resolver.Locate(typeof(SingleService));
+            var userService = (IUserService1?)resolver.Locate(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Locate(typeof(SingleService1));
         }
     }
 
@@ -174,62 +280,62 @@
         }
 
         [Benchmark]
-        public IUserService? MicrosoftTransient()
+        public IUserService1? MicrosoftTransient()
         {
-            return (IUserService?)_serviceProvider.GetService(typeof(IUserService));
+            return (IUserService1?)_serviceProvider.GetService(typeof(IUserService1));
         }
 
         [Benchmark]
-        public IUserService? ZeroIoCTransient()
+        public IUserService1? ZeroIoCTransient()
         {
-            return (IUserService?)_zeroIoCContainer.Resolve(typeof(IUserService));
+            return (IUserService1?)_zeroIoCContainer.Resolve(typeof(IUserService1));
         }
 
         [Benchmark]
-        public IUserService? IoCServiceContainerTransient()
+        public IUserService1? IoCServiceContainerTransient()
         {
-            return (IUserService?)_iocServiceContainer.Resolve(typeof(IUserService));
+            return (IUserService1?)_iocServiceContainer.Resolve(typeof(IUserService1));
         }
 
         [Benchmark]
-        public IUserService? IoCServiceContainerFrozenTransient()
+        public IUserService1? IoCServiceContainerFrozenTransient()
         {
-            return (IUserService?)_iocServiceContainerFrozen.Resolve(typeof(IUserService));
+            return (IUserService1?)_iocServiceContainerFrozen.Resolve(typeof(IUserService1));
         }
 
         [Benchmark]
-        public IUserService GraceTransient()
+        public IUserService1 GraceTransient()
         {
-            return (IUserService)_grace.Locate(typeof(IUserService));
+            return (IUserService1)_grace.Locate(typeof(IUserService1));
         }
 
         [Benchmark]
-        public SingleService? MicrosoftSingleton()
+        public SingleService1? MicrosoftSingleton()
         {
-            return (SingleService?)_serviceProvider.GetService(typeof(SingleService));
+            return (SingleService1?)_serviceProvider.GetService(typeof(SingleService1));
         }
 
         [Benchmark]
-        public SingleService? ZeroIoCSingleton()
+        public SingleService1? ZeroIoCSingleton()
         {
-            return (SingleService?)_zeroIoCContainer.Resolve(typeof(SingleService));
+            return (SingleService1?)_zeroIoCContainer.Resolve(typeof(SingleService1));
         }
 
         [Benchmark]
-        public SingleService? IoCServiceContainerSingleton()
+        public SingleService1? IoCServiceContainerSingleton()
         {
-            return (SingleService?)_iocServiceContainer.Resolve(typeof(SingleService));
+            return (SingleService1?)_iocServiceContainer.Resolve(typeof(SingleService1));
         }
         [Benchmark]
-        public SingleService? IoCServiceContainerFrozenSingleton()
+        public SingleService1? IoCServiceContainerFrozenSingleton()
         {
-            return (SingleService?)_iocServiceContainerFrozen.Resolve(typeof(SingleService));
+            return (SingleService1?)_iocServiceContainerFrozen.Resolve(typeof(SingleService1));
         }
 
         [Benchmark]
-        public SingleService GraceSingleton()
+        public SingleService1 GraceSingleton()
         {
-            return (SingleService)_grace.Locate(typeof(SingleService));
+            return (SingleService1)_grace.Locate(typeof(SingleService1));
         }
     }
 }
