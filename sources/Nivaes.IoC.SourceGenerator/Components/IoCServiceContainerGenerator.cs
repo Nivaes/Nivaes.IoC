@@ -184,7 +184,7 @@ namespace {action.containerType?.ContainingNamespace}
                         var entry = o.First();
                         var (propertyToStore, resolver) = MapResolver(entry);
 
-                        return $@"          {propertyToStore}.Add(typeof({entry.Interface.ToGlobalName()}), new {resolver}<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>());";
+                        return $@"          {propertyToStore}.Add(typeof({entry.Interface.ToGlobalName()}).GetHashCode(), new {resolver}<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>());";
                     }
 
                     return "";
@@ -192,7 +192,7 @@ namespace {action.containerType?.ContainingNamespace}
         .JoinWithNewLine()}
         }}
 
-        private {action.containerType?.Name}(IDictionary<Type, IInstanceResolver> resolvers, IDictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
+        private {action.containerType?.Name}(IDictionary<int, IInstanceResolver> resolvers, IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)
             : base(resolvers, scopedResolvers, scope)
         {{
         }}

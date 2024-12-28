@@ -53,6 +53,119 @@
 
         public Guid Id { get; } = Guid.NewGuid();
     }
+
+
+    public interface IUserService4
+    {
+    }
+
+    public class UserService4 : IUserService4
+    {
+
+        public UserService4(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService5
+    {
+    }
+
+    public class UserService5 : IUserService5
+    {
+
+        public UserService5(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService6
+    {
+    }
+
+    public class UserService6 : IUserService6
+    {
+
+        public UserService6(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService7
+    {
+    }
+
+    public class UserService7 : IUserService7
+    {
+
+        public UserService7(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService8
+    {
+    }
+
+    public class UserService8 : IUserService8
+    {
+
+        public UserService8(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService9
+    {
+    }
+
+    public class UserService9 : IUserService9
+    {
+
+        public UserService9(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService10
+    {
+    }
+
+    public class UserService10 : IUserService10
+    {
+
+        public UserService10(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
+
+    public interface IUserService11
+    {
+    }
+
+    public class UserService11 : IUserService11
+    {
+
+        public UserService11(Helper1 helper1)
+        {
+        }
+
+        public Guid Id { get; } = Guid.NewGuid();
+    }
     #endregion
 
     #region Helper
@@ -106,12 +219,22 @@
     #endregion
 
     #region SingleService
-    public class SingleService1(SingleHelper1 helper)
+    public class SingleService1(/*SingleHelper1 helper*/)
     {
-        private readonly SingleHelper1 helper = helper;
+        //private readonly SingleHelper1 helper = helper;
     }
 
     public class SingleService2(SingleHelper2 helper)
+    {
+        private readonly SingleHelper2 helper = helper;
+    }
+
+    public class SingleService3(SingleHelper2 helper)
+    {
+        private readonly SingleHelper2 helper = helper;
+    }
+
+    public class SingleService4(SingleHelper2 helper)
     {
         private readonly SingleHelper2 helper = helper;
     }
@@ -124,14 +247,24 @@
         {
             bootstrapper.AddTransient<Helper1>();
             bootstrapper.AddTransient<Helper2>();
-            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService2, UserService2>();
             bootstrapper.AddTransient<IUserService3, UserService3>();
+            bootstrapper.AddTransient<IUserService4, UserService4>();
+            bootstrapper.AddTransient<IUserService5, UserService5>();
+            bootstrapper.AddTransient<IUserService6, UserService6>();
+            bootstrapper.AddTransient<IUserService7, UserService7>();
+            bootstrapper.AddTransient<IUserService8, UserService8>();
+            bootstrapper.AddTransient<IUserService9, UserService9>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService10, UserService10>();
+            bootstrapper.AddTransient<IUserService11, UserService11>();
             bootstrapper.AddSingleton<SingleHelper1>();
             bootstrapper.AddSingleton<SingleHelper2>();
             bootstrapper.AddSingleton<SingleHelper3>();
             bootstrapper.AddSingleton<SingleService1>();
             bootstrapper.AddSingleton<SingleService2>();
+            bootstrapper.AddSingleton<SingleService3>();
+            bootstrapper.AddSingleton<SingleService4>();
         }
     }
 
@@ -141,14 +274,24 @@
         {
             bootstrapper.AddTransient<Helper1>();
             bootstrapper.AddTransient<Helper2>();
-            bootstrapper.AddTransient<IUserService1, UserService1>();
             bootstrapper.AddTransient<IUserService2, UserService2>();
             bootstrapper.AddTransient<IUserService3, UserService3>();
+            bootstrapper.AddTransient<IUserService4, UserService4>();
+            bootstrapper.AddTransient<IUserService5, UserService5>();
+            bootstrapper.AddTransient<IUserService6, UserService6>();
+            bootstrapper.AddTransient<IUserService7, UserService7>();
+            bootstrapper.AddTransient<IUserService8, UserService8>();
+            bootstrapper.AddTransient<IUserService9, UserService9>();
+            bootstrapper.AddTransient<IUserService1, UserService1>();
+            bootstrapper.AddTransient<IUserService10, UserService10>();
+            bootstrapper.AddTransient<IUserService11, UserService11>();
             bootstrapper.AddSingleton<SingleHelper1>();
             bootstrapper.AddSingleton<SingleHelper2>();
             bootstrapper.AddSingleton<SingleHelper3>();
             bootstrapper.AddSingleton<SingleService1>();
             bootstrapper.AddSingleton<SingleService2>();
+            bootstrapper.AddSingleton<SingleService3>();
+            bootstrapper.AddSingleton<SingleService4>();
         }
     }
 
@@ -178,14 +321,24 @@
             var services = new ServiceCollection();
             services.AddTransient<Helper1>();
             services.AddTransient<Helper2>();
-            services.AddTransient<IUserService1, UserService1>();
             services.AddTransient<IUserService2, UserService2>();
             services.AddTransient<IUserService3, UserService3>();
+            services.AddTransient<IUserService4, UserService4>();
+            services.AddTransient<IUserService5, UserService5>();
+            services.AddTransient<IUserService6, UserService6>();
+            services.AddTransient<IUserService7, UserService7>();
+            services.AddTransient<IUserService8, UserService8>();
+            services.AddTransient<IUserService9, UserService9>();
+            services.AddTransient<IUserService1, UserService1>();
+            services.AddTransient<IUserService10, UserService10>();
+            services.AddTransient<IUserService11, UserService11>();
             services.AddSingleton<SingleHelper1>();
             services.AddSingleton<SingleHelper2>();
             services.AddSingleton<SingleHelper3>();
             services.AddSingleton<SingleService1>();
             services.AddSingleton<SingleService2>();
+            services.AddSingleton<SingleService3>();
+            services.AddSingleton<SingleService4>();
 
             return services.BuildServiceProvider();
         }
@@ -197,15 +350,24 @@
             {
                 o.Export<Helper1>().As<Helper1>();
                 o.Export<Helper2>().As<Helper2>();
-                o.Export<UserService1>().As<IUserService1>();
                 o.Export<UserService2>().As<IUserService2>();
                 o.Export<UserService3>().As<IUserService3>();
-
+                o.Export<UserService4>().As<IUserService4>();
+                o.Export<UserService5>().As<IUserService5>();
+                o.Export<UserService6>().As<IUserService6>();
+                o.Export<UserService7>().As<IUserService7>();
+                o.Export<UserService8>().As<IUserService8>();
+                o.Export<UserService9>().As<IUserService9>();
+                o.Export<UserService1>().As<IUserService1>();
+                o.Export<UserService10>().As<IUserService10>();
+                o.Export<UserService11>().As<IUserService11>();
                 o.Export<SingleHelper1>().As<SingleHelper1>().UsingLifestyle(new SingletonLifestyle());
                 o.Export<SingleHelper2>().As<SingleHelper2>().UsingLifestyle(new SingletonLifestyle());
                 o.Export<SingleHelper3>().As<SingleHelper3>().UsingLifestyle(new SingletonLifestyle());
                 o.Export<SingleService1>().As<SingleService1>().UsingLifestyle(new SingletonLifestyle());
                 o.Export<SingleService2>().As<SingleService2>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleService3>().As<SingleService3>().UsingLifestyle(new SingletonLifestyle());
+                o.Export<SingleService4>().As<SingleService4>().UsingLifestyle(new SingletonLifestyle());
             });
 
             return grace;
@@ -250,6 +412,15 @@
         }
 
         [Benchmark]
+        public void IoCServiceContainerOptimizeStartup()
+        {
+            var resolver = Creators.CreateIoCServiceContainer();
+            resolver.Optimize();
+            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
+        }
+
+        [Benchmark]
         public void GraceStartup()
         {
             var resolver = Creators.CreateGrace();
@@ -266,6 +437,7 @@
         private readonly ZeroContainer _zeroIoCContainer;
         private readonly BenchmarkIoCServiceContainer _iocServiceContainer;
         private readonly BenchmarkIoCServiceContainer _iocServiceContainerFrozen;
+        private readonly BenchmarkIoCServiceContainer _iocServiceContainerOptimize;
         private readonly ServiceProvider _serviceProvider;
 
         public IoCRuntimeBenchmark()
@@ -277,6 +449,9 @@
 
             _iocServiceContainerFrozen = Creators.CreateIoCServiceContainer();
             _iocServiceContainerFrozen.Frozen();
+
+            _iocServiceContainerOptimize = Creators.CreateIoCServiceContainer();
+            _iocServiceContainerOptimize.Optimize();
         }
 
         [Benchmark]
@@ -295,6 +470,12 @@
         public IUserService1? IoCServiceContainerTransient()
         {
             return (IUserService1?)_iocServiceContainer.Resolve(typeof(IUserService1));
+        }
+
+        [Benchmark]
+        public IUserService1? IoCServiceContainerOptimizeTransient()
+        {
+            return (IUserService1?)_iocServiceContainerOptimize.Resolve(typeof(IUserService1));
         }
 
         [Benchmark]
@@ -326,6 +507,13 @@
         {
             return (SingleService1?)_iocServiceContainer.Resolve(typeof(SingleService1));
         }
+
+        [Benchmark]
+        public SingleService1? IoCServiceContainerOptimizeSingleton()
+        {
+            return (SingleService1?)_iocServiceContainerOptimize.Resolve(typeof(SingleService1));
+        }
+
         [Benchmark]
         public SingleService1? IoCServiceContainerFrozenSingleton()
         {

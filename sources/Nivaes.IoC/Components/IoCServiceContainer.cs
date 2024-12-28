@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Frozen;
+using Nivaes.IoC.Components;
+using Nivaes.IoC.Components.Collections;
 using Nivaes.IoC.Core;
 
 namespace Nivaes.IoC
 {
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected IDictionary<Type, IInstanceResolver> resolvers = new Dictionary<Type, IInstanceResolver>();
+        protected IDictionary<int, IInstanceResolver> resolvers = new Dictionary<int, IInstanceResolver>();
+        protected IDictionary<int, IInstanceResolver> scopedResolvers = new Dictionary<int, IInstanceResolver>();
 
-        protected IDictionary<Type, IInstanceResolver> scopedResolvers = new Dictionary<Type, IInstanceResolver>();
+        protected ISearcher<IInstanceResolver> resolverSearcher;
+        protected ISearcher<IInstanceResolver> scopedResolversSearcher;
 
         protected readonly bool Scoped;
 
@@ -16,14 +21,19 @@ namespace Nivaes.IoC
 
         protected IoCServiceContainer()
         {
+            resolverSearcher = resolvers.ToDictionarySeeker();
+            scopedResolversSearcher = scopedResolvers.ToDictionarySeeker();
         }
 
-        protected IoCServiceContainer(IDictionary<Type, IInstanceResolver> resolvers,
-            IDictionary<Type, IInstanceResolver> scopedResolvers, bool scope = false)
+        protected IoCServiceContainer(IDictionary<int, IInstanceResolver> resolvers,
+            IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)
         {
             this.resolvers = resolvers;
             this.scopedResolvers = scopedResolvers;
             Scoped = scope;
+
+            resolverSearcher = this.resolvers.ToDictionarySeeker();
+            scopedResolversSearcher = this.scopedResolvers.ToDictionarySeeker();
         }
 
         public virtual IIoCResolver CreateScope()
@@ -38,25 +48,38 @@ namespace Nivaes.IoC
 
         public void Frozen()
         {
-            resolvers = resolvers.ToFrozenDictionary();
-            scopedResolvers = scopedResolvers.ToFrozenDictionary();
+            //var aa = resolvers.Select(x => x.Key).ToArray();
+            //resolvers = resolvers.ToFrozenDictionary();
+            //var bb = resolvers.Select(x => x.Key).ToArray();
+            //scopedResolvers = scopedResolvers.ToFrozenDictionary();
+
+            resolverSearcher = resolvers.ToFrozenSeeker();
+            scopedResolversSearcher = scopedResolvers.ToFrozenSeeker();
+        }
+
+        public void Optimize()
+        {
+            resolverSearcher = resolvers.ToIoTSeeker();
+            scopedResolversSearcher = scopedResolvers.ToIoTSeeker();
         }
 
         protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
 
         public object? Resolve(Type serviceType)
         {
-            if (resolvers.TryGetValue(serviceType, out var entry))
+            var serviceTypeHashCode = serviceType.GetHashCode();
+
+            if (resolverSearcher.TryGetValue(serviceTypeHashCode, out var entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (Scoped && scopedResolvers.TryGetValue(serviceType, out entry))
+            if (Scoped && scopedResolversSearcher.TryGetValue(serviceTypeHashCode, out entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (scopedResolvers.TryGetValue(serviceType, out entry))
+            if (scopedResolversSearcher.TryGetValue(serviceTypeHashCode, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(serviceType.FullName ?? string.Empty);
             }
@@ -67,17 +90,19 @@ namespace Nivaes.IoC
 
         public object? Resolve(Type type, IOverrides overrides)
         {
-            if (resolvers.TryGetValue(type, out var entry))
+            var typeHashCode = type.GetHashCode();
+
+            if (resolverSearcher.TryGetValue(typeHashCode, out var entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (Scoped && scopedResolvers.TryGetValue(type, out entry))
+            if (Scoped && scopedResolversSearcher.TryGetValue(typeHashCode, out entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (scopedResolvers.TryGetValue(type, out entry))
+            if (scopedResolversSearcher.TryGetValue(typeHashCode, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(type.FullName ?? string.Empty);
             }
@@ -89,16 +114,18 @@ namespace Nivaes.IoC
         public void AddDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
             Reuse reuse = Reuse.Transient)
         {
+            var interfaceTypeHashCode = interfaceType.GetHashCode();
+
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    scopedResolvers.Add(interfaceType, new SingletonResolver(resolver));
+                    scopedResolvers.Add(interfaceTypeHashCode, new SingletonResolver(resolver));
                     break;
                 case Reuse.Singleton:
-                    resolvers.Add(interfaceType, new SingletonResolver(resolver));
+                    resolvers.Add(interfaceTypeHashCode, new SingletonResolver(resolver));
                     break;
                 case Reuse.Transient:
-                    resolvers.Add(interfaceType, new TransientResolver(resolver));
+                    resolvers.Add(interfaceTypeHashCode, new TransientResolver(resolver));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -108,16 +135,18 @@ namespace Nivaes.IoC
         public void ReplaceDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
             Reuse reuse = Reuse.Transient)
         {
+            var interfaceTypeHashCode = interfaceType.GetHashCode();
+
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    scopedResolvers[interfaceType] = new SingletonResolver(resolver);
+                    scopedResolvers[interfaceTypeHashCode] = new SingletonResolver(resolver);
                     break;
                 case Reuse.Singleton:
-                    resolvers[interfaceType] = new SingletonResolver(resolver);
+                    resolvers[interfaceTypeHashCode] = new SingletonResolver(resolver);
                     break;
                 case Reuse.Transient:
-                    resolvers[interfaceType] = new TransientResolver(resolver);
+                    resolvers[interfaceTypeHashCode] = new TransientResolver(resolver);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -126,12 +155,12 @@ namespace Nivaes.IoC
 
         public void AddInstance<TValue>(TValue value)
         {
-            resolvers.Add(typeof(TValue), new SingletonResolver(o => value!));
+            resolvers.Add(typeof(TValue).GetHashCode(), new SingletonResolver(o => value!));
         }
 
         public void ReplaceInstance<TValue>(TValue value)
         {
-            resolvers[typeof(TValue)] = new SingletonResolver(o => value!);
+            resolvers[typeof(TValue).GetHashCode()] = new SingletonResolver(o => value!);
         }
 
         public void Merge(IoCServiceContainer container)
@@ -147,6 +176,7 @@ namespace Nivaes.IoC
             }
         }
 
+        #region IDispose
         public void Dispose()
         {
             Dispose(true);
@@ -176,5 +206,6 @@ namespace Nivaes.IoC
 
             disposed = true;
         }
+        #endregion
     }
 }
