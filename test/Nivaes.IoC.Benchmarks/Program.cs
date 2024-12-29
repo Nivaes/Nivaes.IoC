@@ -459,209 +459,116 @@
             _iocServiceContainerOptimize.Optimize();
         }
 
-        private static IEnumerable<Type> RandomUserServices()
-        {
-            //if (System.Diagnostics.Debugger.IsAttached)
-            //    System.Diagnostics.Debugger.Break();
+        private static readonly IEnumerable<Type> RandomUserServices = [typeof(IUserService1), typeof(IUserService2), typeof(IUserService3), typeof(IUserService4), typeof(IUserService5), typeof(IUserService6), typeof(IUserService7), typeof(IUserService8), typeof(IUserService9), typeof(IUserService10), typeof(IUserService11)];
 
-            while (true)
+        private static readonly IEnumerable<Type> RandomSingleServices = [typeof(SingleService1), typeof(SingleService2), typeof(SingleService3), typeof(SingleService4)];
+
+        [Benchmark]
+        public void MicrosoftTransient()
+        {
+            foreach (var userServiceType in RandomUserServices)
             {
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService1);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService2);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService3);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService4);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService5);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService6);
-                //if (System.Diagnostics.Debugger.IsAttached)
-                //    System.Diagnostics.Debugger.Break();
-                yield return typeof(IUserService7);
-                yield return typeof(IUserService8);
-                yield return typeof(IUserService9);
-                yield return typeof(IUserService10);
-                yield return typeof(IUserService11);
+                _ = _serviceProvider.GetService(userServiceType);
             }
         }
 
-        private static IEnumerable<Type> RandomSingleServices()
+        [Benchmark]
+        public void ZeroIoCTransient()
         {
-            while(true)
+            foreach (var userServiceType in RandomUserServices)
             {
-                yield return typeof(SingleService1);
-                yield return typeof(SingleService2);
-                yield return typeof(SingleService3);
-                yield return typeof(SingleService4);
+                _ = _zeroIoCContainer.Resolve(userServiceType);
             }
         }
 
-        private IEnumerator<Type> userServiceTypesEnumerator;
-        private static IEnumerator<Type> randomSingleServicesEnumerator;
-
-
-        //public IEnumerable<Type> UserServiceTypes => new[] {
-        //    typeof(IUserService1),
-        //    typeof(IUserService2),
-        //    typeof(IUserService3),
-        //    typeof(IUserService4),
-        //    typeof(IUserService5),
-        //    typeof(IUserService6),
-        //    typeof(IUserService7),
-        //    typeof(IUserService8),
-        //    typeof(IUserService9),
-        //    typeof(IUserService10),
-        //    typeof(IUserService11)
-        //};
-
-        //public IEnumerable<Type> SingleServiceTypes => new[] {
-        //    typeof(SingleService1),
-        //    typeof(SingleService2),
-        //    typeof(SingleService3),
-        //    typeof(SingleService4)
-        //};
-
-        //[ParamsSource(nameof(UserServiceTypes))]
-        //public Type UserServiceType;
-
-        //[ParamsSource(nameof(SingleServiceTypes))]
-        //public Type SingleServiceType;
-
-        //[Benchmark]
-        //public void Prueba()
-        //{
-        //    UserServiceTypesEnumerator.MoveNext();
-        //    Console.WriteLine(UserServiceTypesEnumerator.Current);
-        //}
-
-        [GlobalSetup]
-        public void GlobalSetup()
-        {
-            userServiceTypesEnumerator = RandomUserServices().GetEnumerator();
-            randomSingleServicesEnumerator = RandomSingleServices().GetEnumerator();
-        }
-
-
-        [IterationSetup]
-        public void IterationSetup()
-        {
-            userServiceTypesEnumerator.MoveNext();
-            randomSingleServicesEnumerator.MoveNext();
-
-        }
-        //{
-        //    //if (System.Diagnostics.Debugger.IsAttached)
-        //    //    System.Diagnostics.Debugger.Break();
-
-        //    userServiceTypesEnumerator.MoveNext();
-        //}
-
         [Benchmark]
-        public object? MicrosoftTransient()
+        public void IoCServiceContainerTransient()
         {
-            //if (UserServiceTypesEnumerator.Current == null)
-            //userServiceTypesEnumerator.MoveNext();
-
-            //userServiceTypesEnumerator.MoveNext();
-
-            //if (System.Diagnostics.Debugger.IsAttached)
-            //    System.Diagnostics.Debugger.Break();
-
-            //userServiceTypesEnumerator.MoveNext();
-
-            //var userServiceType = RandomUserService();
-            return _serviceProvider.GetService(userServiceTypesEnumerator.Current);
+            foreach (var userServiceType in RandomUserServices)
+            {
+                _ = _iocServiceContainer.Resolve(userServiceType);
+            }
         }
 
         [Benchmark]
-        public object? ZeroIoCTransient()
+        public void IoCServiceContainerOptimizeTransient()
         {
-            //if (UserServiceTypesEnumerator.Current == null)
-            //userServiceTypesEnumerator.MoveNext();
-
-            //System.Diagnostics.Debugger.Launch();
-
-            //var userServiceType = RandomUserService();
-            return _zeroIoCContainer.Resolve(userServiceTypesEnumerator.Current);
+            foreach (var userServiceType in RandomUserServices)
+            {
+                _ = _iocServiceContainerOptimize.Resolve(userServiceType);
+            }
         }
 
         [Benchmark]
-        public object? IoCServiceContainerTransient()
+        public void IoCServiceContainerFrozenTransient()
         {
-            //var userServiceType = RandomUserService();
-            return _iocServiceContainer.Resolve(userServiceTypesEnumerator.Current);
+            foreach (var userServiceType in RandomUserServices)
+            {
+                _ = _iocServiceContainerFrozen.Resolve(userServiceType);
+            }
         }
 
         [Benchmark]
-        public object? IoCServiceContainerOptimizeTransient()
+        public void GraceTransient()
         {
-            //var userServiceType = RandomUserService();
-            return _iocServiceContainerOptimize.Resolve(userServiceTypesEnumerator.Current);
+            foreach (var userServiceType in RandomUserServices)
+            {
+                _ = _grace.Locate(userServiceType);
+            }
         }
 
         [Benchmark]
-        public object? IoCServiceContainerFrozenTransient()
+        public void MicrosoftSingleton()
         {
-            //var userServiceType = RandomUserService();
-            return _iocServiceContainerFrozen.Resolve(userServiceTypesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _serviceProvider.GetService(singleServiceType);
+            }
         }
 
         [Benchmark]
-        public object GraceTransient()
+        public void ZeroIoCSingleton()
         {
-            //var userServiceType = RandomUserService();
-            return _grace.Locate(userServiceTypesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _zeroIoCContainer.Resolve(singleServiceType);
+            }
         }
 
         [Benchmark]
-        public object? MicrosoftSingleton()
+        public void IoCServiceContainerSingleton()
         {
-            //var singleServiceType = RandomSingleService();
-            return _serviceProvider.GetService(randomSingleServicesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _iocServiceContainer.Resolve(singleServiceType);
+            }
         }
 
         [Benchmark]
-        public object? ZeroIoCSingleton()
+        public void IoCServiceContainerOptimizeSingleton()
         {
-            //var singleServiceType = RandomSingleService();
-            return _zeroIoCContainer.Resolve(randomSingleServicesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _iocServiceContainerOptimize.Resolve(singleServiceType);
+            }
         }
 
         [Benchmark]
-        public object? IoCServiceContainerSingleton()
+        public void IoCServiceContainerFrozenSingleton()
         {
-            //var singleServiceType = RandomSingleService();
-            return _iocServiceContainer.Resolve(randomSingleServicesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _iocServiceContainerFrozen.Resolve(singleServiceType);
+            }
         }
 
         [Benchmark]
-        public object? IoCServiceContainerOptimizeSingleton()
+        public void GraceSingleton()
         {
-            //var singleServiceType = RandomSingleService();
-            return _iocServiceContainerOptimize.Resolve(randomSingleServicesEnumerator.Current);
-        }
-
-        [Benchmark]
-        public object? IoCServiceContainerFrozenSingleton()
-        {
-            //var singleServiceType = RandomSingleService();
-            return _iocServiceContainerFrozen.Resolve(randomSingleServicesEnumerator.Current);
-        }
-
-        [Benchmark]
-        public object GraceSingleton()
-        {
-            //var singleServiceType = RandomSingleService();
-            return _grace.Locate(randomSingleServicesEnumerator.Current);
+            foreach (var singleServiceType in RandomSingleServices)
+            {
+                _ = _grace.Locate(singleServiceType);
+            }
         }
     }
 }
