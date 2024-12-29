@@ -4,26 +4,28 @@
 
     public class IoTSearcher<TValue> : ISearcher<TValue>
     {
-        private readonly KeyValuePair<int, TValue>[] mArray;
+        private readonly KeyValuePair<int, TValue>[] mValues;
 
         internal IoTSearcher(IEnumerable<KeyValuePair<int, TValue>> source)
         {
-            mArray = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
+            mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
         }
 
         public bool TryGetValue(int key, [MaybeNullWhen(false)] out TValue value)
         {
-            var high = mArray.Length - 1;
+            ReadOnlySpan<KeyValuePair<int, TValue>> spanValue = new(mValues);
+
+            var high = spanValue.Length - 1;
             var low = 0;
 
             while (low <= high)
             {
                 int mid = (high + low) / 2;
-                var midKey = mArray[mid].Key;
+                var midKey = spanValue[mid].Key;
 
                 if (midKey == key)
                 {
-                    value = mArray[mid].Value;
+                    value = spanValue[mid].Value;
                     return true;
                 }
                 else
