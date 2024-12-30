@@ -2,13 +2,13 @@
 {
     using System.Diagnostics.CodeAnalysis;
 
-    public class IoTSearcher<TValue> : ISearcher<TValue>
+    public class IoCSearcher<TValue> : ISearcher<TValue>
     {
         private readonly KeyValuePair<int, TValue>[] mValues;
 
-        internal IoTSearcher(IEnumerable<KeyValuePair<int, TValue>> source)
+        internal IoCSearcher(IEnumerable<KeyValuePair<int, TValue>> source)
         {
-            mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
+            mValues = source.OrderBy((o) => o.Key, new IoCComparer()).ToArray();
         }
 
         public bool TryGetValue(int key, [MaybeNullWhen(false)] out TValue value)

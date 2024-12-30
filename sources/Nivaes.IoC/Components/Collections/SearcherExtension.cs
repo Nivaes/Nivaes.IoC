@@ -6,7 +6,7 @@
     {
         public static ISearcher<TValue> ToIoTSeeker<TValue>(this IEnumerable<KeyValuePair<int, TValue>> source)
         {
-            return new IoTSearcher<TValue>(source);
+            return new IoCSearcher<TValue>(source);
         }
 
         public static ISearcher<TValue> ToDictionarySeeker<TValue>(this IDictionary<int, TValue> source)
