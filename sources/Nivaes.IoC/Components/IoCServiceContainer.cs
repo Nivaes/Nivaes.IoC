@@ -4,8 +4,8 @@
 
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected IDictionary<int, IInstanceResolver> resolvers = new Dictionary<int, IInstanceResolver>();
-        protected IDictionary<int, IInstanceResolver> scopedResolvers = new Dictionary<int, IInstanceResolver>();
+        protected IDictionary<int, IInstanceResolver> resolvers = new OrderedDictionary<int, IInstanceResolver>();
+        protected IDictionary<int, IInstanceResolver> scopedResolvers = new OrderedDictionary<int, IInstanceResolver>();
 
         protected ISearcher<IInstanceResolver> resolverSearcher;
         protected ISearcher<IInstanceResolver> scopedResolversSearcher;
@@ -16,8 +16,8 @@
 
         protected IoCServiceContainer()
         {
-            resolverSearcher = resolvers.ToDictionarySeeker();
-            scopedResolversSearcher = scopedResolvers.ToDictionarySeeker();
+            resolverSearcher = resolvers.ToDictionarySearcher();
+            scopedResolversSearcher = scopedResolvers.ToDictionarySearcher();
         }
 
         protected IoCServiceContainer(IDictionary<int, IInstanceResolver> resolvers,
@@ -27,8 +27,8 @@
             this.scopedResolvers = scopedResolvers;
             Scoped = scope;
 
-            resolverSearcher = this.resolvers.ToDictionarySeeker();
-            scopedResolversSearcher = this.scopedResolvers.ToDictionarySeeker();
+            resolverSearcher = this.resolvers.ToDictionarySearcher();
+            scopedResolversSearcher = this.scopedResolvers.ToDictionarySearcher();
         }
 
         public virtual IIoCResolver CreateScope()
@@ -48,14 +48,14 @@
             //var bb = resolvers.Select(x => x.Key).ToArray();
             //scopedResolvers = scopedResolvers.ToFrozenDictionary();
 
-            resolverSearcher = resolvers.ToFrozenSeeker();
-            scopedResolversSearcher = scopedResolvers.ToFrozenSeeker();
+            resolverSearcher = resolvers.ToFrozenSearcher();
+            scopedResolversSearcher = scopedResolvers.ToFrozenSearcher();
         }
 
         public void Optimize()
         {
-            resolverSearcher = resolvers.ToIoTSeeker();
-            scopedResolversSearcher = scopedResolvers.ToIoTSeeker();
+            resolverSearcher = resolvers.ToIoTSearcher();
+            scopedResolversSearcher = scopedResolvers.ToIoTSearcher();
         }
 
         protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
