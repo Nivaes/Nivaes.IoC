@@ -1,4 +1,4 @@
-﻿namespace Nivaes.IoC.Core
+﻿namespace Nivaes.IoC
 {
     internal static class ExceptionHelper
     {

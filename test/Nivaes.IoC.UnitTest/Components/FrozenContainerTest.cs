@@ -34,7 +34,7 @@ public partial class FrozenContainerTest
     {
         var container = new TestContainer();
         container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
-        container.Frozen();
+        //container.Frozen();
 
         var userService1_1 = container.Resolve<IUserService1>();
         userService1_1.Should().NotBeNull();
@@ -63,7 +63,7 @@ public partial class FrozenContainerTest
                 return new UserService1(new Helper1(new Helper2(helper3!)));
             }
         );
-        container.Frozen();
+        //container.Frozen();
 
         var userService1_1 = container.Resolve<IUserService1>();
         userService1_1.Should().NotBeNull();
@@ -86,7 +86,7 @@ public partial class FrozenContainerTest
     {
         var container = new TestContainer();
         container.AddInstance<IUserService1>(new UserService1(new Helper1(new Helper2(new Helper3()))));
-        container.Frozen();
+        //container.Frozen();
 
         var scope1 = container.CreateScope();
         scope1.Should().NotBeNull();

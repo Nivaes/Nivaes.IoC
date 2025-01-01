@@ -147,14 +147,14 @@ public class ScopedContainerTest
             service = scoped.Resolve(serviceType);
             Assert.NotNull(service);
 
-            Assert.False((bool)service.ReflectionGetValue("Disposed"));
+            Assert.False((bool?)service.ReflectionGetValue("Disposed"));
 
             singletonService = scoped.Resolve(singletonServiceType);
             Assert.NotNull(singletonService);
-            Assert.False((bool)service.ReflectionGetValue("Disposed"));
+            Assert.False((bool?)service.ReflectionGetValue("Disposed"));
         }
 
-        Assert.True((bool)service.ReflectionGetValue("Disposed"));
-        Assert.False((bool)singletonService.ReflectionGetValue("Disposed"));
+        Assert.True((bool?)service.ReflectionGetValue("Disposed"));
+        Assert.False((bool?)singletonService.ReflectionGetValue("Disposed"));
     }
 }

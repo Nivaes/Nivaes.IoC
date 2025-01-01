@@ -147,22 +147,27 @@ public class BasicContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType1 = assembly.GetType("TestProject.TestContainer");
         var containerType2 = assembly.GetType("TestProject.SingleContainer");
+        containerType1.Should().NotBeNull();
+        containerType2.Should().NotBeNull();
 
         var serviceType = assembly.GetType("TestProject.IService");
+        serviceType.Should().NotBeNull();
 
-        var container1 = (IIoCResolver?)Activator.CreateInstance(containerType1);
-        var container2 = (IIoCResolver?)Activator.CreateInstance(containerType2);
+        var container1 = (IIoCResolver?)Activator.CreateInstance(containerType1!);
+        var container2 = (IIoCResolver?)Activator.CreateInstance(containerType2!);
+        container1.Should().NotBeNull();
+        container2.Should().NotBeNull();
 
-        var firstService1 = container1.Resolve(serviceType);
-        var secondService1 = container1.Resolve(serviceType);
+        var firstService1 = container1!.Resolve(serviceType!);
+        var secondService1 = container1!.Resolve(serviceType!);
 
-        var firstService2 = container2.Resolve(serviceType);
-        var secondService2 = container2.Resolve(serviceType);
+        var firstService2 = container2!.Resolve(serviceType!);
+        var secondService2 = container2!.Resolve(serviceType!);
 
-        Assert.True(!firstService1.Equals(secondService1));
-        Assert.True(!firstService1.Equals(firstService2));
-        Assert.True(!firstService1.Equals(secondService2));
-        Assert.True(firstService2.Equals(secondService2));
+        Assert.True(!firstService1!.Equals(secondService1));
+        Assert.True(!firstService1!.Equals(firstService2));
+        Assert.True(!firstService1!.Equals(secondService2));
+        Assert.True(firstService2!.Equals(secondService2));
     }
 
     [Fact]
@@ -194,11 +199,13 @@ public class BasicContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
-        var firstService = container.Resolve(serviceType);
+        serviceType.Should().NotBeNull();
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        var firstService = container!.Resolve(serviceType!);
 
         var scoped = container.CreateScope();
-        var secondService = scoped.Resolve(serviceType);
+        var secondService = scoped.Resolve(serviceType!);
 
         Assert.True(firstService != null && secondService != null && firstService.Equals(secondService));
     }
@@ -225,10 +232,13 @@ public class BasicContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
         var serviceType = assembly.GetType("TestProject.Service");
+        serviceType.Should().NotBeNull();
 
-        var container = (IIoCResolver)Activator.CreateInstance(containerType);
-        var service = container.Resolve(serviceType);
+        var container = (IIoCResolver?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        var service = container!.Resolve(serviceType!);
 
         service.Should().NotBeNull();
     }

@@ -192,21 +192,21 @@ namespace {action.containerType?.ContainingNamespace}
         .JoinWithNewLine()}
         }}
 
-        private {action.containerType?.Name}(IDictionary<int, IInstanceResolver> resolvers, IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)
+        private {action.containerType?.Name}(IoTCollection<IInstanceResolver> resolvers, IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
             : base(resolvers, scopedResolvers, scope)
         {{
         }}
 
         public override IIoCResolver CreateScope()
         {{
-            var newScope = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            var newScope = scopedResolvers.Clone();
             return new {action.containerType?.Name}(resolvers, newScope, true);
         }}
 
         public override IIoCResolver Clone()
         {{
-            var copy = resolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
-            var scopedCopy = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            var copy = resolvers.Clone();
+            var scopedCopy = scopedResolvers.Clone();
             return new {action.containerType?.Name}(copy, scopedCopy, false);
         }}
     }}

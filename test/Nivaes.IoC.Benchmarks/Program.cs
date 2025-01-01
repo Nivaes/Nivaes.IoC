@@ -300,11 +300,7 @@
     {
         private static void Main(string[] args)
         {
-            //BenchmarkRunner.Run<IoCStartupBenchmark>();
-            //BenchmarkRunner.Run<IoCRuntimeBenchmark>();
-
-            //BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, new DebugInProcessConfig());
-
+            BenchmarkRunner.Run<IoCStartupBenchmark>();
             BenchmarkRunner.Run<IoCRuntimeBenchmark>();
         }
     }
@@ -407,23 +403,23 @@
             var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }
 
-        [Benchmark]
-        public void IoCServiceContainerFrozenStartup()
-        {
-            var resolver = Creators.CreateIoCServiceContainer();
-            resolver.Frozen();
-            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
-            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerFrozenStartup()
+        //{
+        //    var resolver = Creators.CreateIoCServiceContainer();
+        //    resolver.Frozen();
+        //    var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+        //    var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
+        //}
 
-        [Benchmark]
-        public void IoCServiceContainerOptimizeStartup()
-        {
-            var resolver = Creators.CreateIoCServiceContainer();
-            resolver.Optimize();
-            var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
-            var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerOptimizeStartup()
+        //{
+        //    var resolver = Creators.CreateIoCServiceContainer();
+        //    resolver.Optimize();
+        //    var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
+        //    var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
+        //}
 
         [Benchmark]
         public void GraceStartup()
@@ -441,8 +437,8 @@
         private readonly DependencyInjectionContainer _grace;
         private readonly ZeroContainer _zeroIoCContainer;
         private readonly BenchmarkIoCServiceContainer _iocServiceContainer;
-        private readonly BenchmarkIoCServiceContainer _iocServiceContainerFrozen;
-        private readonly BenchmarkIoCServiceContainer _iocServiceContainerOptimize;
+        //private readonly BenchmarkIoCServiceContainer _iocServiceContainerFrozen;
+        //private readonly BenchmarkIoCServiceContainer _iocServiceContainerOptimize;
         private readonly ServiceProvider _serviceProvider;
 
         public IoCRuntimeBenchmark()
@@ -452,11 +448,11 @@
             _zeroIoCContainer = Creators.CreateZeroIoC();
             _iocServiceContainer = Creators.CreateIoCServiceContainer();
 
-            _iocServiceContainerFrozen = Creators.CreateIoCServiceContainer();
-            _iocServiceContainerFrozen.Frozen();
+            //_iocServiceContainerFrozen = Creators.CreateIoCServiceContainer();
+            //_iocServiceContainerFrozen.Frozen();
 
-            _iocServiceContainerOptimize = Creators.CreateIoCServiceContainer();
-            _iocServiceContainerOptimize.Optimize();
+            //_iocServiceContainerOptimize = Creators.CreateIoCServiceContainer();
+            //_iocServiceContainerOptimize.Optimize();
         }
 
         private static readonly IEnumerable<Type> RandomUserServices = [typeof(IUserService1), typeof(IUserService2), typeof(IUserService3), typeof(IUserService4), typeof(IUserService5), typeof(IUserService6), typeof(IUserService7), typeof(IUserService8), typeof(IUserService9), typeof(IUserService10), typeof(IUserService11)];
@@ -490,23 +486,23 @@
             }
         }
 
-        [Benchmark]
-        public void IoCServiceContainerOptimizeTransient()
-        {
-            foreach (var userServiceType in RandomUserServices)
-            {
-                _ = _iocServiceContainerOptimize.Resolve(userServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerOptimizeTransient()
+        //{
+        //    foreach (var userServiceType in RandomUserServices)
+        //    {
+        //        _ = _iocServiceContainerOptimize.Resolve(userServiceType);
+        //    }
+        //}
 
-        [Benchmark]
-        public void IoCServiceContainerFrozenTransient()
-        {
-            foreach (var userServiceType in RandomUserServices)
-            {
-                _ = _iocServiceContainerFrozen.Resolve(userServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerFrozenTransient()
+        //{
+        //    foreach (var userServiceType in RandomUserServices)
+        //    {
+        //        _ = _iocServiceContainerFrozen.Resolve(userServiceType);
+        //    }
+        //}
 
         [Benchmark]
         public void GraceTransient()
@@ -544,23 +540,23 @@
             }
         }
 
-        [Benchmark]
-        public void IoCServiceContainerOptimizeSingleton()
-        {
-            foreach (var singleServiceType in RandomSingleServices)
-            {
-                _ = _iocServiceContainerOptimize.Resolve(singleServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerOptimizeSingleton()
+        //{
+        //    foreach (var singleServiceType in RandomSingleServices)
+        //    {
+        //        _ = _iocServiceContainerOptimize.Resolve(singleServiceType);
+        //    }
+        //}
 
-        [Benchmark]
-        public void IoCServiceContainerFrozenSingleton()
-        {
-            foreach (var singleServiceType in RandomSingleServices)
-            {
-                _ = _iocServiceContainerFrozen.Resolve(singleServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void IoCServiceContainerFrozenSingleton()
+        //{
+        //    foreach (var singleServiceType in RandomSingleServices)
+        //    {
+        //        _ = _iocServiceContainerFrozen.Resolve(singleServiceType);
+        //    }
+        //}
 
         [Benchmark]
         public void GraceSingleton()
