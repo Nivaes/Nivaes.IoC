@@ -10,13 +10,17 @@
       
         #endregion
 
-        private KeyInstanceResolverValue[] mValues = new KeyInstanceResolverValue[0];
+        private KeyInstanceResolverValue[] mValues;
 
-        //internal IoTCollection()
-        //{
-        //    mValues = new PairValues[0];
-        //    //mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
-        //}
+        internal IoTCollection(int length)
+        {
+            mValues = new KeyInstanceResolverValue[length];
+        }
+
+        public IoTCollection(IEnumerable<KeyInstanceResolverValue> source)
+        {
+            mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
+        }
 
         public void Add(Type key, TValue value)
         {
@@ -26,17 +30,17 @@
 
         private void Add(int keyHash, TValue value)
         {
-            int index = Array.BinarySearch(mValues, new KeyInstanceResolverValue { Key = keyHash }, new KeyInstanceResolverValueComparer());
+            int index = Array.BinarySearch(mValues, new KeyInstanceResolverValue(key: keyHash), new KeyInstanceResolverValueComparer());
             if (index < 0)
             {
                 index = ~index;
                 Array.Resize(ref mValues, mValues.Length + 1);
                 Array.Copy(mValues, index, mValues, index + 1, mValues.Length - index - 1);
-                mValues[index] = new KeyInstanceResolverValue { Key = keyHash, Value = value };
+                mValues[index] = new KeyInstanceResolverValue (key: keyHash, value: value);
             }
             else
             {
-                mValues[index] = new KeyInstanceResolverValue { Key = keyHash, Value = value };
+                mValues[index] = new KeyInstanceResolverValue (key: keyHash, value: value);
             }
         }
 
@@ -46,7 +50,7 @@
             var result = TryGetPosition(key, out int position);
             if (result)
             {
-                mValues[position] = new KeyInstanceResolverValue { Key = key, Value = value };
+                mValues[position] = new KeyInstanceResolverValue(key: key, value: value);
             }
             else
             {
@@ -112,14 +116,11 @@
 
         public IoTCollection<TValue> Clone()
         {
-            IoTCollection<TValue> clone = new IoTCollection<TValue>
-            {
-                mValues = new KeyInstanceResolverValue[mValues.Length]
-            };
+            IoTCollection<TValue> clone = new IoTCollection<TValue>(mValues.Length);
 
             for (int i = 0; i < mValues.Length; i++)
             {
-                clone.mValues[i] = new KeyInstanceResolverValue { Key = mValues[i].Key, Value = (TValue)mValues[i].Value.Duplicate() };
+                clone.mValues[i] = new KeyInstanceResolverValue(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
             }
 
             return clone;

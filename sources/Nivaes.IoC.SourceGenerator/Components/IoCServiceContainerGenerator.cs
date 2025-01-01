@@ -177,19 +177,55 @@ namespace {action.containerType?.ContainingNamespace}
 
         public {action.containerType?.Name}()
         {{
-{groupedEntries.Select(o =>
-                {
-                    if (o.Count() == 1)
+            IEnumerable<KeyInstanceResolverValue> mResolvers = [{
+                groupedEntries
+                    .Where(o =>
+                    {
+                        if (o.Count() == 1)
+                        {
+                            var entry = o.First();
+                            return entry.Lifetime == ServiceEntry.LifetimeKind.Singleton || entry.Lifetime == ServiceEntry.LifetimeKind.Transient;
+                        }
+                        return false;
+                    })
+                    .Select(o =>
                     {
                         var entry = o.First();
-                        var (propertyToStore, resolver) = MapResolver(entry);
+                        if (entry.Lifetime == ServiceEntry.LifetimeKind.Singleton)
+                        {
+                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                        }
+                        else if (entry.Lifetime == ServiceEntry.LifetimeKind.Transient)
+                        {
+                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                        }
+                        else
+                        {
+                            return string.Empty;
+                        }
+                    })
+                    .JoinWithNewLine()
+            }];
 
-                        return $@"          {propertyToStore}.Add(typeof({entry.Interface.ToGlobalName()}), new {resolver}<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>());";
-                    }
+            IEnumerable<KeyInstanceResolverValue> mScopedResolvers = [{groupedEntries
+                    .Where(o =>
+                    {
+                        if (o.Count() == 1)
+                        {
+                            var entry = o.First();
+                            return entry.Lifetime == ServiceEntry.LifetimeKind.Scoped;
+                        }
+                        return false;
+                    })
+                    .Select(o =>
+                    {
+                        var entry = o.First();
+                        return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                    })
+                    .JoinWithNewLine()
+            }];
 
-                    return "";
-                })
-        .JoinWithNewLine()}
+            LoadData(mResolvers, mScopedResolvers);
         }}
 
         private {action.containerType?.Name}(IoTCollection<IInstanceResolver> resolvers, IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
@@ -199,14 +235,14 @@ namespace {action.containerType?.ContainingNamespace}
 
         public override IIoCResolver CreateScope()
         {{
-            var newScope = scopedResolvers.Clone();
-            return new {action.containerType?.Name}(resolvers, newScope, true);
+            var newScope = mScopedResolvers.Clone();
+            return new {action.containerType?.Name}(mResolvers, newScope, true);
         }}
 
         public override IIoCResolver Clone()
         {{
-            var copy = resolvers.Clone();
-            var scopedCopy = scopedResolvers.Clone();
+            var copy = mResolvers.Clone();
+            var scopedCopy = mScopedResolvers.Clone();
             return new {action.containerType?.Name}(copy, scopedCopy, false);
         }}
     }}
@@ -215,7 +251,6 @@ namespace {action.containerType?.ContainingNamespace}
 ";
                 var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
                 context.AddSource(sourceName + "_IoCServiceContainer", source);
-
             });
         }
 
