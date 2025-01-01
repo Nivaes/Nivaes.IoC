@@ -9,6 +9,8 @@
 
         protected IoCServiceContainer()
         {
+            mResolvers = new IoTCollection<IInstanceResolver>(0);
+            mScopedResolvers = new IoTCollection<IInstanceResolver>(0);
         }
 
         protected IoCServiceContainer(IoTCollection<IInstanceResolver> resolvers,
@@ -25,36 +27,9 @@
             mScopedResolvers = new IoTCollection<IInstanceResolver>(scopedResolvers);
         }
 
-        //protected IoCServiceContainer(IInstanceResolver<IInstanceResolver> resolvers, IInstanceResolver<IInstanceResolver> scopedResolvers, bool scope = false)
-        //{
-        //    mResolvers = resolvers;
-        //    mScopedResolvers = scopedResolvers;
-        //    Scoped = scope;
-
-        //    //resolverSearcher = this.resolvers.ToDictionarySeeker();
-        //    //scopedResolversSearcher = this.scopedResolvers.ToDictionarySeeker();
-        //}
-
         public abstract IIoCResolver CreateScope();
 
         public abstract IIoCResolver Clone();
-
-        //public void Frozen()
-        //{
-        //    //var aa = resolvers.Select(x => x.Key).ToArray();
-        //    //resolvers = resolvers.ToFrozenDictionary();
-        //    //var bb = resolvers.Select(x => x.Key).ToArray();
-        //    //scopedResolvers = scopedResolvers.ToFrozenDictionary();
-
-        //    resolverSearcher = resolvers.ToFrozenSeeker();
-        //    scopedResolversSearcher = scopedResolvers.ToFrozenSeeker();
-        //}
-
-        //public void Optimize()
-        //{
-        //    resolverSearcher = resolvers.ToIoTSeeker();
-        //    scopedResolversSearcher = scopedResolvers.ToIoTSeeker();
-        //}
 
         protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
 

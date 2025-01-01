@@ -19,7 +19,11 @@
 
         public IoTCollection(IEnumerable<KeyInstanceResolverValue> source)
         {
-            mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
+            mValues = source.ToArray();
+            var keyInstanceResolverValues = new Span<KeyInstanceResolverValue>(mValues);
+            keyInstanceResolverValues.Sort(new KeyInstanceResolverValueComparer());
+
+            //mValues = source.OrderBy((o) => o.Key, new IoTComparer()).ToArray();
         }
 
         public void Add(Type key, TValue value)

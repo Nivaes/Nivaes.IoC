@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.CodeAnalysis;
-using Xunit;
+﻿using FluentAssertions;
 using Xunit.Abstractions;
 
 namespace Nivaes.IoC.UnitTest;
