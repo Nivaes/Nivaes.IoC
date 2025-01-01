@@ -300,12 +300,8 @@
     {
         private static void Main(string[] args)
         {
-            //BenchmarkRunner.Run<IoCStartupBenchmark>();
+            BenchmarkRunner.Run<IoCStartupBenchmark>();
             //BenchmarkRunner.Run<IoCRuntimeBenchmark>();
-
-            //BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args, new DebugInProcessConfig());
-
-            BenchmarkRunner.Run<IoCRuntimeBenchmark>();
         }
     }
 
