@@ -63,19 +63,17 @@
 
         public object? Resolve(Type serviceType)
         {
-            var serviceTypeHashCode = serviceType.GetHashCode();
-
-            if (resolvers.TryGetValue(serviceTypeHashCode, out var entry))
+            if (resolvers.TryGetValue(serviceType, out var entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (Scoped && scopedResolvers.TryGetValue(serviceTypeHashCode, out entry))
+            if (Scoped && scopedResolvers.TryGetValue(serviceType, out entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (scopedResolvers.TryGetValue(serviceTypeHashCode, out entry))
+            if (scopedResolvers.TryGetValue(serviceType, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(serviceType.FullName ?? string.Empty);
             }
@@ -86,19 +84,17 @@
 
         public object? Resolve(Type type, IOverrides overrides)
         {
-            var typeHashCode = type.GetHashCode();
-
-            if (resolvers.TryGetValue(typeHashCode, out var entry))
+            if (resolvers.TryGetValue(type, out var entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (Scoped && scopedResolvers.TryGetValue(typeHashCode, out entry))
+            if (Scoped && scopedResolvers.TryGetValue(type, out entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (scopedResolvers.TryGetValue(typeHashCode, out entry))
+            if (scopedResolvers.TryGetValue(type, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(type.FullName ?? string.Empty);
             }
