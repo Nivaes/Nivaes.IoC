@@ -5,15 +5,10 @@
         protected IoTCollection<IInstanceResolver> resolvers = new IoTCollection<IInstanceResolver>();
         protected IoTCollection<IInstanceResolver> scopedResolvers = new IoTCollection<IInstanceResolver>();
 
-        //protected ISearcher<IInstanceResolver> resolverSearcher;
-        //protected ISearcher<IInstanceResolver> scopedResolversSearcher;
-
         protected readonly bool Scoped;
 
         protected IoCServiceContainer()
         {
-            //resolverSearcher = resolvers.ToDictionarySeeker();
-            //scopedResolversSearcher = scopedResolvers.ToDictionarySeeker();
         }
 
         protected IoCServiceContainer(IoTCollection<IInstanceResolver> resolvers,
@@ -22,10 +17,12 @@
             this.resolvers = resolvers;
             this.scopedResolvers = scopedResolvers;
             Scoped = scope;
-
-            //resolverSearcher = this.resolvers.ToDictionarySeeker();
-            //scopedResolversSearcher = this.scopedResolvers.ToDictionarySeeker();
         }
+
+        //private void LoadData(IEnumerable)
+        //{
+
+        //}
 
         //protected IoCServiceContainer(IDictionary<int, IInstanceResolver> resolvers,
         //    IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)

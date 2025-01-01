@@ -1,33 +1,16 @@
 ﻿namespace Nivaes.IoC
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Text;
 
-    public class IoTCollection<TValue> //: ISearcher<TValue>
+    public class IoTCollection<TValue>
         where TValue : IInstanceResolver
     {
         #region PairValues
-        private struct PairValues
-        {
-            public int Key;
-            public TValue Value;
-        }
-
-        internal class PairValuesComparer : IComparer
-        {
-            public int Compare(object? x, object? y)
-            {
-                ArgumentNullException.ThrowIfNull(x);
-                ArgumentNullException.ThrowIfNull(y);
-
-                return ((PairValues)x).Key.CompareTo(((PairValues)y).Key);
-            }
-        }
+      
         #endregion
 
-        private PairValues[] mValues = new PairValues[0];
+        private KeyInstanceResolverValue[] mValues = new KeyInstanceResolverValue[0];
 
         //internal IoTCollection()
         //{
@@ -43,17 +26,17 @@
 
         private void Add(int keyHash, TValue value)
         {
-            int index = Array.BinarySearch(mValues, new PairValues { Key = keyHash }, new PairValuesComparer());
+            int index = Array.BinarySearch(mValues, new KeyInstanceResolverValue { Key = keyHash }, new KeyInstanceResolverValueComparer());
             if (index < 0)
             {
                 index = ~index;
                 Array.Resize(ref mValues, mValues.Length + 1);
                 Array.Copy(mValues, index, mValues, index + 1, mValues.Length - index - 1);
-                mValues[index] = new PairValues { Key = keyHash, Value = value };
+                mValues[index] = new KeyInstanceResolverValue { Key = keyHash, Value = value };
             }
             else
             {
-                mValues[index] = new PairValues { Key = keyHash, Value = value };
+                mValues[index] = new KeyInstanceResolverValue { Key = keyHash, Value = value };
             }
         }
 
@@ -63,7 +46,7 @@
             var result = TryGetPosition(key, out int position);
             if (result)
             {
-                mValues[position] = new PairValues { Key = key, Value = value };
+                mValues[position] = new KeyInstanceResolverValue { Key = key, Value = value };
             }
             else
             {
@@ -78,7 +61,7 @@
             var result = TryGetPosition(key, out int position);
             if (result)
             {
-                value = mValues[position].Value;
+                value = (TValue)mValues[position].Value;
                 return true;
             }
             else
@@ -90,7 +73,7 @@
 
         internal bool TryGetPosition(int key, [MaybeNullWhen(false)] out int position)
         {
-            ReadOnlySpan<PairValues> spanValue = new ReadOnlySpan<PairValues>(mValues);
+            ReadOnlySpan<KeyInstanceResolverValue> spanValue = new ReadOnlySpan<KeyInstanceResolverValue>(mValues);
 
             var high = spanValue.Length - 1;
             var low = 0;
@@ -121,22 +104,22 @@
         {
             foreach (var value in collection.mValues)
             {
-                Add(value.Key, value.Value);
+                Add(value.Key, (TValue)value.Value);
             }
         }
 
-        internal IEnumerable<TValue> Values => mValues.Select((o) => o.Value);
+        internal IEnumerable<TValue> Values => mValues.Select((o) => (TValue)o.Value);
 
         public IoTCollection<TValue> Clone()
         {
             IoTCollection<TValue> clone = new IoTCollection<TValue>
             {
-                mValues = new PairValues[mValues.Length]
+                mValues = new KeyInstanceResolverValue[mValues.Length]
             };
 
             for (int i = 0; i < mValues.Length; i++)
             {
-                clone.mValues[i] = new PairValues { Key = mValues[i].Key, Value = (TValue)mValues[i].Value.Duplicate() };
+                clone.mValues[i] = new KeyInstanceResolverValue { Key = mValues[i].Key, Value = (TValue)mValues[i].Value.Duplicate() };
             }
 
             return clone;
