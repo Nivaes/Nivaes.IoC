@@ -1,4 +1,5 @@
-﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+﻿using FluentAssertions;
+using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
 using Xunit;
 
@@ -24,18 +25,19 @@ public class AddDelegateTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer")!;
 
-        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
-        container.AddDelegate(r => new MemoryStream(), Reuse.Singleton);
-        using var scope1 = container.CreateScope();
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
+        container.Should().NotBeNull();
+        container!.AddDelegate(r => new MemoryStream(), Reuse.Singleton);
+        using var scope1 = container!.CreateScope();
 
-        var stream1 = container.Resolve<MemoryStream>(); 
-        var stream2 = container.Resolve<MemoryStream>(); 
-        var stream3 = scope1.Resolve<MemoryStream>(); 
+        var stream1 = container.Resolve<MemoryStream>();
+        var stream2 = container.Resolve<MemoryStream>();
+        var stream3 = scope1.Resolve<MemoryStream>();
 
         Assert.Equal(stream1, stream2);
         Assert.Equal(stream1, stream3);
     }
-        
+
     [Fact]
     public async Task AddScopedAsDelegate()
     {
@@ -53,21 +55,23 @@ public class AddDelegateTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
 
-        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
-        container.AddDelegate(r => new MemoryStream(), Reuse.Scoped);
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        container!.AddDelegate(r => new MemoryStream(), Reuse.Scoped);
 
-        using var scope1 = container.CreateScope();
-        using var scope2 = container.CreateScope();
-            
-        var stream1 = scope1.Resolve<MemoryStream>(); 
-        var stream2 = scope1.Resolve<MemoryStream>(); 
-        var stream3 = scope2.Resolve<MemoryStream>(); 
+        using var scope1 = container!.CreateScope();
+        using var scope2 = container!.CreateScope();
+
+        var stream1 = scope1.Resolve<MemoryStream>();
+        var stream2 = scope1.Resolve<MemoryStream>();
+        var stream3 = scope2.Resolve<MemoryStream>();
 
         Assert.Equal(stream1, stream2);
         Assert.NotEqual(stream1, stream3);
     }
-        
+
     [Fact]
     public async Task AddTransientAsDelegate()
     {
@@ -85,16 +89,18 @@ public class AddDelegateTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.Should().NotBeNull();
 
-        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
-        container.AddDelegate(r => new MemoryStream(), Reuse.Transient);
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
+        container.Should().NotBeNull();
+        container!.AddDelegate(r => new MemoryStream(), Reuse.Transient);
 
-        using var scope1 = container.CreateScope();
-        using var scope2 = container.CreateScope();
-            
-        var stream1 = container.Resolve<MemoryStream>(); 
-        var stream2 = scope1.Resolve<MemoryStream>(); 
-        var stream3 = scope2.Resolve<MemoryStream>(); 
+        using var scope1 = container!.CreateScope();
+        using var scope2 = container!.CreateScope();
+
+        var stream1 = container!.Resolve<MemoryStream>();
+        var stream2 = scope1.Resolve<MemoryStream>();
+        var stream3 = scope2.Resolve<MemoryStream>();
 
         Assert.NotEqual(stream1, stream2);
         Assert.NotEqual(stream2, stream3);

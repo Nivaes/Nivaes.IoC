@@ -6,7 +6,7 @@ namespace Nivaes.IoC
     {
         public static readonly DiagnosticDescriptor ClassIsNotPartial = new(
             "NI001",
-            "ZeroContainer has to be a partial class",
+            "IoCServerContainer has to be a partial class",
             "The {0} ia not partial class. It is essential to enable source generation.",
             "Nivaes.IoC",
             DiagnosticSeverity.Error,
@@ -14,7 +14,7 @@ namespace Nivaes.IoC
 
         public static readonly DiagnosticDescriptor BootstrapIsNotOverrided = new(
             "NI002",
-            "ZeroContainer does not override the Bootstrap method",
+            "IoCServerContainer does not override the Bootstrap method",
             "The {0} does not override the Bootstrap method. Override the Bootstrap method to enable source generation.",
             "Nivaes.IoC",
             DiagnosticSeverity.Error,
@@ -22,7 +22,7 @@ namespace Nivaes.IoC
 
         public static readonly DiagnosticDescriptor CreateScopeIsOverrided = new(
             "NI003",
-            "ZeroContainer has override for the CreateScope method",
+            "IoCServerContainer has override for the CreateScope method",
             "The {0} has override for the CreateScope method. There is no need to override the CreateScope. It will be overrided by the source generator.",
             "Nivaes.IoC",
             DiagnosticSeverity.Error,

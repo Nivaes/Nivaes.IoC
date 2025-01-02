@@ -35,17 +35,17 @@ public partial class ResolveContainerTest
     {
         var container = new TestContainer();
 
-        var userService1_1 = container.Resolve<IUserService1>();
+        IUserService1? userService1_1 = container.Resolve<IUserService1>();
         userService1_1.Should().NotBeNull();
         userService1_1!.PrintMessage();
         output.WriteLine($"{userService1_1.Id}");
 
-        var userService1_2 = container.Resolve<IUserService1>();
+        IUserService1? userService1_2 = container.Resolve<IUserService1>();
         userService1_2.Should().NotBeNull();
         userService1_2!.PrintMessage();
         output.WriteLine($"{userService1_2.Id}");
 
-        var userService1_3 = container.Resolve<IUserService1>();
+        IUserService1? userService1_3 = container.Resolve<IUserService1>();
         userService1_3.Should().NotBeNull();
         userService1_3!.PrintMessage();
         output.WriteLine($"{userService1_3.Id}");

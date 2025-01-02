@@ -1,80 +1,51 @@
 ﻿namespace Nivaes.IoC
 {
-    using Nivaes.IoC.Core;
-
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected IDictionary<int, IInstanceResolver> resolvers = new OrderedDictionary<int, IInstanceResolver>();
-        protected IDictionary<int, IInstanceResolver> scopedResolvers = new OrderedDictionary<int, IInstanceResolver>();
-
-        protected ISearcher<IInstanceResolver> resolverSearcher;
-        protected ISearcher<IInstanceResolver> scopedResolversSearcher;
+        protected IoTCollection<IInstanceResolver> mResolvers;
+        protected IoTCollection<IInstanceResolver> mScopedResolvers;
 
         protected readonly bool Scoped;
 
-        private bool disposed = false;
-
         protected IoCServiceContainer()
         {
-            resolverSearcher = resolvers.ToDictionarySearcher();
-            scopedResolversSearcher = scopedResolvers.ToDictionarySearcher();
+            mResolvers = new IoTCollection<IInstanceResolver>(0);
+            mScopedResolvers = new IoTCollection<IInstanceResolver>(0);
         }
 
-        protected IoCServiceContainer(IDictionary<int, IInstanceResolver> resolvers,
-            IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)
+        protected IoCServiceContainer(IoTCollection<IInstanceResolver> resolvers,
+            IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
         {
-            this.resolvers = resolvers;
-            this.scopedResolvers = scopedResolvers;
+            mResolvers = resolvers;
+            mScopedResolvers = scopedResolvers;
             Scoped = scope;
-
-            resolverSearcher = this.resolvers.ToDictionarySearcher();
-            scopedResolversSearcher = this.scopedResolvers.ToDictionarySearcher();
         }
 
-        public virtual IIoCResolver CreateScope()
+        protected void LoadData(KeyInstanceResolverValue[] resolvers, KeyInstanceResolverValue[] scopedResolvers)
         {
-            throw new NotImplementedException(nameof(CreateScope));
+            mResolvers = new IoTCollection<IInstanceResolver>(resolvers);
+            mScopedResolvers = new IoTCollection<IInstanceResolver>(scopedResolvers);
         }
 
-        public virtual IIoCResolver Clone()
-        {
-            throw new NotImplementedException(nameof(CreateScope));
-        }
+        public abstract IIoCResolver CreateScope();
 
-        public void Frozen()
-        {
-            //var aa = resolvers.Select(x => x.Key).ToArray();
-            //resolvers = resolvers.ToFrozenDictionary();
-            //var bb = resolvers.Select(x => x.Key).ToArray();
-            //scopedResolvers = scopedResolvers.ToFrozenDictionary();
-
-            resolverSearcher = resolvers.ToFrozenSearcher();
-            scopedResolversSearcher = scopedResolvers.ToFrozenSearcher();
-        }
-
-        public void Optimize()
-        {
-            resolverSearcher = resolvers.ToIoTSearcher();
-            scopedResolversSearcher = scopedResolvers.ToIoTSearcher();
-        }
+        public abstract IIoCResolver Clone();
 
         protected abstract void Bootstrap(IIoCServiceContainerBootstrapper bootstrapper);
 
         public object? Resolve(Type serviceType)
         {
-            var serviceTypeHashCode = serviceType.GetHashCode();
-
-            if (resolverSearcher.TryGetValue(serviceTypeHashCode, out var entry))
+            if (mResolvers.TryGetValue(serviceType, out var entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (Scoped && scopedResolversSearcher.TryGetValue(serviceTypeHashCode, out entry))
+            if (Scoped && mScopedResolvers.TryGetValue(serviceType, out entry))
             {
                 return entry.Resolve(this);
             }
 
-            if (scopedResolversSearcher.TryGetValue(serviceTypeHashCode, out entry))
+            if (mScopedResolvers.TryGetValue(serviceType, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(serviceType.FullName ?? string.Empty);
             }
@@ -85,19 +56,17 @@
 
         public object? Resolve(Type type, IOverrides overrides)
         {
-            var typeHashCode = type.GetHashCode();
-
-            if (resolverSearcher.TryGetValue(typeHashCode, out var entry))
+            if (mResolvers.TryGetValue(type, out var entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (Scoped && scopedResolversSearcher.TryGetValue(typeHashCode, out entry))
+            if (Scoped && mScopedResolvers.TryGetValue(type, out entry))
             {
                 return entry.Resolve(this, overrides);
             }
 
-            if (scopedResolversSearcher.TryGetValue(typeHashCode, out entry))
+            if (mScopedResolvers.TryGetValue(type, out entry))
             {
                 ExceptionHelper.ScopedWithoutScopeException(type.FullName ?? string.Empty);
             }
@@ -109,18 +78,16 @@
         public void AddDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
             Reuse reuse = Reuse.Transient)
         {
-            var interfaceTypeHashCode = interfaceType.GetHashCode();
-
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    scopedResolvers.Add(interfaceTypeHashCode, new SingletonResolver(resolver));
+                    mScopedResolvers.Add(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Singleton:
-                    resolvers.Add(interfaceTypeHashCode, new SingletonResolver(resolver));
+                    mResolvers.Add(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Transient:
-                    resolvers.Add(interfaceTypeHashCode, new TransientResolver(resolver));
+                    mResolvers.Add(interfaceType, new TransientResolver(resolver));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -130,18 +97,16 @@
         public void ReplaceDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
             Reuse reuse = Reuse.Transient)
         {
-            var interfaceTypeHashCode = interfaceType.GetHashCode();
-
             switch (reuse)
             {
                 case Reuse.Scoped:
-                    scopedResolvers[interfaceTypeHashCode] = new SingletonResolver(resolver);
+                    mScopedResolvers.Replace(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Singleton:
-                    resolvers[interfaceTypeHashCode] = new SingletonResolver(resolver);
+                    mResolvers.Replace(interfaceType, new SingletonResolver(resolver));
                     break;
                 case Reuse.Transient:
-                    resolvers[interfaceTypeHashCode] = new TransientResolver(resolver);
+                    mResolvers.Replace(interfaceType, new TransientResolver(resolver));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(reuse), reuse, null);
@@ -150,28 +115,23 @@
 
         public void AddInstance<TValue>(TValue value)
         {
-            resolvers.Add(typeof(TValue).GetHashCode(), new SingletonResolver(o => value!));
+            mResolvers.Add(typeof(TValue), new SingletonResolver(o => value!));
         }
 
         public void ReplaceInstance<TValue>(TValue value)
         {
-            resolvers[typeof(TValue).GetHashCode()] = new SingletonResolver(o => value!);
+            mResolvers.Replace(typeof(TValue), new SingletonResolver(o => value!));
         }
 
         public void Merge(IoCServiceContainer container)
         {
-            foreach (var resolver in container.resolvers)
-            {
-                resolvers.Add(resolver.Key, resolver.Value);
-            }
-
-            foreach (var resolver in container.scopedResolvers)
-            {
-                scopedResolvers.Add(resolver.Key, resolver.Value);
-            }
+            mResolvers.Merge(container.mResolvers);
+            mScopedResolvers.Merge(container.mScopedResolvers);
         }
 
         #region IDispose
+        private bool disposed = false;
+
         public void Dispose()
         {
             Dispose(true);
@@ -187,13 +147,13 @@
             {
                 if (!Scoped)
                 {
-                    foreach (var resolver in resolvers.Values)
+                    foreach (var resolver in mResolvers.Values)
                     {
                         resolver.Dispose();
                     }
                 }
 
-                foreach (var resolver in scopedResolvers.Values)
+                foreach (var resolver in mScopedResolvers.Values)
                 {
                     resolver.Dispose();
                 }

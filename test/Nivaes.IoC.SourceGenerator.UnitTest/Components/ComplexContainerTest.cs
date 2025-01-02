@@ -162,12 +162,15 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var serviceContainerType = assembly.GetType("TestProject.ServiceContainer");
         var serviceType = assembly.GetType("TestProject.IService");
+        serviceContainerType.Should().NotBeNull();
+        serviceType.Should().NotBeNull();
 
-        var serviceContainer = (IoCServiceContainer)Activator.CreateInstance(serviceContainerType);
-        var serviceContainerCopy = serviceContainer.Clone();
+        var serviceContainer = (IoCServiceContainer?)Activator.CreateInstance(serviceContainerType!);
+        serviceContainer.Should().NotBeNull();
+        var serviceContainerCopy = serviceContainer!.Clone();
 
-        var service = serviceContainer.Resolve(serviceType);
-        var serviceCopy = serviceContainerCopy.Resolve(serviceType);
+        var service = serviceContainer.Resolve(serviceType!);
+        var serviceCopy = serviceContainerCopy.Resolve(serviceType!);
 
         Assert.NotNull(service);
         Assert.NotNull(serviceCopy);
@@ -308,16 +311,17 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
 
-        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
-            
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
+        container.Should().NotBeNull();
+
         var guidValue = Guid.NewGuid();
-        container.AddDelegate(o => guidValue, Reuse.Singleton);
-        var resolvedGuid = container.Resolve<Guid>();
+        container!.AddDelegate(o => guidValue, Reuse.Singleton);
+        var resolvedGuid = container!.Resolve<Guid>();
 
         Assert.True(guidValue == resolvedGuid);
             
         var newGuid = Guid.NewGuid();
-        container.ReplaceDelegate(o => newGuid, Reuse.Singleton);
+        container!.ReplaceDelegate(o => newGuid, Reuse.Singleton);
             
         Assert.False(newGuid == resolvedGuid);
     }

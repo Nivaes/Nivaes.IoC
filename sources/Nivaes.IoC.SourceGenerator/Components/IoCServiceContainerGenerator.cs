@@ -11,9 +11,9 @@
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-//#if DEBUG
-//            System.Diagnostics.Debugger.Launch();
-//#endif
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
 
             var generate = context.SyntaxProvider
                 .CreateSyntaxProvider(
@@ -177,36 +177,72 @@ namespace {action.containerType?.ContainingNamespace}
 
         public {action.containerType?.Name}()
         {{
-{groupedEntries.Select(o =>
-                {
-                    if (o.Count() == 1)
+            KeyInstanceResolverValue[] mResolvers = [{
+                groupedEntries
+                    .Where(o =>
+                    {
+                        if (o.Count() == 1)
+                        {
+                            var entry = o.First();
+                            return entry.Lifetime == ServiceEntry.LifetimeKind.Singleton || entry.Lifetime == ServiceEntry.LifetimeKind.Transient;
+                        }
+                        return false;
+                    })
+                    .Select(o =>
                     {
                         var entry = o.First();
-                        var (propertyToStore, resolver) = MapResolver(entry);
+                        if (entry.Lifetime == ServiceEntry.LifetimeKind.Singleton)
+                        {
+                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                        }
+                        else if (entry.Lifetime == ServiceEntry.LifetimeKind.Transient)
+                        {
+                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                        }
+                        else
+                        {
+                            return string.Empty;
+                        }
+                    })
+                    .JoinWithNewLine()
+            }];
 
-                        return $@"          {propertyToStore}.Add(typeof({entry.Interface.ToGlobalName()}).GetHashCode(), new {resolver}<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>());";
-                    }
+            KeyInstanceResolverValue[] mScopedResolvers = [{groupedEntries
+                    .Where(o =>
+                    {
+                        if (o.Count() == 1)
+                        {
+                            var entry = o.First();
+                            return entry.Lifetime == ServiceEntry.LifetimeKind.Scoped;
+                        }
+                        return false;
+                    })
+                    .Select(o =>
+                    {
+                        var entry = o.First();
+                        return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                    })
+                    .JoinWithNewLine()
+            }];
 
-                    return "";
-                })
-        .JoinWithNewLine()}
+            LoadData(mResolvers, mScopedResolvers);
         }}
 
-        private {action.containerType?.Name}(IDictionary<int, IInstanceResolver> resolvers, IDictionary<int, IInstanceResolver> scopedResolvers, bool scope = false)
+        private {action.containerType?.Name}(IoTCollection<IInstanceResolver> resolvers, IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
             : base(resolvers, scopedResolvers, scope)
         {{
         }}
 
         public override IIoCResolver CreateScope()
         {{
-            var newScope = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
-            return new {action.containerType?.Name}(resolvers, newScope, true);
+            var newScope = mScopedResolvers.Clone();
+            return new {action.containerType?.Name}(mResolvers, newScope, true);
         }}
 
         public override IIoCResolver Clone()
         {{
-            var copy = resolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
-            var scopedCopy = scopedResolvers.ToDictionary(o => o.Key, o => o.Value.Duplicate());
+            var copy = mResolvers.Clone();
+            var scopedCopy = mScopedResolvers.Clone();
             return new {action.containerType?.Name}(copy, scopedCopy, false);
         }}
     }}
@@ -215,23 +251,7 @@ namespace {action.containerType?.ContainingNamespace}
 ";
                 var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
                 context.AddSource(sourceName + "_IoCServiceContainer", source);
-
             });
-        }
-
-        private static (string, string) MapResolver(ServiceEntry entry)
-        {
-            switch (entry.Lifetime)
-            {
-                case ServiceEntry.LifetimeKind.Singleton:
-                    return ("resolvers", "SingletonResolver");
-                case ServiceEntry.LifetimeKind.Transient:
-                    return ("resolvers", "TransientResolver");
-                case ServiceEntry.LifetimeKind.Scoped:
-                    return ("scopedResolvers", "SingletonResolver");
-                default:
-                    return ("", "");
-            }
         }
 
         private static string ResolveConstructor(SourceProductionContext context, ServiceEntry entry, HashSet<string> transients)

@@ -93,7 +93,7 @@ public static class TestExtensions
 
         return member.Invoke(@object, args);
     }
-        
+
     public static object? StaticReflectionCall(this object @object, string name, params object[] args)
     {
         var nonPublic = BindingFlags.Static | BindingFlags.Public;
