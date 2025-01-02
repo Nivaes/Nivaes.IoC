@@ -6,10 +6,6 @@
     public class IoTCollection<TValue>
         where TValue : IInstanceResolver
     {
-        #region PairValues
-      
-        #endregion
-
         private KeyInstanceResolverValue[] mValues;
 
         internal IoTCollection(int length)
@@ -52,19 +48,6 @@
             {
                 spanValues[index] = new KeyInstanceResolverValue(key: keyHash, value: value);
             }
-
-            //int index = Array.BinarySearch(mValues, new KeyInstanceResolverValue(key: keyHash), new KeyInstanceResolverValueComparer());
-            //if (index < 0)
-            //{
-            //    index = ~index;
-            //    Array.Resize(ref mValues, mValues.Length + 1);
-            //    Array.Copy(mValues, index, mValues, index + 1, mValues.Length - index - 1);
-            //    mValues[index] = new KeyInstanceResolverValue(key: keyHash, value: value);
-            //}
-            //else
-            //{
-            //    mValues[index] = new KeyInstanceResolverValue(key: keyHash, value: value);
-            //}
         }
 
         internal void Replace(Type type, TValue value)
@@ -100,8 +83,6 @@
 
         internal bool TryGetPosition(int key, [MaybeNullWhen(false)] out int position)
         {
-            //ReadOnlySpan<KeyInstanceResolverValue> spanValue = new ReadOnlySpan<KeyInstanceResolverValue>(mValues);
-
             var high = mValues.Length - 1;
             var low = 0;
 

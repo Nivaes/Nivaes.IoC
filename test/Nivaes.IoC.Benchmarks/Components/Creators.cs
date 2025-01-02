@@ -1,5 +1,6 @@
 ﻿namespace Benchmarks
 {
+    using BenchmarkDotNet.Characteristics;
     using Grace.DependencyInjection;
     using Grace.DependencyInjection.Lifestyle;
     using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +14,30 @@
 
         public static BenchmarkIoCServiceContainer CreateIoCServiceContainer()
         {
-            return new BenchmarkIoCServiceContainer();
+            var container = new BenchmarkIoCServiceContainer();
+            //container.AddInstance(new Helper40(new Helper1()));
+            //container.AddInstance(new Helper41(new Helper21(new Helper1())));
+            //container.AddInstance(new Helper42(new Helper21(new Helper1())));
+            //container.AddInstance(new Helper43(new Helper2(new Helper1())));
+            //container.AddInstance(new Helper44(new Helper1()));
+            //container.AddInstance(new Helper45(new Helper1()));
+            //container.AddInstance(new Helper46(new Helper1()));
+            //container.AddInstance(new Helper47(new Helper1()));
+            //container.AddInstance(new Helper48(new Helper1()));
+            //container.AddInstance(new Helper49(new Helper1()));
+            //container.AddInstance(new Helper50(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper51(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper52(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper53(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper54(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper55(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper56(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper57(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper58(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper59(new Helper5(new Helper1())));
+            //container.AddInstance(new Helper60(new Helper5(new Helper1())));
+
+            return container;
         }
 
         public static ServiceProvider CreateMicrosoft()

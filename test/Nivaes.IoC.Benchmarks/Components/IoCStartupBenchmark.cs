@@ -27,6 +27,7 @@
         public void IoCServiceContainerStartup()
         {
             var resolver = Creators.CreateIoCServiceContainer();
+
             var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
             var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }

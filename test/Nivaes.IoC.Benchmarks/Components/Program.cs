@@ -1,7 +1,6 @@
 ﻿namespace Benchmarks
 {
     using BenchmarkDotNet.Running;
-    using ZeroIoC;
 
     internal class Program
     {
