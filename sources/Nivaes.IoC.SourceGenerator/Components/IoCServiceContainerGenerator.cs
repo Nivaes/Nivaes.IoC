@@ -11,9 +11,9 @@
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-//#if DEBUG
-//            System.Diagnostics.Debugger.Launch();
-//#endif
+#if DEBUG
+            System.Diagnostics.Debugger.Launch();
+#endif
 
             var generate = context.SyntaxProvider
                 .CreateSyntaxProvider(
@@ -252,21 +252,6 @@ namespace {action.containerType?.ContainingNamespace}
                 var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
                 context.AddSource(sourceName + "_IoCServiceContainer", source);
             });
-        }
-
-        private static (string, string) MapResolver(ServiceEntry entry)
-        {
-            switch (entry.Lifetime)
-            {
-                case ServiceEntry.LifetimeKind.Singleton:
-                    return ("resolvers", "SingletonResolver");
-                case ServiceEntry.LifetimeKind.Transient:
-                    return ("resolvers", "TransientResolver");
-                case ServiceEntry.LifetimeKind.Scoped:
-                    return ("scopedResolvers", "SingletonResolver");
-                default:
-                    return ("", "");
-            }
         }
 
         private static string ResolveConstructor(SourceProductionContext context, ServiceEntry entry, HashSet<string> transients)

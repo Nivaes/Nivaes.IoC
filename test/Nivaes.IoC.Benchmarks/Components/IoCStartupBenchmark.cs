@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Order;
-
-namespace Nivaes.IoC.Benchmarks
+﻿namespace Benchmarks
 {
+    using BenchmarkDotNet.Attributes;
+    using BenchmarkDotNet.Order;
+
     [MemoryDiagnoser]
     [Orderer(SummaryOrderPolicy.FastestToSlowest)]
     public class IoCStartupBenchmark
     {
-        //[Benchmark]
-        //public void MicrosoftStartup()
-        //{
-        //    var resolver = Creators.CreateMicrosoft();
-        //    var userService = (IUserService1?)resolver.GetService(typeof(IUserService1));
-        //    var singleService = (SingleService1?)resolver.GetService(typeof(SingleService1));
-        //}
+        [Benchmark]
+        public void MicrosoftStartup()
+        {
+            var resolver = Creators.CreateMicrosoft();
+            var userService = (IUserService1?)resolver.GetService(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.GetService(typeof(SingleService1));
+        }
 
         [Benchmark]
         public void ZeroIoCStartup()
@@ -36,12 +31,12 @@ namespace Nivaes.IoC.Benchmarks
             var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
         }
 
-        //[Benchmark]
-        //public void GraceStartup()
-        //{
-        //    var resolver = Creators.CreateGrace();
-        //    var userService = (IUserService1?)resolver.Locate(typeof(IUserService1));
-        //    var singleService = (SingleService1?)resolver.Locate(typeof(SingleService1));
-        //}
+        [Benchmark]
+        public void GraceStartup()
+        {
+            var resolver = Creators.CreateGrace();
+            var userService = (IUserService1?)resolver.Locate(typeof(IUserService1));
+            var singleService = (SingleService1?)resolver.Locate(typeof(SingleService1));
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Nivaes.IoC
 {
     using System.Collections.Generic;
-    using System.ComponentModel.Design;
     using System.Diagnostics.CodeAnalysis;
 
     public class IoTCollection<TValue>
