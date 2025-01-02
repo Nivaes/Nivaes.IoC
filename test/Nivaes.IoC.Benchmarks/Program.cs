@@ -379,13 +379,13 @@
     [Orderer(SummaryOrderPolicy.FastestToSlowest)]
     public class IoCStartupBenchmark
     {
-        [Benchmark]
-        public void MicrosoftStartup()
-        {
-            var resolver = Creators.CreateMicrosoft();
-            var userService = (IUserService1?)resolver.GetService(typeof(IUserService1));
-            var singleService = (SingleService1?)resolver.GetService(typeof(SingleService1));
-        }
+        //[Benchmark]
+        //public void MicrosoftStartup()
+        //{
+        //    var resolver = Creators.CreateMicrosoft();
+        //    var userService = (IUserService1?)resolver.GetService(typeof(IUserService1));
+        //    var singleService = (SingleService1?)resolver.GetService(typeof(SingleService1));
+        //}
 
         [Benchmark]
         public void ZeroIoCStartup()
@@ -404,30 +404,12 @@
         }
 
         //[Benchmark]
-        //public void IoCServiceContainerFrozenStartup()
+        //public void GraceStartup()
         //{
-        //    var resolver = Creators.CreateIoCServiceContainer();
-        //    resolver.Frozen();
-        //    var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
-        //    var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
+        //    var resolver = Creators.CreateGrace();
+        //    var userService = (IUserService1?)resolver.Locate(typeof(IUserService1));
+        //    var singleService = (SingleService1?)resolver.Locate(typeof(SingleService1));
         //}
-
-        //[Benchmark]
-        //public void IoCServiceContainerOptimizeStartup()
-        //{
-        //    var resolver = Creators.CreateIoCServiceContainer();
-        //    resolver.Optimize();
-        //    var userService = (IUserService1?)resolver.Resolve(typeof(IUserService1));
-        //    var singleService = (SingleService1?)resolver.Resolve(typeof(SingleService1));
-        //}
-
-        [Benchmark]
-        public void GraceStartup()
-        {
-            var resolver = Creators.CreateGrace();
-            var userService = (IUserService1?)resolver.Locate(typeof(IUserService1));
-            var singleService = (SingleService1?)resolver.Locate(typeof(SingleService1));
-        }
     }
 
     [MemoryDiagnoser]
@@ -437,8 +419,6 @@
         private readonly DependencyInjectionContainer _grace;
         private readonly ZeroContainer _zeroIoCContainer;
         private readonly BenchmarkIoCServiceContainer _iocServiceContainer;
-        //private readonly BenchmarkIoCServiceContainer _iocServiceContainerFrozen;
-        //private readonly BenchmarkIoCServiceContainer _iocServiceContainerOptimize;
         private readonly ServiceProvider _serviceProvider;
 
         public IoCRuntimeBenchmark()
@@ -447,35 +427,29 @@
             _serviceProvider = Creators.CreateMicrosoft();
             _zeroIoCContainer = Creators.CreateZeroIoC();
             _iocServiceContainer = Creators.CreateIoCServiceContainer();
-
-            //_iocServiceContainerFrozen = Creators.CreateIoCServiceContainer();
-            //_iocServiceContainerFrozen.Frozen();
-
-            //_iocServiceContainerOptimize = Creators.CreateIoCServiceContainer();
-            //_iocServiceContainerOptimize.Optimize();
         }
 
         private static readonly IEnumerable<Type> RandomUserServices = [typeof(IUserService1), typeof(IUserService2), typeof(IUserService3), typeof(IUserService4), typeof(IUserService5), typeof(IUserService6), typeof(IUserService7), typeof(IUserService8), typeof(IUserService9), typeof(IUserService10), typeof(IUserService11)];
 
         private static readonly IEnumerable<Type> RandomSingleServices = [typeof(SingleService1), typeof(SingleService2), typeof(SingleService3), typeof(SingleService4)];
 
-        [Benchmark]
-        public void MicrosoftTransient()
-        {
-            foreach (var userServiceType in RandomUserServices)
-            {
-                _ = _serviceProvider.GetService(userServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void MicrosoftTransient()
+        //{
+        //    foreach (var userServiceType in RandomUserServices)
+        //    {
+        //        _ = _serviceProvider.GetService(userServiceType);
+        //    }
+        //}
 
-        [Benchmark]
-        public void ZeroIoCTransient()
-        {
-            foreach (var userServiceType in RandomUserServices)
-            {
-                _ = _zeroIoCContainer.Resolve(userServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void ZeroIoCTransient()
+        //{
+        //    foreach (var userServiceType in RandomUserServices)
+        //    {
+        //        _ = _zeroIoCContainer.Resolve(userServiceType);
+        //    }
+        //}
 
         [Benchmark]
         public void IoCServiceContainerTransient()
@@ -487,49 +461,31 @@
         }
 
         //[Benchmark]
-        //public void IoCServiceContainerOptimizeTransient()
+        //public void GraceTransient()
         //{
         //    foreach (var userServiceType in RandomUserServices)
         //    {
-        //        _ = _iocServiceContainerOptimize.Resolve(userServiceType);
+        //        _ = _grace.Locate(userServiceType);
         //    }
         //}
 
         //[Benchmark]
-        //public void IoCServiceContainerFrozenTransient()
+        //public void MicrosoftSingleton()
         //{
-        //    foreach (var userServiceType in RandomUserServices)
+        //    foreach (var singleServiceType in RandomSingleServices)
         //    {
-        //        _ = _iocServiceContainerFrozen.Resolve(userServiceType);
+        //        _ = _serviceProvider.GetService(singleServiceType);
         //    }
         //}
 
-        [Benchmark]
-        public void GraceTransient()
-        {
-            foreach (var userServiceType in RandomUserServices)
-            {
-                _ = _grace.Locate(userServiceType);
-            }
-        }
-
-        [Benchmark]
-        public void MicrosoftSingleton()
-        {
-            foreach (var singleServiceType in RandomSingleServices)
-            {
-                _ = _serviceProvider.GetService(singleServiceType);
-            }
-        }
-
-        [Benchmark]
-        public void ZeroIoCSingleton()
-        {
-            foreach (var singleServiceType in RandomSingleServices)
-            {
-                _ = _zeroIoCContainer.Resolve(singleServiceType);
-            }
-        }
+        //[Benchmark]
+        //public void ZeroIoCSingleton()
+        //{
+        //    foreach (var singleServiceType in RandomSingleServices)
+        //    {
+        //        _ = _zeroIoCContainer.Resolve(singleServiceType);
+        //    }
+        //}
 
         [Benchmark]
         public void IoCServiceContainerSingleton()
@@ -541,30 +497,12 @@
         }
 
         //[Benchmark]
-        //public void IoCServiceContainerOptimizeSingleton()
+        //public void GraceSingleton()
         //{
         //    foreach (var singleServiceType in RandomSingleServices)
         //    {
-        //        _ = _iocServiceContainerOptimize.Resolve(singleServiceType);
+        //        _ = _grace.Locate(singleServiceType);
         //    }
         //}
-
-        //[Benchmark]
-        //public void IoCServiceContainerFrozenSingleton()
-        //{
-        //    foreach (var singleServiceType in RandomSingleServices)
-        //    {
-        //        _ = _iocServiceContainerFrozen.Resolve(singleServiceType);
-        //    }
-        //}
-
-        [Benchmark]
-        public void GraceSingleton()
-        {
-            foreach (var singleServiceType in RandomSingleServices)
-            {
-                _ = _grace.Locate(singleServiceType);
-            }
-        }
     }
 }

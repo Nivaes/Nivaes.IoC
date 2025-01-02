@@ -21,7 +21,7 @@
             Scoped = scope;
         }
 
-        protected void LoadData(IEnumerable<KeyInstanceResolverValue> resolvers, IEnumerable<KeyInstanceResolverValue> scopedResolvers)
+        protected void LoadData(KeyInstanceResolverValue[] resolvers, KeyInstanceResolverValue[] scopedResolvers)
         {
             mResolvers = new IoTCollection<IInstanceResolver>(resolvers);
             mScopedResolvers = new IoTCollection<IInstanceResolver>(scopedResolvers);
@@ -127,16 +127,6 @@
         {
             mResolvers.Merge(container.mResolvers);
             mScopedResolvers.Merge(container.mScopedResolvers);
-
-            //foreach (var resolver in container.resolvers)
-            //{
-            //    resolvers.Add(resolver.Key, resolver.Value);
-            //}
-
-            //foreach (var resolver in container.scopedResolvers)
-            //{
-            //    scopedResolvers.Add(resolver.Key, resolver.Value);
-            //}
         }
 
         #region IDispose

@@ -177,7 +177,7 @@ namespace {action.containerType?.ContainingNamespace}
 
         public {action.containerType?.Name}()
         {{
-            IEnumerable<KeyInstanceResolverValue> mResolvers = [{
+            KeyInstanceResolverValue[] mResolvers = [{
                 groupedEntries
                     .Where(o =>
                     {
@@ -207,7 +207,7 @@ namespace {action.containerType?.ContainingNamespace}
                     .JoinWithNewLine()
             }];
 
-            IEnumerable<KeyInstanceResolverValue> mScopedResolvers = [{groupedEntries
+            KeyInstanceResolverValue[] mScopedResolvers = [{groupedEntries
                     .Where(o =>
                     {
                         if (o.Count() == 1)
