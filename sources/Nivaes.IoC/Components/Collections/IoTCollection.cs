@@ -111,28 +111,30 @@
         internal void Merge(IoTCollection<TValue> newValues)
         {
             var oldValues = mValues;
-            mValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
+            var allValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
             int i = 0, j = 0, m = 0;
 
             while (i < oldValues.Length && j < newValues.mValues.Length)
             {
                 if (oldValues[i].Key < newValues.mValues[j].Key)
                 {
-                    mValues[m++] = oldValues[i++];
+                    allValues[m++] = oldValues[i++];
                 }
                 else
                 {
-                    mValues[m++] = newValues.mValues[j++];
+                    allValues[m++] = newValues.mValues[j++];
                 }
             }
             while (i < oldValues.Length)
             {
-                mValues[m++] = oldValues[i++];
+                allValues[m++] = oldValues[i++];
             }
             while (j < newValues.mValues.Length)
             {
-                mValues[m++] = newValues.mValues[j++];
+                allValues[m++] = newValues.mValues[j++];
             }
+
+            mValues = allValues;
         }
 
         internal IEnumerable<TValue> Values => mValues.Select((o) => (TValue)o.Value);
