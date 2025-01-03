@@ -21,7 +21,7 @@
             Scoped = scope;
         }
 
-        protected void LoadData(KeyInstanceResolverValue[] resolvers, KeyInstanceResolverValue[] scopedResolvers)
+        protected void LoadData(KeyInstanceResolverValue<IInstanceResolver>[] resolvers, KeyInstanceResolverValue<IInstanceResolver>[] scopedResolvers)
         {
             mResolvers = new IoTCollection<IInstanceResolver>(resolvers);
             mScopedResolvers = new IoTCollection<IInstanceResolver>(scopedResolvers);

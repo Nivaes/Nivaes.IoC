@@ -177,7 +177,7 @@ namespace {action.containerType?.ContainingNamespace}
 
         public {action.containerType?.Name}()
         {{
-            KeyInstanceResolverValue[] mResolvers = [{
+            KeyInstanceResolverValue<IInstanceResolver>[] mResolvers = [{
                 groupedEntries
                     .Where(o =>
                     {
@@ -193,11 +193,11 @@ namespace {action.containerType?.ContainingNamespace}
                         var entry = o.First();
                         if (entry.Lifetime == ServiceEntry.LifetimeKind.Singleton)
                         {
-                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                            return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
                         }
                         else if (entry.Lifetime == ServiceEntry.LifetimeKind.Transient)
                         {
-                            return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                            return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
                         }
                         else
                         {
@@ -207,7 +207,7 @@ namespace {action.containerType?.ContainingNamespace}
                     .JoinWithNewLine()
             }];
 
-            KeyInstanceResolverValue[] mScopedResolvers = [{groupedEntries
+            KeyInstanceResolverValue<IInstanceResolver>[] mScopedResolvers = [{groupedEntries
                     .Where(o =>
                     {
                         if (o.Count() == 1)
@@ -220,7 +220,7 @@ namespace {action.containerType?.ContainingNamespace}
                     .Select(o =>
                     {
                         var entry = o.First();
-                        return $@"new KeyInstanceResolverValue(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                        return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
                     })
                     .JoinWithNewLine()
             }];

@@ -6,18 +6,18 @@
     public class IoTCollection<TValue>
         where TValue : IInstanceResolver
     {
-        private KeyInstanceResolverValue[] mValues;
+        private KeyInstanceResolverValue<TValue>[] mValues;
 
         internal IoTCollection(int length)
         {
-            mValues = new KeyInstanceResolverValue[length];
+            mValues = new KeyInstanceResolverValue<TValue>[length];
         }
 
-        public IoTCollection(KeyInstanceResolverValue[] source)
+        public IoTCollection(KeyInstanceResolverValue<TValue>[] source)
         {
             mValues = source;
-            var keyInstanceResolverValues = new Span<KeyInstanceResolverValue>(mValues);
-            keyInstanceResolverValues.Sort(new KeyInstanceResolverValueComparer());
+            var keyInstanceResolverValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
+            keyInstanceResolverValues.Sort(new KeyInstanceResolverValueComparer<TValue>());
         }
 
         public void Add(Type key, TValue value)
@@ -28,25 +28,25 @@
 
         private void Add(int keyHash, TValue value)
         {
-            var spanValues = new Span<KeyInstanceResolverValue>(mValues);
+            var spanValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
 
-            int index = spanValues.BinarySearch(new KeyInstanceResolverValue(key: keyHash), new KeyInstanceResolverValueComparer());
+            int index = spanValues.BinarySearch(new KeyInstanceResolverValue<TValue>(key: keyHash), new KeyInstanceResolverValueComparer<TValue>());
             if (index < 0)
             {
                 index = ~index;
-                var newValues = new KeyInstanceResolverValue[mValues.Length + 1];
-                var newSpanValues = new Span<KeyInstanceResolverValue>(newValues);
+                var newValues = new KeyInstanceResolverValue<TValue>[mValues.Length + 1];
+                var newSpanValues = new Span<KeyInstanceResolverValue<TValue>>(newValues);
                 var first = mValues.AsSpan(0, index);
                 var second = mValues.AsSpan(index);
 
                 first.CopyTo(newSpanValues.Slice(0, first.Length));
                 second.CopyTo(newSpanValues.Slice(index + 1, second.Length));
-                newSpanValues[index] = new KeyInstanceResolverValue(key: keyHash, value: value);
+                newSpanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
                 mValues = newValues;
             }
             else
             {
-                spanValues[index] = new KeyInstanceResolverValue(key: keyHash, value: value);
+                spanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
             }
         }
 
@@ -56,7 +56,7 @@
             var result = TryGetPosition(key, out int position);
             if (result)
             {
-                mValues[position] = new KeyInstanceResolverValue(key: key, value: value);
+                mValues[position] = new KeyInstanceResolverValue<TValue>(key: key, value: value);
             }
             else
             {
@@ -71,7 +71,7 @@
             var result = TryGetPosition(key, out int position);
             if (result)
             {
-                value = (TValue)mValues[position].Value;
+                value = mValues[position].Value;
                 return true;
             }
             else
@@ -111,7 +111,7 @@
         internal void Merge(IoTCollection<TValue> newValues)
         {
             var oldValues = mValues;
-            mValues = new KeyInstanceResolverValue[oldValues.Length + newValues.mValues.Length];
+            mValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
             int i = 0, j = 0, m = 0;
 
             while (i < oldValues.Length && j < newValues.mValues.Length)
@@ -143,7 +143,7 @@
 
             for (int i = 0; i < mValues.Length; i++)
             {
-                clone.mValues[i] = new KeyInstanceResolverValue(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
+                clone.mValues[i] = new KeyInstanceResolverValue<TValue>(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
             }
 
             return clone;
