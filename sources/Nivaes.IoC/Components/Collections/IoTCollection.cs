@@ -8,7 +8,7 @@
     {
         private KeyInstanceResolverValue<TValue>[] mValues;
 
-        internal IoTCollection(int length)
+        internal IoTCollection(int length = 0)
         {
             mValues = new KeyInstanceResolverValue<TValue>[length];
         }
