@@ -251,3 +251,6 @@ dotnet_diagnostic.S1939.severity = none
 
 # S2292: Trivial properties should be auto-implemented
 dotnet_diagnostic.S2292.severity = none
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = none

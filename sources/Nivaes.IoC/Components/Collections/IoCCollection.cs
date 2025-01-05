@@ -137,7 +137,7 @@
             mValues = allValues;
         }
 
-        internal IEnumerable<TValue> Values => mValues.Select((o) => (TValue)o.Value);
+        internal IEnumerable<TValue> Values => mValues.Select((o) => o.Value);
 
         public IoCCollection<TValue> Clone()
         {
