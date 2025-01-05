@@ -11,9 +11,9 @@
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-#if DEBUG
-            System.Diagnostics.Debugger.Launch();
-#endif
+//#if DEBUG
+//            System.Diagnostics.Debugger.Launch();
+//#endif
 
             var generate = context.SyntaxProvider
                 .CreateSyntaxProvider(

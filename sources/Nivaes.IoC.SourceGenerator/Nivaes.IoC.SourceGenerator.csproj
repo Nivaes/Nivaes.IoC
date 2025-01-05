@@ -16,7 +16,6 @@
   <PropertyGroup>
     <PackageId>Nivaes.IoC.SourceGenerator</PackageId>
     <Title>Nivaes IoC SourceGenerator</Title>
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
     <Product>Nivaes IoC SourceGenerator</Product>
     <Description>Nivaes IoC source generator.</Description>
     <PackageTags>Nivaes;IoC;roslyn</PackageTags>

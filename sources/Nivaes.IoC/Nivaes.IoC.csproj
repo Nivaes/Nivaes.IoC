@@ -13,7 +13,7 @@
     <PackageId>Nivaes.IoC</PackageId>
     <Title>Nivaes IoC</Title>
 
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+    <!--<GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>-->
     <Product>Nivaes IoC</Product>
     <Description>Nivaes IoC.</Description>
     <PackageTags>Nivaes;IoC</PackageTags>
