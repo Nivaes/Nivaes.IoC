@@ -3,17 +3,17 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    public class IoTCollection<TValue>
+    public class IoCCollection<TValue>
         where TValue : IInstanceResolver
     {
         private KeyInstanceResolverValue<TValue>[] mValues;
 
-        internal IoTCollection(int length = 0)
+        internal IoCCollection(int length = 0)
         {
             mValues = new KeyInstanceResolverValue<TValue>[length];
         }
 
-        public IoTCollection(KeyInstanceResolverValue<TValue>[] source)
+        public IoCCollection(KeyInstanceResolverValue<TValue>[] source)
         {
             mValues = source;
             var keyInstanceResolverValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
@@ -108,7 +108,7 @@
             return false;
         }
 
-        internal void Merge(IoTCollection<TValue> newValues)
+        internal void Merge(IoCCollection<TValue> newValues)
         {
             var oldValues = mValues;
             var allValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
@@ -139,9 +139,9 @@
 
         internal IEnumerable<TValue> Values => mValues.Select((o) => (TValue)o.Value);
 
-        public IoTCollection<TValue> Clone()
+        public IoCCollection<TValue> Clone()
         {
-            IoTCollection<TValue> clone = new IoTCollection<TValue>(mValues.Length);
+            IoCCollection<TValue> clone = new IoCCollection<TValue>(mValues.Length);
 
             for (int i = 0; i < mValues.Length; i++)
             {

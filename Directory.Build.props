@@ -54,8 +54,6 @@
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
-    <!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
-
   </PropertyGroup>
 
 </Project>

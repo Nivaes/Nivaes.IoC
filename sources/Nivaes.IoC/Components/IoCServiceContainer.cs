@@ -2,19 +2,19 @@
 {
     public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
-        protected IoTCollection<IInstanceResolver> mResolvers;
-        protected IoTCollection<IInstanceResolver> mScopedResolvers;
+        protected IoCCollection<IInstanceResolver> mResolvers;
+        protected IoCCollection<IInstanceResolver> mScopedResolvers;
 
         protected readonly bool Scoped;
 
         protected IoCServiceContainer()
         {
-            mResolvers = new IoTCollection<IInstanceResolver>(0);
-            mScopedResolvers = new IoTCollection<IInstanceResolver>(0);
+            mResolvers = new IoCCollection<IInstanceResolver>(0);
+            mScopedResolvers = new IoCCollection<IInstanceResolver>(0);
         }
 
-        protected IoCServiceContainer(IoTCollection<IInstanceResolver> resolvers,
-            IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
+        protected IoCServiceContainer(IoCCollection<IInstanceResolver> resolvers,
+            IoCCollection<IInstanceResolver> scopedResolvers, bool scope = false)
         {
             mResolvers = resolvers;
             mScopedResolvers = scopedResolvers;
@@ -23,8 +23,8 @@
 
         protected void LoadData(KeyInstanceResolverValue<IInstanceResolver>[] resolvers, KeyInstanceResolverValue<IInstanceResolver>[] scopedResolvers)
         {
-            mResolvers = new IoTCollection<IInstanceResolver>(resolvers);
-            mScopedResolvers = new IoTCollection<IInstanceResolver>(scopedResolvers);
+            mResolvers = new IoCCollection<IInstanceResolver>(resolvers);
+            mScopedResolvers = new IoCCollection<IInstanceResolver>(scopedResolvers);
         }
 
         public abstract IIoCResolver CreateScope();
