@@ -228,7 +228,7 @@ namespace {action.containerType?.ContainingNamespace}
             LoadData(mResolvers, mScopedResolvers);
         }}
 
-        private {action.containerType?.Name}(IoTCollection<IInstanceResolver> resolvers, IoTCollection<IInstanceResolver> scopedResolvers, bool scope = false)
+        private {action.containerType?.Name}(IoCCollection<IInstanceResolver> resolvers, IoCCollection<IInstanceResolver> scopedResolvers, bool scope = false)
             : base(resolvers, scopedResolvers, scope)
         {{
         }}
