@@ -1,21 +1,26 @@
-﻿namespace Nivaes.IoC
+﻿using System.Text;
+using System;
+
+namespace Nivaes.IoC
 {
     using System.Text;
     using System.Linq;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
+    using System;
+    using Microsoft.CodeAnalysis.Text;
 
     [Generator(LanguageNames.CSharp)]
     public class IoCServiceContainerGenerator : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-//#if DEBUG
-//            System.Diagnostics.Debugger.Launch();
-//#endif
+            //#if DEBUG
+            //            System.Diagnostics.Debugger.Launch();
+            //#endif
 
-            var generate = context.SyntaxProvider
+            var classDeclarations = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // select enums with attributes
                     transform: static (ctx, ct) => GetSemanticTargetForGeneration(ctx, ct)) // select enums with the [EnumExtensions] attribute and extract details
@@ -27,7 +32,7 @@
                 {
                     case ClassDeclarationSyntax classDeclaration:
                         if (classDeclaration.BaseList?.Types
-                                .Any(o => o.Type.ToString().EndsWith("IoCServiceContainer")) ?? false)
+                                .Any(o => o.Type.ToString() == "IoCServiceContainer") ?? false)
                         {
                             return true;
                         }
@@ -37,12 +42,12 @@
                 return false;
             }
 
-            static (INamedTypeSymbol? containerType, string[] identifiersText, IEnumerable<ServiceEntry>? entries) GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
+            static (ClassDeclarationSyntax? node, INamedTypeSymbol? containerType, string[] identifiersText, IEnumerable<ServiceEntry>? entries) GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
             {
                 if (context.Node is ClassDeclarationSyntax classDeclaration)
                 {
                     if (classDeclaration == null)
-                        return (null, [], null);
+                        return (null, null, [], null);
 
                     var bootstrapMethod = classDeclaration?
                         .DescendantNodes()
@@ -51,7 +56,7 @@
 
                     if (bootstrapMethod == null)
                     {
-                        return (null, [], null);
+                        return (null, null, [], null);
                     }
 
                     var invocations = bootstrapMethod
@@ -65,7 +70,7 @@
                     foreach (var invocation in invocations)
                     {
                         if (ct.IsCancellationRequested)
-                            return (null, [], null);
+                            return (null, null, [], null);
 
                         if (invocation.Expression is MemberAccessExpressionSyntax member &&
                             member.Name is GenericNameSyntax generic)
@@ -88,7 +93,7 @@
                     }
 
                     if (classDeclaration == null)
-                        return (null, [], null);
+                        return (null, null, [], null);
 
                     var containerType = semantic?.GetDeclaredSymbol(classDeclaration, ct);
 
@@ -99,53 +104,56 @@
                         identifiesText.Add(classNode.Identifier.Text);
                     } while ((classNode = classNode.Parent as ClassDeclarationSyntax) != null);
 
-                    return (containerType, identifiesText.ToArray(), entries);
+                    return ((ClassDeclarationSyntax)context.Node, containerType, identifiesText.ToArray(), entries);
                 }
                 else
                 {
-                    return (null, [], null);
+                    return (null, null, [], null);
                 }
             }
 
-            context.RegisterSourceOutput(generate, (context, action) =>
-            {
-                var groupedEntries = action.entries
+            context.RegisterSourceOutput(classDeclarations, GenerateModifiedClass);
+        }
+
+        private void GenerateModifiedClass(SourceProductionContext context, (ClassDeclarationSyntax? classDeclaration, INamedTypeSymbol? containerType, string[] identifiersText, IEnumerable<ServiceEntry>? entries) action)
+        {
+            var groupedEntries = action.entries
                     .GroupBy(o => o.Interface, SymbolEqualityComparer.Default)
                     .ToArray();
 
-                foreach (var entry in groupedEntries)
-                {
-                    if (context.CancellationToken.IsCancellationRequested)
-                        return;
+            foreach (var entry in groupedEntries)
+            {
+                if (context.CancellationToken.IsCancellationRequested)
+                    return;
 
-                    if (entry.Count() > 1)
+                if (entry.Count() > 1)
+                {
+                    foreach (var serviceEntry in entry)
                     {
-                        foreach (var serviceEntry in entry)
-                        {
-                            context.ReportDiagnostic(
-                                Diagnostic.Create(
-                                    Descriptors.MultipleTypeRegistrationsNotAllowed,
-                                    serviceEntry.Syntax.GetLocation()));
-                        }
-
-                        return;
+                        context.ReportDiagnostic(
+                            Diagnostic.Create(
+                                Descriptors.MultipleTypeRegistrationsNotAllowed,
+                                serviceEntry.Syntax.GetLocation()));
                     }
+
+                    return;
                 }
+            }
 
-                var transients = new HashSet<string>(action.entries
-                    .Where(o => o.Lifetime == ServiceEntry.LifetimeKind.Transient)
-                    .Select(o => o.Interface.ToGlobalName()));
+            var transients = new HashSet<string>(action.entries
+                .Where(o => o.Lifetime == ServiceEntry.LifetimeKind.Transient)
+                .Select(o => o.Interface.ToGlobalName()));
 
-                var prefixClass = new StringBuilder();
-                var sufixClass = new StringBuilder();
-                for (int i = action.identifiersText.Length-1; i > 0 ; i--)
-                {
-                    prefixClass.AppendLine($"public partial class {action.identifiersText[i]}{{");
-                    sufixClass.AppendLine($"}}");
-                }
+            var prefixClass = new StringBuilder();
+            var sufixClass = new StringBuilder();
+            for (int i = action.identifiersText.Length - 1; i > 0; i--)
+            {
+                prefixClass.AppendLine($"public partial class {action.identifiersText[i]}{{");
+                sufixClass.AppendLine($"}}");
+            }
 
-                var source =
-@$"// This file generated for Nivaes.IoC.
+            var source =
+            @$"// This file generated for Nivaes.IoC.
 // <auto-generated/>
 using System;
 using System.Linq;
@@ -158,8 +166,8 @@ namespace {action.containerType?.ContainingNamespace}
     {IoCAnalyzer.CodeGenerationAttribute}
     public sealed partial class {action.containerType?.Name}
     {{{groupedEntries
-                .Select(o =>
-                    $@"
+            .Select(o =>
+                $@"
         private struct {o.First().Interface.ToCreatorName()} : ICreator<{o.First().Interface.ToGlobalName()}>
         {{
             public {o.First().Interface.ToGlobalName()} Create(IIoCResolver resolver, IOverrides overrides)
@@ -173,57 +181,54 @@ namespace {action.containerType?.ContainingNamespace}
                 return {ResolveConstructor(context, o.First(), transients)};
             }}
         }}")
-                .JoinWithNewLine()}
+            .JoinWithNewLine()}
 
         public {action.containerType?.Name}()
         {{
-            KeyInstanceResolverValue<IInstanceResolver>[] mResolvers = [{
-                groupedEntries
-                    .Where(o =>
-                    {
-                        if (o.Count() == 1)
-                        {
-                            var entry = o.First();
-                            return entry.Lifetime == ServiceEntry.LifetimeKind.Singleton || entry.Lifetime == ServiceEntry.LifetimeKind.Transient;
-                        }
-                        return false;
-                    })
-                    .Select(o =>
+            KeyInstanceResolverValue<IInstanceResolver>[] mResolvers = [{groupedEntries
+                .Where(o =>
+                {
+                    if (o.Count() == 1)
                     {
                         var entry = o.First();
-                        if (entry.Lifetime == ServiceEntry.LifetimeKind.Singleton)
-                        {
-                            return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
-                        }
-                        else if (entry.Lifetime == ServiceEntry.LifetimeKind.Transient)
-                        {
-                            return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
-                        }
-                        else
-                        {
-                            return string.Empty;
-                        }
-                    })
-                    .JoinWithNewLine()
-            }];
+                        return entry.Lifetime == ServiceEntry.LifetimeKind.Singleton || entry.Lifetime == ServiceEntry.LifetimeKind.Transient;
+                    }
+                    return false;
+                })
+                .Select(o =>
+                {
+                    var entry = o.First();
+                    if (entry.Lifetime == ServiceEntry.LifetimeKind.Singleton)
+                    {
+                        return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                    }
+                    else if (entry.Lifetime == ServiceEntry.LifetimeKind.Transient)
+                    {
+                        return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new TransientResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                })
+                .JoinWithNewLine()}];
 
             KeyInstanceResolverValue<IInstanceResolver>[] mScopedResolvers = [{groupedEntries
-                    .Where(o =>
-                    {
-                        if (o.Count() == 1)
-                        {
-                            var entry = o.First();
-                            return entry.Lifetime == ServiceEntry.LifetimeKind.Scoped;
-                        }
-                        return false;
-                    })
-                    .Select(o =>
+                .Where(o =>
+                {
+                    if (o.Count() == 1)
                     {
                         var entry = o.First();
-                        return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
-                    })
-                    .JoinWithNewLine()
-            }];
+                        return entry.Lifetime == ServiceEntry.LifetimeKind.Scoped;
+                    }
+                    return false;
+                })
+                .Select(o =>
+                {
+                    var entry = o.First();
+                    return $@"new KeyInstanceResolverValue<IInstanceResolver>(typeof({entry.Interface.ToGlobalName()}), new SingletonResolver<{entry.Interface.ToCreatorName()}, {entry.Interface.ToGlobalName()}>()),";
+                })
+                .JoinWithNewLine()}];
 
             LoadData(mResolvers, mScopedResolvers);
         }}
@@ -249,10 +254,10 @@ namespace {action.containerType?.ContainingNamespace}
     {sufixClass}
 }}
 ";
-                var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
-                context.AddSource(sourceName + "_IoCServiceContainer", source);
-            });
+            var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
+            context.AddSource(sourceName + "_IoCServiceContainer", source);
         }
+
 
         private static string ResolveConstructor(SourceProductionContext context, ServiceEntry entry, HashSet<string> transients)
         {
