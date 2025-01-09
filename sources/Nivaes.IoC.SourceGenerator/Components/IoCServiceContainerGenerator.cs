@@ -1,15 +1,11 @@
-﻿using System.Text;
-using System;
-
-namespace Nivaes.IoC
+﻿namespace Nivaes.IoC
 {
-    using System.Text;
+    using System;
     using System.Linq;
+    using System.Text;
     using Microsoft.CodeAnalysis;
     using Microsoft.CodeAnalysis.CSharp;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
-    using System;
-    using Microsoft.CodeAnalysis.Text;
 
     [Generator(LanguageNames.CSharp)]
     public class IoCServiceContainerGenerator : IIncrementalGenerator
