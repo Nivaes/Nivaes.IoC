@@ -8,7 +8,8 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [Generator(LanguageNames.CSharp)]
-    public class IoCServiceContainerGenerator : IIncrementalGenerator
+    public class IoCServiceContainerGenerator
+        : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
