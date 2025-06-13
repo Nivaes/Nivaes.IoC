@@ -3,14 +3,14 @@
   <PropertyGroup Condition="$(MSBuildProjectName.Contains('Test')) == 'False'">
     <Copyright>Copyright (c) Nivaes Systems S.L.</Copyright>
     <PackageProject>https://github.com/Nivaes/Nivaes.IoC</PackageProject>
-    <!--<PackageLicenseExpression>MS-PL</PackageLicenseExpression>-->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <Authors>Nivaes Systems</Authors>
     <Company>Nivaes Systems</Company>
     <Owners>Nivaes</Owners>
     <PackageReleaseNotes>https://www.nivaes.com</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <RepositoryUrl>https://github.com/Nivaes/Nivaes.App.Shared</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Nivaes/Nivaes.IoC</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
   </PropertyGroup>
