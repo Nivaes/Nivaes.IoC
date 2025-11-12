@@ -251,7 +251,8 @@ namespace {action.containerType?.ContainingNamespace}
     {sufixClass}
 }}
 ";
-            var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
+            action.identifiersText.Reverse();
+            var sourceName = action.identifiersText.Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
             context.AddSource(sourceName + "_IoCServiceContainer", source);
         }
 
