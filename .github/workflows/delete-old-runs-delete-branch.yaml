@@ -8,6 +8,9 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
     steps:
       - name: Delete runs from the deleted branch
         uses: Mattraks/delete-workflow-runs@v2
