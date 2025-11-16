@@ -3,6 +3,7 @@ packs:
   # - codeql/csharp-queries
 
 paths:
-  - sources
+  - sources/Nivaes.IoC
+  - sources/Nivaes.IoC.SourceGenerator
 paths-ignore:
   - tests
