@@ -31,8 +31,8 @@ jobs:
       if: github.event.action == 'prereleased'
       run: echo Prereleased
 
-    - name: Checkout
-      uses: actions/checkout@v5
+    # - name: Checkout
+    #   uses: actions/checkout@v5
 
     - name: Release
       run: |
