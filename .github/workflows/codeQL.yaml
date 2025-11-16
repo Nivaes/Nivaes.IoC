@@ -53,8 +53,8 @@ jobs:
                 dotnet build $_.FullName --configuration Release --no-restore
             }
 
-    - name: Build the project
-      run: dotnet build --configuration Release --no-restore
+    # - name: Build the project
+    #   run: dotnet build --configuration Release --no-restore
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
