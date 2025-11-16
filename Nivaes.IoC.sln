@@ -30,8 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{A743E524-CABA-4D51-A173-235319F5B589}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build_release.yaml = .github\workflows\build_release.yaml
+		.github\workflows\acodeQL.yaml = .github\workflows\acodeQL.yaml
 		.github\workflows\ci.yaml = .github\workflows\ci.yaml
-		.github\workflows\CodeQL.yaml = .github\workflows\CodeQL.yaml
 		.github\workflows\publish_release.yaml = .github\workflows\publish_release.yaml
 	EndProjectSection
 EndProject
