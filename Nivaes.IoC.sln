@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11205.157 d18.0
+VisualStudioVersion = 18.0.11205.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nivaes.IoC.SourceGenerator", "sources\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj", "{40905150-958A-44DC-ABEF-909CEB0FF10F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{668694D7-0F58-40F2-B718-536811C550E0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{4BDA909C-F325-40FE-B9A7-01689DE57DE1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9BEC0B56-B633-48D2-AB2A-63F13A692250}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC", "sources\Nivaes.IoC\Nivaes.IoC.csproj", "{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{4BDA909C-F325-40FE-B9A7-01689DE57DE1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{071D58AE-3A42-4DCD-8D87-555D50BAAEA2}"
 	ProjectSection(SolutionItems) = preProject
@@ -31,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build_release.yaml = .github\workflows\build_release.yaml
 		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+		.github\workflows\codeQL.yaml = .github\workflows\codeQL.yaml
 		.github\workflows\delete-old-runs.yaml = .github\workflows\delete-old-runs.yaml
 		.github\workflows\publish_release.yaml = .github\workflows\publish_release.yaml
-		.github\workflows\codeQL.yaml = .github\workflows\codeQL.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.Benchmarks", "tests\Nivaes.IoC.Benchmarks\Nivaes.IoC.Benchmarks.csproj", "{A016305C-781F-455D-BB83-DF9278EAF250}"
@@ -43,9 +39,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.UnitTest", "tests\Nivaes.IoC.Unittest\Nivaes.IoC.UnitTest.csproj", "{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "codeql", "codeql", "{FC0DC7F8-4F06-4D4A-931F-9CB04D9FC45D}"
-	ProjectSection(SolutionItems) = preProject
-		.github\codeql\codeql-config.yaml = .github\codeql\codeql-config.yaml
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,14 +46,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{40905150-958A-44DC-ABEF-909CEB0FF10F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40905150-958A-44DC-ABEF-909CEB0FF10F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40905150-958A-44DC-ABEF-909CEB0FF10F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40905150-958A-44DC-ABEF-909CEB0FF10F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A016305C-781F-455D-BB83-DF9278EAF250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A016305C-781F-455D-BB83-DF9278EAF250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A016305C-781F-455D-BB83-DF9278EAF250}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -78,8 +63,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{40905150-958A-44DC-ABEF-909CEB0FF10F} = {4BDA909C-F325-40FE-B9A7-01689DE57DE1}
-		{68BDF4E9-8FDD-409C-AA6F-CF1CDF41E3AB} = {4BDA909C-F325-40FE-B9A7-01689DE57DE1}
 		{071D58AE-3A42-4DCD-8D87-555D50BAAEA2} = {9BEC0B56-B633-48D2-AB2A-63F13A692250}
 		{A743E524-CABA-4D51-A173-235319F5B589} = {071D58AE-3A42-4DCD-8D87-555D50BAAEA2}
 		{A016305C-781F-455D-BB83-DF9278EAF250} = {668694D7-0F58-40F2-B718-536811C550E0}
