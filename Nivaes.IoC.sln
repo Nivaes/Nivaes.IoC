@@ -30,9 +30,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{A743E524-CABA-4D51-A173-235319F5B589}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\build_release.yaml = .github\workflows\build_release.yaml
-		.github\workflows\acodeQL.yaml = .github\workflows\acodeQL.yaml
 		.github\workflows\ci.yaml = .github\workflows\ci.yaml
 		.github\workflows\publish_release.yaml = .github\workflows\publish_release.yaml
+		.github\workflows\codeQL.yaml = .github\workflows\codeQL.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.Benchmarks", "test\Nivaes.IoC.Benchmarks\Nivaes.IoC.Benchmarks.csproj", "{A016305C-781F-455D-BB83-DF9278EAF250}"
