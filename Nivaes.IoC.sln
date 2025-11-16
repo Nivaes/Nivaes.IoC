@@ -39,6 +39,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.UnitTest", "tests\Nivaes.IoC.Unittest\Nivaes.IoC.UnitTest.csproj", "{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "codeql", "codeql", "{FC0DC7F8-4F06-4D4A-931F-9CB04D9FC45D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\codeql\codeql-config.yaml = .github\codeql\codeql-config.yaml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
