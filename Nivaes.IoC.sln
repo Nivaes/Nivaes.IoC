@@ -38,9 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.Benchmarks", "tests\Nivaes.IoC.Benchmarks\Nivaes.IoC.Benchmarks.csproj", "{A016305C-781F-455D-BB83-DF9278EAF250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.SourceGenerator.UnitTest", "tests\Nivaes.IoC.SourceGenerator.Unittests\Nivaes.IoC.SourceGenerator.UnitTest.csproj", "{5F0F19A6-E5BC-471E-8510-732B6C0D73A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.SourceGenerator.UnitTest", "tests\Nivaes.IoC.SourceGenerator.Unittest\Nivaes.IoC.SourceGenerator.UnitTest.csproj", "{5F0F19A6-E5BC-471E-8510-732B6C0D73A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.UnitTest", "tests\Nivaes.IoC.Unittests\Nivaes.IoC.UnitTest.csproj", "{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.UnitTest", "tests\Nivaes.IoC.Unittest\Nivaes.IoC.UnitTest.csproj", "{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "codeql", "codeql", "{FC0DC7F8-4F06-4D4A-931F-9CB04D9FC45D}"
 	ProjectSection(SolutionItems) = preProject
