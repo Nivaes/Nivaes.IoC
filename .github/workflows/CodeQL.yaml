@@ -45,9 +45,11 @@ jobs:
       run: dotnet restore
 
     - name: Build the project
+      shell: pwsh
       run: |
-          dotnet build Nivaes.IoC.SourceGenerator --configuration Release --no-restore
-          dotnet build Nivaes.IoC --configuration Release --no-restore
+        Get-ChildItem -Recurse -Filter .\sources\*.csproj | ForEach-Object {
+            dotnet build $_.FullName --configuration Release --no-restore
+        }
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
