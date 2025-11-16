@@ -31,8 +31,8 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v5
       with:
-        lobal-json-file: ./global.json
-        source-url: https://nuget.pkg.github.com/Nivaes/index.json
+        global-json-file: ./global.json
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
