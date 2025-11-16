@@ -8,10 +8,14 @@ on:
 jobs:
   cleanup:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
     steps:
-      - name: Delete old workflow runs (mantener solo 25)
+      - name: Delete old workflow runs (mantener solo 10)
         uses: Mattraks/delete-workflow-runs@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: ${{ github.repository }}
-          keep_minimum_runs: 25
+          retain_days: 0
+          keep_minimum_runs: 0
