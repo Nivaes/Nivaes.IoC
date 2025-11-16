@@ -41,6 +41,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.SourceGenerator.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nivaes.IoC.UnitTest", "test\Nivaes.IoC.UnitTest\Nivaes.IoC.UnitTest.csproj", "{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "codeql", "codeql", "{FC0DC7F8-4F06-4D4A-931F-9CB04D9FC45D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\codeql\codeql-config.yaml = .github\codeql\codeql-config.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +84,7 @@ Global
 		{A016305C-781F-455D-BB83-DF9278EAF250} = {668694D7-0F58-40F2-B718-536811C550E0}
 		{5F0F19A6-E5BC-471E-8510-732B6C0D73A3} = {668694D7-0F58-40F2-B718-536811C550E0}
 		{D3E41F01-F6F3-4CA8-B2D7-D13A452EB839} = {668694D7-0F58-40F2-B718-536811C550E0}
+		{FC0DC7F8-4F06-4D4A-931F-9CB04D9FC45D} = {071D58AE-3A42-4DCD-8D87-555D50BAAEA2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {459176FD-3FCB-4025-80C7-E855E0E0F81B}
