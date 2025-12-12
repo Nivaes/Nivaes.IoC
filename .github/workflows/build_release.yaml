@@ -6,7 +6,7 @@ on:
 jobs:
   build_release:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
 
@@ -20,13 +20,13 @@ jobs:
       run: echo "$GITHUB_CONTEXT"
 
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
-        lobal-json-file: ./global.json
-        source-url: https://nuget.pkg.github.com/Nivaes/index.json
+        global-json-file: ./global.json
+        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
         NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -38,11 +38,11 @@ jobs:
       run: dotnet build --configuration Release -p:Version=${{ steps.version_run_number.outputs.version }} --no-restore
 
     - name: Test
-      run: dotnet test --configuration Release --no-build --verbosity normal --no-restore
+      run: dotnet test --configuration Release --no-build --verbosity normal --no-restore --no-build
 
     - name: Pack
       if: github.event_name == 'push' || (github.event_name != 'pull_request')
-      run: dotnet pack --configuration Release --no-build --verbosity normal --output ./Artifacts/ -p:Version=${{ steps.version_run_number.outputs.version }} --no-restore
+      run: dotnet pack --configuration Release --no-build --verbosity normal --output ./Artifacts/ -p:Version=${{ steps.version_run_number.outputs.version }} --no-restore --no-build
 
     - name: Create Release
       if: github.event_name == 'push' || (github.event_name != 'pull_request')
@@ -65,4 +65,4 @@ jobs:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
          upload_url: ${{ steps.create_release.outputs.upload_url }}
-         targets: ./Artifacts/*.nupkg
+         targets: ./Artifacts/*.{nupkg,snupkg}

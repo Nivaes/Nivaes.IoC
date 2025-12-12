@@ -8,7 +8,8 @@
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     [Generator(LanguageNames.CSharp)]
-    public class IoCServiceContainerGenerator : IIncrementalGenerator
+    public class IoCServiceContainerGenerator
+        : IIncrementalGenerator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
@@ -250,7 +251,8 @@ namespace {action.containerType?.ContainingNamespace}
     {sufixClass}
 }}
 ";
-            var sourceName = action.identifiersText.Reverse().Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
+            action.identifiersText.Reverse();
+            var sourceName = action.identifiersText.Where(o => !string.IsNullOrWhiteSpace(o)).Join("_");
             context.AddSource(sourceName + "_IoCServiceContainer", source);
         }
 

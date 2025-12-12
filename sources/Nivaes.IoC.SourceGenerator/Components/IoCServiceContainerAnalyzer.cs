@@ -7,7 +7,8 @@
     using Microsoft.CodeAnalysis.Diagnostics;
 
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class IoCServiceContainerAnalyzer : DiagnosticAnalyzer
+    public class IoCServiceContainerAnalyzer
+        : DiagnosticAnalyzer
     {
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
             =>
