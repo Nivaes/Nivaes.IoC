@@ -1,22 +1,20 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public class ScopedWithoutScopeException
+    : Exception
 {
-    public class ScopedWithoutScopeException
-        : Exception
+    internal ScopedWithoutScopeException()
+        : base()
     {
-        internal ScopedWithoutScopeException()
-            : base()
-        {
-        }
+    }
 
-        internal ScopedWithoutScopeException(string message)
-            : base(message)
-        {
+    internal ScopedWithoutScopeException(string message)
+        : base(message)
+    {
+    }
 
-        }
-
-        internal ScopedWithoutScopeException(string? message, Exception? innerException)
-            : base(message, innerException)
-        {
-        }
+    internal ScopedWithoutScopeException(string? message, Exception? innerException)
+        : base(message, innerException)
+    {
     }
 }

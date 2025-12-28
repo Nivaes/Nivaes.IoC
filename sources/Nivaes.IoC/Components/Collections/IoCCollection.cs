@@ -1,154 +1,152 @@
-﻿namespace Nivaes.IoC
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Nivaes.IoC;
+
+public class IoCCollection<TValue>
+    where TValue : IInstanceResolver
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+    private KeyInstanceResolverValue<TValue>[] mValues;
 
-    public class IoCCollection<TValue>
-        where TValue : IInstanceResolver
+    internal IoCCollection(int length = 0)
     {
-        private KeyInstanceResolverValue<TValue>[] mValues;
+        mValues = new KeyInstanceResolverValue<TValue>[length];
+    }
 
-        internal IoCCollection(int length = 0)
+    public IoCCollection(KeyInstanceResolverValue<TValue>[] source)
+    {
+        mValues = source;
+        var keyInstanceResolverValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
+        keyInstanceResolverValues.Sort(new KeyInstanceResolverValueComparer<TValue>());
+    }
+
+    public void Add(Type key, TValue value)
+    {
+        int keyHash = key.GetHashCode();
+        Add(keyHash, value);
+    }
+
+    private void Add(int keyHash, TValue value)
+    {
+        var spanValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
+
+        int index = spanValues.BinarySearch(new KeyInstanceResolverValue<TValue>(key: keyHash), new KeyInstanceResolverValueComparer<TValue>());
+        if (index < 0)
         {
-            mValues = new KeyInstanceResolverValue<TValue>[length];
+            index = ~index;
+            var newValues = new KeyInstanceResolverValue<TValue>[mValues.Length + 1];
+            var newSpanValues = new Span<KeyInstanceResolverValue<TValue>>(newValues);
+            var first = mValues.AsSpan(0, index);
+            var second = mValues.AsSpan(index);
+
+            first.CopyTo(newSpanValues.Slice(0, first.Length));
+            second.CopyTo(newSpanValues.Slice(index + 1, second.Length));
+            newSpanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
+            mValues = newValues;
         }
-
-        public IoCCollection(KeyInstanceResolverValue<TValue>[] source)
+        else
         {
-            mValues = source;
-            var keyInstanceResolverValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
-            keyInstanceResolverValues.Sort(new KeyInstanceResolverValueComparer<TValue>());
+            spanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
         }
+    }
 
-        public void Add(Type key, TValue value)
+    internal void Replace(Type type, TValue value)
+    {
+        int key = type.GetHashCode();
+        var result = TryGetPosition(key, out int position);
+        if (result)
         {
-            int keyHash = key.GetHashCode();
-            Add(keyHash, value);
+            mValues[position] = new KeyInstanceResolverValue<TValue>(key: key, value: value);
         }
-
-        private void Add(int keyHash, TValue value)
+        else
         {
-            var spanValues = new Span<KeyInstanceResolverValue<TValue>>(mValues);
-
-            int index = spanValues.BinarySearch(new KeyInstanceResolverValue<TValue>(key: keyHash), new KeyInstanceResolverValueComparer<TValue>());
-            if (index < 0)
-            {
-                index = ~index;
-                var newValues = new KeyInstanceResolverValue<TValue>[mValues.Length + 1];
-                var newSpanValues = new Span<KeyInstanceResolverValue<TValue>>(newValues);
-                var first = mValues.AsSpan(0, index);
-                var second = mValues.AsSpan(index);
-
-                first.CopyTo(newSpanValues.Slice(0, first.Length));
-                second.CopyTo(newSpanValues.Slice(index + 1, second.Length));
-                newSpanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
-                mValues = newValues;
-            }
-            else
-            {
-                spanValues[index] = new KeyInstanceResolverValue<TValue>(key: keyHash, value: value);
-            }
+            Add(key, value);
         }
+    }
 
-        internal void Replace(Type type, TValue value)
+    internal bool TryGetValue(Type type, [MaybeNullWhen(false)] out TValue value)
+    {
+        int key = type.GetHashCode();
+
+        var result = TryGetPosition(key, out int position);
+        if (result)
         {
-            int key = type.GetHashCode();
-            var result = TryGetPosition(key, out int position);
-            if (result)
-            {
-                mValues[position] = new KeyInstanceResolverValue<TValue>(key: key, value: value);
-            }
-            else
-            {
-                Add(key, value);
-            }
+            value = mValues[position].Value;
+            return true;
         }
-
-        internal bool TryGetValue(Type type, [MaybeNullWhen(false)] out TValue value)
+        else
         {
-            int key = type.GetHashCode();
+            value = default;
+            return false;
+        }
+    }
 
-            var result = TryGetPosition(key, out int position);
-            if (result)
+    internal bool TryGetPosition(int key, [MaybeNullWhen(false)] out int position)
+    {
+        var high = mValues.Length - 1;
+        var low = 0;
+
+        while (low <= high)
+        {
+            int mid = (high + low) / 2;
+            var midKey = mValues[mid].Key;
+
+            if (midKey == key)
             {
-                value = mValues[position].Value;
+                position = mid;
                 return true;
             }
             else
             {
-                value = default;
-                return false;
+                if (key < midKey)
+                    high = mid - 1;
+                else
+                    low = mid + 1;
             }
         }
+        position = -1;
+        return false;
+    }
 
-        internal bool TryGetPosition(int key, [MaybeNullWhen(false)] out int position)
+    internal void Merge(IoCCollection<TValue> newValues)
+    {
+        var oldValues = mValues;
+        var allValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
+        int i = 0, j = 0, m = 0;
+
+        while (i < oldValues.Length && j < newValues.mValues.Length)
         {
-            var high = mValues.Length - 1;
-            var low = 0;
-
-            while (low <= high)
-            {
-                int mid = (high + low) / 2;
-                var midKey = mValues[mid].Key;
-
-                if (midKey == key)
-                {
-                    position = mid;
-                    return true;
-                }
-                else
-                {
-                    if (key < midKey)
-                        high = mid - 1;
-                    else
-                        low = mid + 1;
-                }
-            }
-            position = -1;
-            return false;
-        }
-
-        internal void Merge(IoCCollection<TValue> newValues)
-        {
-            var oldValues = mValues;
-            var allValues = new KeyInstanceResolverValue<TValue>[oldValues.Length + newValues.mValues.Length];
-            int i = 0, j = 0, m = 0;
-
-            while (i < oldValues.Length && j < newValues.mValues.Length)
-            {
-                if (oldValues[i].Key < newValues.mValues[j].Key)
-                {
-                    allValues[m++] = oldValues[i++];
-                }
-                else
-                {
-                    allValues[m++] = newValues.mValues[j++];
-                }
-            }
-            while (i < oldValues.Length)
+            if (oldValues[i].Key < newValues.mValues[j].Key)
             {
                 allValues[m++] = oldValues[i++];
             }
-            while (j < newValues.mValues.Length)
+            else
             {
                 allValues[m++] = newValues.mValues[j++];
             }
-
-            mValues = allValues;
         }
-
-        internal IEnumerable<TValue> Values => mValues.Select((o) => o.Value);
-
-        public IoCCollection<TValue> Clone()
+        while (i < oldValues.Length)
         {
-            IoCCollection<TValue> clone = new IoCCollection<TValue>(mValues.Length);
-
-            for (int i = 0; i < mValues.Length; i++)
-            {
-                clone.mValues[i] = new KeyInstanceResolverValue<TValue>(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
-            }
-
-            return clone;
+            allValues[m++] = oldValues[i++];
         }
+        while (j < newValues.mValues.Length)
+        {
+            allValues[m++] = newValues.mValues[j++];
+        }
+
+        mValues = allValues;
+    }
+
+    internal IEnumerable<TValue> Values => mValues.Select((o) => o.Value);
+
+    public IoCCollection<TValue> Clone()
+    {
+        IoCCollection<TValue> clone = new IoCCollection<TValue>(mValues.Length);
+
+        for (int i = 0; i < mValues.Length; i++)
+        {
+            clone.mValues[i] = new KeyInstanceResolverValue<TValue>(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
+        }
+
+        return clone;
     }
 }

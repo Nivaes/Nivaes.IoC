@@ -1,10 +1,9 @@
-﻿namespace Nivaes.IoC
-{
-    public interface IIoCResolver : IDisposable
-    {
-        IIoCResolver CreateScope();
+﻿namespace Nivaes.IoC;
 
-        object? Resolve(Type serviceType);
-        object? Resolve(Type type, IOverrides overrides);
-    }
+public interface IIoCResolver : IDisposable
+{
+    IIoCResolver CreateScope();
+
+    object? Resolve(Type serviceType);
+    object? Resolve(Type type, IOverrides overrides);
 }

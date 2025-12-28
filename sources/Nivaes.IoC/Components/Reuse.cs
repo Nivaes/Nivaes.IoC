@@ -1,9 +1,8 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public enum Reuse
 {
-    public enum Reuse
-    {
-        Scoped,
-        Singleton,
-        Transient
-    }
+    Scoped,
+    Singleton,
+    Transient
 }

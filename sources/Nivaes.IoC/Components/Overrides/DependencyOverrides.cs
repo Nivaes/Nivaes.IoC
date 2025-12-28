@@ -1,7 +1,6 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public class DependencyOverrides
 {
-    public class DependencyOverrides
-    {
-        public Dictionary<Type, Func<object?>> Overrides { get; } = new Dictionary<Type, Func<object?>>();
-    }
+    public Dictionary<Type, Func<object?>> Overrides { get; } = new Dictionary<Type, Func<object?>>();
 }

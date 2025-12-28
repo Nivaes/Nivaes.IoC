@@ -1,31 +1,28 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public struct KeyInstanceResolverValue<TValue>
+    : IKeyInstanceResolverValue
+     where TValue : IInstanceResolver
 {
-    public struct KeyInstanceResolverValue<TValue>
-        : IKeyInstanceResolverValue
-         where TValue : IInstanceResolver
+    public int Key { get; }
+    public TValue? Value { get; }
+
+    object? IKeyInstanceResolverValue.Value => Value;
+
+    public KeyInstanceResolverValue(int key)
     {
-        public int Key { get; }
-        public TValue Value { get; }
+        Key = key;
+    }
 
-        object IKeyInstanceResolverValue.Value => Value;
+    public KeyInstanceResolverValue(Type type, TValue value)
+    {
+        Key = type.GetHashCode();
+        Value = value;
+    }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        public KeyInstanceResolverValue(int key)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        {
-            Key = key;
-        }
-
-        public KeyInstanceResolverValue(Type type, TValue value)
-        {
-            Key = type.GetHashCode();
-            Value = value;
-        }
-
-        public KeyInstanceResolverValue(int key, TValue value)
-        {
-            Key = key;
-            Value = value;
-        }
+    public KeyInstanceResolverValue(int key, TValue value)
+    {
+        Key = key;
+        Value = value;
     }
 }

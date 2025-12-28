@@ -1,7 +1,6 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public class ConstructorOverrides
 {
-    public class ConstructorOverrides
-    {
-        public Dictionary<string, object> Overrides { get; } = new Dictionary<string, object>();
-    }
+    public Dictionary<string, object> Overrides { get; } = new Dictionary<string, object>();
 }

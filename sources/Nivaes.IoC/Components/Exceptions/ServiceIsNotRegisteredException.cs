@@ -1,22 +1,20 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+public class ServiceIsNotRegisteredException
+    : Exception
 {
-    public class ServiceIsNotRegisteredException
-        : Exception
+    internal ServiceIsNotRegisteredException()
+        : base()
     {
-        internal ServiceIsNotRegisteredException()
-            : base()
-        {
-        }
+    }
 
-        internal ServiceIsNotRegisteredException(string message)
-            : base(message)
-        {
+    internal ServiceIsNotRegisteredException(string message)
+        : base(message)
+    {
+    }
 
-        }
-
-        internal ServiceIsNotRegisteredException(string? message, Exception? innerException)
-            : base(message, innerException)
-        {
-        }
+    internal ServiceIsNotRegisteredException(string? message, Exception? innerException)
+        : base(message, innerException)
+    {
     }
 }

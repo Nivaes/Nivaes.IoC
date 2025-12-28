@@ -1,8 +1,7 @@
-﻿namespace Nivaes.IoC
+﻿namespace Nivaes.IoC;
+
+internal interface IKeyInstanceResolverValue
 {
-    internal interface IKeyInstanceResolverValue
-    {
-        public int Key { get; }
-        public object Value { get; }
-    }
+    public int Key { get; }
+    public object? Value { get; }
 }
