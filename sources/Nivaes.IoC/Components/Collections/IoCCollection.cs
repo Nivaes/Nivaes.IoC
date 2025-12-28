@@ -63,7 +63,7 @@ public class IoCCollection<TValue>
         }
     }
 
-    internal bool TryGetValue(Type type, [MaybeNullWhen(false)] out TValue value)
+    internal bool TryGetValue(Type type, [MaybeNullWhen(false)] out TValue? value)
     {
         int key = type.GetHashCode();
 
@@ -136,7 +136,7 @@ public class IoCCollection<TValue>
         mValues = allValues;
     }
 
-    internal IEnumerable<TValue> Values => mValues.Select((o) => o.Value);
+    internal IEnumerable<TValue?> Values => mValues.Select((o) => o.Value);
 
     public IoCCollection<TValue> Clone()
     {
@@ -144,7 +144,7 @@ public class IoCCollection<TValue>
 
         for (int i = 0; i < mValues.Length; i++)
         {
-            clone.mValues[i] = new KeyInstanceResolverValue<TValue>(key: mValues[i].Key, value: (TValue)mValues[i].Value.Duplicate());
+            clone.mValues[i] = new KeyInstanceResolverValue<TValue>(key: mValues[i].Key, value: (TValue?)mValues[i].Value?.Duplicate());
         }
 
         return clone;

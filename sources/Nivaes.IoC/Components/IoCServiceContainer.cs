@@ -37,12 +37,12 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         if (mResolvers.TryGetValue(serviceType, out var entry))
         {
-            return entry.Resolve(this);
+            return entry?.Resolve(this);
         }
 
         if (Scoped && mScopedResolvers.TryGetValue(serviceType, out entry))
         {
-            return entry.Resolve(this);
+            return entry?.Resolve(this);
         }
 
         if (mScopedResolvers.TryGetValue(serviceType, out entry))
@@ -58,13 +58,13 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         if (mResolvers.TryGetValue(serviceType, out var entry))
         {
-            result = entry.Resolve(this);
+            result = entry?.Resolve(this);
             return true;
         }
 
         if (Scoped && mScopedResolvers.TryGetValue(serviceType, out entry))
         {
-            result = entry.Resolve(this);
+            result = entry?.Resolve(this);
             return true;
         }
 
@@ -82,12 +82,12 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         if (mResolvers.TryGetValue(type, out var entry))
         {
-            return entry.Resolve(this, overrides);
+            return entry?.Resolve(this, overrides);
         }
 
         if (Scoped && mScopedResolvers.TryGetValue(type, out entry))
         {
-            return entry.Resolve(this, overrides);
+            return entry?.Resolve(this, overrides);
         }
 
         if (mScopedResolvers.TryGetValue(type, out entry))
@@ -103,13 +103,13 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
     {
         if (mResolvers.TryGetValue(type, out var entry))
         {
-            result = entry.Resolve(this, overrides);
+            result = entry?.Resolve(this, overrides);
             return true;
         }
 
         if (Scoped && mScopedResolvers.TryGetValue(type, out entry))
         {
-            result = entry.Resolve(this, overrides);
+            result = entry?.Resolve(this, overrides);
             return true;   
         }
 
@@ -200,13 +200,13 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
             {
                 foreach (var resolver in mResolvers.Values)
                 {
-                    resolver.Dispose();
+                    resolver?.Dispose();
                 }
             }
 
             foreach (var resolver in mScopedResolvers.Values)
             {
-                resolver.Dispose();
+                resolver?.Dispose();
             }
         }
 

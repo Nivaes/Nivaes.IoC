@@ -14,13 +14,13 @@ public struct KeyInstanceResolverValue<TValue>
         Key = key;
     }
 
-    public KeyInstanceResolverValue(Type type, TValue value)
+    public KeyInstanceResolverValue(Type type, TValue? value)
     {
         Key = type.GetHashCode();
         Value = value;
     }
 
-    public KeyInstanceResolverValue(int key, TValue value)
+    public KeyInstanceResolverValue(int key, TValue? value)
     {
         Key = key;
         Value = value;
