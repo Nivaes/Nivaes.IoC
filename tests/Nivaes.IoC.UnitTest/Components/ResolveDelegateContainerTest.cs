@@ -64,4 +64,26 @@ public partial class ResolveDelegateContainerTest
         var userService = container.Resolve<IUserService1>();
         userService.ShouldBeNull();
     }
+
+    [Fact]
+    public void TryResolve()
+    {
+        var container = new TestContainer();
+
+        var result = container.TryResolve<IUserService1>(out var userService);
+
+        result.ShouldBeTrue();
+        userService.ShouldNotBeNull();
+    }
+
+    [Fact]
+    public void NotResolve()
+    {
+        var container = new TestContainer();
+
+        var result = container.TryResolve<IUserService3>(out var userService);
+
+        result.ShouldBeFalse();
+        userService.ShouldBeNull();
+    }
 }

@@ -11,9 +11,37 @@ public static class IoCServiceContainerExtensions
             return (TService?)container.Resolve(typeof(TService));
         }
 
+        public bool TryResolve<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(out TService? result)
+        {
+            if (container.TryResolve(typeof(TService), out var internalResult))
+            {
+                result = (TService?)internalResult;
+                return true;
+            }
+            else
+            {
+                result = default(TService);
+                return false;
+            }
+        }
+
         public TService? Resolve<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(IOverrides overrides)
         {
             return (TService?)container.Resolve(typeof(TService), overrides);
+        }
+
+        public bool TryResolve<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(IOverrides overrides, out TService? result)
+        {
+            if (container.TryResolve(typeof(TService), overrides, out var internalResult))
+            {
+                result = (TService?)internalResult;
+                return true;
+            }
+            else
+            {
+                result = default(TService);
+                return false;
+            }
         }
     }
 

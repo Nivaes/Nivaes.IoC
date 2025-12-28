@@ -54,8 +54,31 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
         return null;
     }
 
-    public object? Resolve(Type type,
-                           IOverrides overrides)
+    public bool TryResolve(Type serviceType, out object? result)
+    {
+        if (mResolvers.TryGetValue(serviceType, out var entry))
+        {
+            result = entry.Resolve(this);
+            return true;
+        }
+
+        if (Scoped && mScopedResolvers.TryGetValue(serviceType, out entry))
+        {
+            result = entry.Resolve(this);
+            return true;
+        }
+
+        if (mScopedResolvers.TryGetValue(serviceType, out entry))
+        {
+            result = null;
+            return false;
+        }
+
+        result = null;
+        return false;
+    }
+
+    public object? Resolve(Type type, IOverrides overrides)
     {
         if (mResolvers.TryGetValue(type, out var entry))
         {
@@ -75,6 +98,31 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
         ExceptionHelper.ServiceIsNotRegistered(type.FullName ?? string.Empty);
         return null;
     }
+
+    public bool TryResolve(Type type, IOverrides overrides, out object? result)
+    {
+        if (mResolvers.TryGetValue(type, out var entry))
+        {
+            result = entry.Resolve(this, overrides);
+            return true;
+        }
+
+        if (Scoped && mScopedResolvers.TryGetValue(type, out entry))
+        {
+            result = entry.Resolve(this, overrides);
+            return true;   
+        }
+
+        if (mScopedResolvers.TryGetValue(type, out entry))
+        {
+            result = null;
+            return false;
+        }
+
+        result = null;
+        return false;
+    }
+
 
     public void AddDelegate(Func<IIoCResolver, object?> resolver,
                             Type interfaceType,
