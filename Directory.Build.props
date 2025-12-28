@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn);NU1507</NoWarn>
+    <NoWarn>$(NoWarn);1591;NU1507</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>
