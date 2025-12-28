@@ -54,7 +54,8 @@
             return null;
         }
 
-        public object? Resolve(Type type, IOverrides overrides)
+        public object? Resolve(Type type,
+                               IOverrides overrides)
         {
             if (mResolvers.TryGetValue(type, out var entry))
             {
@@ -75,8 +76,9 @@
             return null;
         }
 
-        public void AddDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
-            Reuse reuse = Reuse.Transient)
+        public void AddDelegate(Func<IIoCResolver, object?> resolver,
+                                Type interfaceType,
+                                Reuse reuse = Reuse.Transient)
         {
             switch (reuse)
             {
@@ -94,7 +96,8 @@
             }
         }
 
-        public void ReplaceDelegate(Func<IIoCResolver, object> resolver, Type interfaceType,
+        public void ReplaceDelegate(Func<IIoCResolver, object?> resolver,
+                                    Type interfaceType,
             Reuse reuse = Reuse.Transient)
         {
             switch (reuse)

@@ -50,9 +50,11 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
-        Assert.NotNull(containerType);
+        containerType.ShouldNotBeNull();
+        serviceType.ShouldNotBeNull();
 
         var container = (IIoCResolver?)Activator.CreateInstance(containerType);
+        container.ShouldNotBeNull();
         var firstService = container.Resolve(serviceType);
         var secondService = container.Resolve(serviceType);
 
@@ -108,11 +110,16 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var serviceContainerType = assembly.GetType("TestProject.ServiceContainer");
+        serviceContainerType.ShouldNotBeNull();
         var repositoryContainerType = assembly.GetType("TestProject.RepositoryContainer");
+        repositoryContainerType.ShouldNotBeNull();
         var serviceType = assembly.GetType("TestProject.IService");
+        serviceType.ShouldNotBeNull();
 
         var serviceContainer = (IoCServiceContainer?)Activator.CreateInstance(serviceContainerType);
+        serviceContainer.ShouldNotBeNull();
         var repositoryContainer = (IoCServiceContainer?)Activator.CreateInstance(repositoryContainerType);
+        repositoryContainer.ShouldNotBeNull();
         repositoryContainer.Merge(serviceContainer);
 
         var service = repositoryContainer.Resolve(serviceType);
@@ -281,8 +288,10 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.ShouldNotBeNull();
 
-        var container = (IoCServiceContainer)Activator.CreateInstance(containerType);
+        var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
+        container.ShouldNotBeNull();
             
         var guidValue = Guid.NewGuid();
         container.AddInstance(guidValue);
@@ -311,6 +320,7 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
+        containerType.ShouldNotBeNull();
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
         container.ShouldNotBeNull();

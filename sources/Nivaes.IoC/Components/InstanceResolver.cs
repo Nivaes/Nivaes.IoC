@@ -16,19 +16,19 @@
     
     public sealed class TransientResolver : IInstanceResolver
     {
-        private readonly Func<IIoCResolver, object> activator;
+        private readonly Func<IIoCResolver, object?> activator;
 
-        public TransientResolver(Func<IIoCResolver, object> activator)
+        public TransientResolver(Func<IIoCResolver, object?> activator)
         {
             this.activator = activator;
         }
 
-        public object Resolve(IIoCResolver resolver)
+        public object? Resolve(IIoCResolver resolver)
         {
             return activator(resolver);
         }
 
-        public object Resolve(IIoCResolver resolver, IOverrides overrides)
+        public object? Resolve(IIoCResolver resolver, IOverrides overrides)
         {
             return activator(resolver);
         }
@@ -73,8 +73,8 @@
         private readonly object @object = new object();
         private object? cache;
         private bool disposed;
-        private Func<IIoCResolver, object> resolve;
-        private Func<IIoCResolver, IOverrides, object> resolveOverride;
+        private Func<IIoCResolver, object?> resolve;
+        private Func<IIoCResolver, IOverrides, object?> resolveOverride;
 
         public SingletonResolver()
         {
@@ -85,12 +85,12 @@
             resolveOverride = ResolveInternalOverride;
         }
 
-        public object Resolve(IIoCResolver resolver)
+        public object? Resolve(IIoCResolver resolver)
         {
             return resolve(resolver);
         }
 
-        public object Resolve(IIoCResolver resolver, IOverrides overrides)
+        public object? Resolve(IIoCResolver resolver, IOverrides overrides)
         {
             return resolveOverride(resolver, overrides);
         }
@@ -148,12 +148,12 @@
 
     public sealed class SingletonResolver : IInstanceResolver
     {
-        private readonly Func<IIoCResolver, object> activator;
+        private readonly Func<IIoCResolver, object?> activator;
         private object? cache;
         private bool disposed;
-        private Func<IIoCResolver, object> resolve;
+        private Func<IIoCResolver, object?> resolve;
 
-        public SingletonResolver(Func<IIoCResolver, object> activator)
+        public SingletonResolver(Func<IIoCResolver, object?> activator)
         {
             this.activator = activator;
             cache = null;
@@ -162,12 +162,12 @@
             resolve = ResolveInternal;
         }
 
-        public object Resolve(IIoCResolver resolver)
+        public object? Resolve(IIoCResolver resolver)
         {
             return resolve(resolver);
         }
 
-        public object Resolve(IIoCResolver resolver, IOverrides overrides)
+        public object? Resolve(IIoCResolver resolver, IOverrides overrides)
         {
             return resolve(resolver);
         }
@@ -188,7 +188,7 @@
             }
         }
 
-        private object ResolveInternal(IIoCResolver resolver)
+        private object? ResolveInternal(IIoCResolver resolver)
         {
             lock (activator)
             {
@@ -203,9 +203,9 @@
             }
         }
 
-        private object GetCached(IIoCResolver resolver)
+        private object? GetCached(IIoCResolver resolver)
         {
-            return cache!;
+            return cache;
         }
     }
 }

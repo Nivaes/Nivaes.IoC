@@ -54,10 +54,14 @@ public partial class ResolveDelegateContainerTest
     public void ResolveDelegateNull()
     {
         var container = new TestContainer();
-        container.AddDelegate<IUserService3>(
+        container.AddDelegate<IUserService1>(
             (provider) =>
             {
                 return null;
             });
+
+
+        var userService = container.Resolve<IUserService1>();
+        userService.ShouldBeNull();
     }
-    }
+}
