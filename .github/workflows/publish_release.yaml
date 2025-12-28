@@ -79,31 +79,5 @@ jobs:
         files: |
           ./Artifacts/*.{nupkg,snupkg}
 
-    # - name: Download attach assets 
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     gh release download "${{ github.event.release.ref }}" --dir ./Artifacts
-       
-    # - name: Show downloaded files
-    #   run: ls -lh ./Artifacts
-
-    # - name: Setup .NET SDK
-    #   uses: actions/setup-dotnet@v5
-
-    # - name: Get Version
-    #   if: github.event.action == 'prereleased'
-    #   uses: nivaes/version-pack@develop
-    #   id: version_pack1
-    #   with:
-    #     package-flow: Prerelease
-
-    # - name: Get Version
-    #   if: github.event.action == 'released'
-    #   uses: nivaes/version-pack@develop
-    #   id: version_pack2
-    #   with:
-    #     package-flow: Release
-
     - name: Publish packages
-      run: dotnet nuget push ./Artifacts/*.nupkg --skip-duplicate --source nuget.org --api-key ${{ secrets.NIVAES_NUGET_TOKEN }}
+      run: dotnet nuget push ./Artifacts/*.{nupkg,snupkg} --skip-duplicate --source nuget.org --api-key ${{ secrets.NIVAES_NUGET_TOKEN }}
