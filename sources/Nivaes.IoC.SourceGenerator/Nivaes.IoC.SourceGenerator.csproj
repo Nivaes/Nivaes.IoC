@@ -7,7 +7,6 @@
     <RootNamespace>Nivaes.IoC.SourceGenerator</RootNamespace>
 
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <IncludeBuildOutput>false</IncludeBuildOutput>
 
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
