@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.CodeAnalysis;
-using Xunit;
-using Xunit.Abstractions;
+﻿using Shouldly;
 
 namespace Nivaes.IoC.UnitTest;
 
@@ -40,18 +34,30 @@ public partial class ResolveDelegateContainerTest
             });
 
         var userService3_1 = container.Resolve<IUserService3>();
-        userService3_1.Should().NotBeNull();
+        userService3_1.ShouldNotBeNull();
         userService3_1!.PrintMessage();
         output.WriteLine($"{userService3_1.Id}");
 
         var userService3_2 = container.Resolve<IUserService3>();
-        userService3_2.Should().NotBeNull();
+        userService3_2.ShouldNotBeNull();
         userService3_2!.PrintMessage();
         output.WriteLine($"{userService3_2.Id}");
 
         var userService3_3 = container.Resolve<IUserService3>();
-        userService3_3.Should().NotBeNull();
+        userService3_3.ShouldNotBeNull();
         userService3_3!.PrintMessage();
         output.WriteLine($"{userService3_3.Id}");
     }
-}
+
+
+    [Fact]
+    public void ResolveDelegateNull()
+    {
+        var container = new TestContainer();
+        container.AddDelegate<IUserService3>(
+            (provider) =>
+            {
+                return null;
+            });
+    }
+    }

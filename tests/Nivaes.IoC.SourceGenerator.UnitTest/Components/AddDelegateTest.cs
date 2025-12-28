@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using Shouldly;
 using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
@@ -26,7 +26,7 @@ public class AddDelegateTest
         var containerType = assembly.GetType("TestProject.TestContainer")!;
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
         container!.AddDelegate(r => new MemoryStream(), Reuse.Singleton);
         using var scope1 = container!.CreateScope();
 
@@ -55,10 +55,10 @@ public class AddDelegateTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
         container!.AddDelegate(r => new MemoryStream(), Reuse.Scoped);
 
         using var scope1 = container!.CreateScope();
@@ -89,10 +89,10 @@ public class AddDelegateTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
         container!.AddDelegate(r => new MemoryStream(), Reuse.Transient);
 
         using var scope1 = container!.CreateScope();

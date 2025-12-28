@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using Shouldly;
 using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
@@ -50,6 +50,7 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
+        Assert.NotNull(containerType);
 
         var container = (IIoCResolver?)Activator.CreateInstance(containerType);
         var firstService = container.Resolve(serviceType);
@@ -162,11 +163,11 @@ public class ComplexContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var serviceContainerType = assembly.GetType("TestProject.ServiceContainer");
         var serviceType = assembly.GetType("TestProject.IService");
-        serviceContainerType.Should().NotBeNull();
-        serviceType.Should().NotBeNull();
+        serviceContainerType.ShouldNotBeNull();
+        serviceType.ShouldNotBeNull();
 
         var serviceContainer = (IoCServiceContainer?)Activator.CreateInstance(serviceContainerType!);
-        serviceContainer.Should().NotBeNull();
+        serviceContainer.ShouldNotBeNull();
         var serviceContainerCopy = serviceContainer!.Clone();
 
         var service = serviceContainer.Resolve(serviceType!);
@@ -209,10 +210,10 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
         container!.AddDelegate(o => Guid.NewGuid().ToString());
 
         var service1 = container!.Resolve(typeof(string));
@@ -253,12 +254,12 @@ public class ComplexContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
         var serviceType = assembly.GetType("TestProject.IService");
-        serviceType.Should().NotBeNull();
+        serviceType.ShouldNotBeNull();
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType!);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
         container!.AddInstance(Guid.NewGuid().ToString());
         var service = container.Resolve(serviceType!);
 
@@ -312,7 +313,7 @@ public class ComplexContainerTest
         var containerType = assembly.GetType("TestProject.TestContainer");
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
-        container.Should().NotBeNull();
+        container.ShouldNotBeNull();
 
         var guidValue = Guid.NewGuid();
         container!.AddDelegate(o => guidValue, Reuse.Singleton);

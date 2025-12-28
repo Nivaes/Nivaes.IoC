@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using Nivaes.IoC.SourceGenerator.UnitTest.Data;
+﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
 using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+using Shouldly;
 using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;
@@ -38,9 +38,9 @@ public class SubClassContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.FatherClass+TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
         var serviceType = assembly.GetType("TestProject.IService");
-        serviceType.Should().NotBeNull();
+        serviceType.ShouldNotBeNull();
 
         var container = (IIoCResolver?)Activator.CreateInstance(containerType!);
         var firstService = container!.Resolve(serviceType!);
@@ -86,9 +86,9 @@ public class SubClassContainerTest
 
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.GrandGrandFatherClass+GrandFatherClass+FatherClass+TestContainer");
-        containerType.Should().NotBeNull();
+        containerType.ShouldNotBeNull();
         var serviceType = assembly.GetType("TestProject.IService");
-        serviceType.Should().NotBeNull();
+        serviceType.ShouldNotBeNull();
 
         var container = (IIoCResolver?)Activator.CreateInstance(containerType!);
         var firstService = container!.Resolve(serviceType!);
@@ -141,8 +141,8 @@ public class SubClassContainerTest
         var containerType2 = assembly.GetType("TestProject.FatherClass2+TestContainer");
         var serviceType = assembly.GetType("TestProject.IService");
 
-        containerType1.Should().NotBeNull();
-        containerType2.Should().NotBeNull();
+        containerType1.ShouldNotBeNull();
+        containerType2.ShouldNotBeNull();
 
         var container1 = (IIoCResolver?)Activator.CreateInstance(containerType1!);
         var firstService1 = container1!.Resolve(serviceType!);

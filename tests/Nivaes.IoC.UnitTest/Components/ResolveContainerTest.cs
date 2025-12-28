@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.CodeAnalysis;
-using Xunit;
-using Xunit.Abstractions;
+﻿using Shouldly;
 
 namespace Nivaes.IoC.UnitTest;
 
@@ -36,17 +30,17 @@ public partial class ResolveContainerTest
         var container = new TestContainer();
 
         IUserService1? userService1_1 = container.Resolve<IUserService1>();
-        userService1_1.Should().NotBeNull();
+        userService1_1.ShouldNotBeNull();
         userService1_1!.PrintMessage();
         output.WriteLine($"{userService1_1.Id}");
 
         IUserService1? userService1_2 = container.Resolve<IUserService1>();
-        userService1_2.Should().NotBeNull();
+        userService1_2.ShouldNotBeNull();
         userService1_2!.PrintMessage();
         output.WriteLine($"{userService1_2.Id}");
 
         IUserService1? userService1_3 = container.Resolve<IUserService1>();
-        userService1_3.Should().NotBeNull();
+        userService1_3.ShouldNotBeNull();
         userService1_3!.PrintMessage();
         output.WriteLine($"{userService1_3.Id}");
     }
