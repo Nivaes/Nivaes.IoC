@@ -16,6 +16,7 @@ public class BasicContainerTest
         var newProject = await project.ApplyIoCGenerator();
 
         var compilation = await newProject.GetCompilationAsync();
+        compilation.ShouldNotBeNull();
         var errors = compilation.GetDiagnostics()
             .Where(o => o.Severity == DiagnosticSeverity.Error)
             .ToArray();

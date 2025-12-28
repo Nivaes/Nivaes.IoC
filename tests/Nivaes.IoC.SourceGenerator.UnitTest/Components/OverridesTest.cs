@@ -102,7 +102,7 @@ public class OverridesTest
         Assert.NotNull(service);
 
         var value = service?.ReflectionGetValue("Value");
-        var repositoryValue = service?.ReflectionGetValue("Repository").ReflectionGetValue("Value");
+        var repositoryValue = service?.ReflectionGetValue("Repository")?.ReflectionGetValue("Value");
         
         Assert.NotEqual(initialValue, value);
         Assert.NotEqual(initialValue, repositoryValue);
