@@ -256,7 +256,6 @@ namespace {action.containerType?.ContainingNamespace}
             context.AddSource(sourceName + "_IoCServiceContainer", source);
         }
 
-
         private static string ResolveConstructor(SourceProductionContext context, ServiceEntry entry, HashSet<string> transients)
         {
             var implementation = entry.Implementation;
