@@ -6,7 +6,6 @@ public interface IIoCServiceContainerBootstrapper
     void AddTransient<TInterface, TImplementation>()
         where TImplementation : TInterface;
 
-
     void AddSingleton<TImplementation>();
     void AddSingleton<TInterface, TImplementation>()
         where TImplementation : TInterface;
