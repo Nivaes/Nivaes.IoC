@@ -1,6 +1,4 @@
-﻿using Nivaes.IoC.SourceGenerator.UnitTest.Data;
-using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
 
 namespace Nivaes.IoC.SourceGenerator.UnitTest;

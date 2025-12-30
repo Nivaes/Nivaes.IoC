@@ -1,6 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using Nivaes.IoC.SourceGenerator.UnitTest.Data;
-using Nivaes.IoC.SourceGenerator.UnitTest.Utils;
 using Shouldly;
 using Xunit;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 
-namespace Nivaes.IoC.SourceGenerator.UnitTest.Data;
+namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
 public static class TestProject
 {

@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Nivaes.IoC.SourceGenerator.UnitTest.Utils;
+namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
 public static class TestExtensions
 {
