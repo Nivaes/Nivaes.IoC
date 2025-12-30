@@ -33,7 +33,6 @@
     <ProjectReference Include="..\Nivaes.IoC.SourceGenerator\Nivaes.IoC.SourceGenerator.csproj">
       <OutputItemType>Analyzer</OutputItemType>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      
       <PrivateAssets>runtime; build; native; contentfiles; buildtransitive</PrivateAssets>
       <IncludeAssets>analyzers</IncludeAssets>
       <ExcludeAssets>runtime; build; native; contentfiles; buildtransitive</ExcludeAssets>
