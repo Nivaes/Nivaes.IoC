@@ -3,7 +3,7 @@ Nivaes IoT
 
 ## Componentes
 
-### Nivaes.SourceGenerator
+### Nivaes.IoT.SourceGenerator
 
 Generador de codigo
 
