@@ -14,7 +14,7 @@
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.17.0.131074" />
     <PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
     <PackageVersion Include="Grace" Version="7.2.1" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
     <PackageVersion Include="ZeroIoC" Version="1.1.0" />
   </ItemGroup>
 </Project>
