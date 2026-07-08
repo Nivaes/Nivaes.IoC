@@ -110,7 +110,7 @@ public abstract class IoCServiceContainer : IIoCResolver, IDisposable
         if (Scoped && mScopedResolvers.TryGetValue(type, out entry))
         {
             result = entry?.Resolve(this, overrides);
-            return true;   
+            return true;
         }
 
         if (mScopedResolvers.TryGetValue(type, out entry))

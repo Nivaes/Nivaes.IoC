@@ -35,7 +35,7 @@ public static class Descriptors
         "Nivaes.IoC",
         DiagnosticSeverity.Error,
         true);
-    
+
     public static readonly DiagnosticDescriptor MultipleTypeRegistrationsNotAllowed = new(
         "NI005",
         "The multiple type registrations are not allowed",
@@ -43,7 +43,7 @@ public static class Descriptors
         "Nivaes.IoC",
         DiagnosticSeverity.Error,
         true);
-    
+
     public static readonly DiagnosticDescriptor OnlyOneConstructorWithArgumentAllowed = new(
         "NI006",
         "Only one constructor with argument allowed",

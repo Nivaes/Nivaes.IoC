@@ -1,6 +1,5 @@
 ﻿namespace Benchmarks
 {
-    using BenchmarkDotNet.Characteristics;
     using Grace.DependencyInjection;
     using Grace.DependencyInjection.Lifestyle;
     using Microsoft.Extensions.DependencyInjection;

@@ -1,6 +1,4 @@
-﻿using Shouldly;
-
-namespace Nivaes.IoC.UnitTest;
+﻿namespace Nivaes.IoC.UnitTest;
 
 public partial class MergeContainerTest
 {

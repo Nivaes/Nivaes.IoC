@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Nivaes.IoC;
+﻿namespace Nivaes.IoC;
 
 public interface IOverrides
 {
@@ -32,7 +30,7 @@ public static class OverridesExtensions
     {
         return overrides.Dependency<IOverrides, TDependency>(func);
     }
-    
+
     public static TOverrides Dependency<TOverrides, TDependency>(this TOverrides overrides, Func<TDependency> func)
         where TOverrides : IOverrides
     {
@@ -44,7 +42,7 @@ public static class OverridesExtensions
     {
         return overrides.Constructor<IOverrides>(values);
     }
-    
+
     public static TOverrides Constructor<TOverrides>(this TOverrides overrides, params (string ArgumentName, object ArgumentValue)[] values)
         where TOverrides : IOverrides
     {
@@ -52,7 +50,7 @@ public static class OverridesExtensions
         {
             overrides.Constructor.Overrides.Add(value.ArgumentName, value.ArgumentValue);
         }
-        
+
         return overrides;
     }
 }

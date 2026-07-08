@@ -9,6 +9,6 @@ public interface IIoCResolver : IDisposable
     bool TryResolve(Type serviceType, out object? result);
 
     object? Resolve(Type type, IOverrides overrides);
-    
+
     bool TryResolve(Type serviceType, IOverrides overrides, out object? result);
 }

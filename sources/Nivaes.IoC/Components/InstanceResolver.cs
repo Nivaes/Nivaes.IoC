@@ -127,7 +127,7 @@ public sealed class SingletonResolver<TCreator, TType> : IInstanceResolver
             return cache!;
         }
     }
-    
+
     private object ResolveInternalOverride(IIoCResolver resolver, IOverrides overrides)
     {
         lock (@object)

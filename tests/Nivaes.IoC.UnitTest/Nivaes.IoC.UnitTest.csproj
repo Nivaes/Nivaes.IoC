@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+    <Using Include="Shouldly"/>
   </ItemGroup>
 
   <ItemGroup>

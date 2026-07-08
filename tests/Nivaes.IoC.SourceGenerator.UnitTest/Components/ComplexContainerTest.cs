@@ -124,7 +124,7 @@ public class ComplexContainerTest
 
         Assert.NotNull(service);
     }
-        
+
     [Fact]
     public async Task CloneContainer()
     {
@@ -270,7 +270,7 @@ public class ComplexContainerTest
 
         Assert.NotNull(service);
     }
-        
+
     [Fact]
     public async Task ReplaceInstance()
     {
@@ -290,19 +290,19 @@ public class ComplexContainerTest
 
         var container = (IoCServiceContainer?)Activator.CreateInstance(containerType);
         container.ShouldNotBeNull();
-            
+
         var guidValue = Guid.NewGuid();
         container.AddInstance(guidValue);
         var resolvedGuid = container.Resolve<Guid>();
 
         Assert.True(guidValue == resolvedGuid);
-            
+
         var newGuid = Guid.NewGuid();
         container.ReplaceInstance(newGuid);
-            
+
         Assert.False(newGuid == resolvedGuid);
     }
-        
+
     [Fact]
     public async Task ReplaceDelegate()
     {
@@ -328,10 +328,10 @@ public class ComplexContainerTest
         var resolvedGuid = container!.Resolve<Guid>();
 
         Assert.True(guidValue == resolvedGuid);
-            
+
         var newGuid = Guid.NewGuid();
         container!.ReplaceDelegate(o => newGuid, Reuse.Singleton);
-            
+
         Assert.False(newGuid == resolvedGuid);
     }
 }

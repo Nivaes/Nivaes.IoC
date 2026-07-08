@@ -36,7 +36,7 @@ public class OverridesTest
         Assert.NotNull(serviceType);
 
         var container = (IoCServiceContainer)Activator.CreateInstance(containerType)!;
-        
+
         var initialValue = "not override";
         container.AddInstance(initialValue);
 
@@ -46,7 +46,7 @@ public class OverridesTest
         var value = service?.ReflectionGetValue("Value");
         Assert.NotEqual(initialValue, value);
     }
-    
+
     [Fact]
     public async Task DeepDependencyOverridesWorks()
     {
@@ -92,7 +92,7 @@ public class OverridesTest
         Assert.NotNull(serviceType);
 
         var container = (IoCServiceContainer)Activator.CreateInstance(containerType)!;
-        
+
         var initialValue = "not override";
         container.AddInstance(initialValue);
 
@@ -101,7 +101,7 @@ public class OverridesTest
 
         var value = service?.ReflectionGetValue("Value");
         var repositoryValue = service?.ReflectionGetValue("Repository")?.ReflectionGetValue("Value");
-        
+
         Assert.NotEqual(initialValue, value);
         Assert.NotEqual(initialValue, repositoryValue);
     }

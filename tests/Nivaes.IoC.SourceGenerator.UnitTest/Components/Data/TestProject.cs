@@ -1,6 +1,4 @@
-﻿using System;
-using System.Buffers;
-using System.Linq;
+﻿using System.Buffers;
 using System.Reflection;
 using Microsoft.CodeAnalysis;
 

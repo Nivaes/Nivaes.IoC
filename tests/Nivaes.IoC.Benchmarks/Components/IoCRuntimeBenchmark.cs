@@ -6,7 +6,6 @@
     using BenchmarkDotNet.Order;
     using Grace.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection;
-    using Nivaes.IoC;
 
     [MemoryDiagnoser]
     [Orderer(SummaryOrderPolicy.FastestToSlowest)]

@@ -93,7 +93,7 @@ public class BasicContainerTest
         var assembly = await newProject.CompileToRealAssembly();
         var containerType = assembly.GetType("TestProject.TestContainer");
         containerType.ShouldNotBeNull();
-        
+
         var serviceType = assembly.GetType("TestProject.IService");
         serviceType.ShouldNotBeNull();
 

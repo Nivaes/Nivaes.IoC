@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
@@ -100,7 +97,7 @@ public static class Utils
     {
         return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
     }
-    
+
     public static string ToSafeGlobalName(this ISymbol symbol)
     {
         return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat).Replace(".", "_").Replace("global::", "");
