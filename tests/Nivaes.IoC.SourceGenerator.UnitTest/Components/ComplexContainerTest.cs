@@ -1,7 +1,4 @@
-﻿using Shouldly;
-using Xunit;
-
-namespace Nivaes.IoC.SourceGenerator.UnitTest;
+﻿namespace Nivaes.IoC.SourceGenerator.UnitTest;
 
 public class ComplexContainerTest
 {
